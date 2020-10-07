@@ -7,26 +7,23 @@ import java.util.Calendar;
  */
 public class Visit
 {
-  private Calendar startDateTime;
-  private Calendar endDateTime;
+  private Calendar startTime;
+  private Calendar endTime;
   private String visitorID;
+  private Calendar date;
 
   /**
    * main constructor for a visit.
    * @param startTime start time for visit
    * @param visitorID visitor id for the person visiting
+   * @param endTime end of the visit
+   * @param date date of the visit
    */
-  public Visit(Calendar startTime, String visitorID){
-    this.startDateTime = startTime;
+  public Visit(Calendar startTime, String visitorID, Calendar endTime, Calendar date){
+    this.startTime = startTime;
     this.visitorID = visitorID;
-  }
-
-  /**
-   * sets the end time for the visit
-   * @param endTime the end time for when the visitor leaves
-   */
-  public void endVisit(Calendar endTime){
-    this.endDateTime = endTime;
+    this.endTime = endTime;
+    this.date = date;
   }
 
 }

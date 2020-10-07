@@ -1,5 +1,8 @@
 package Visitors;
 
+/**
+ * @author Mikayla Wishart - mcw7246
+ */
 public class Visitor
 {
   private String fName;

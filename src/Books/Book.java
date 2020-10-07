@@ -2,6 +2,8 @@ package Books;
 
 /**
  * Creates object of a single book in the library
+ *
+ * @author Mikayla Wishart - mcw7246
  */
 public class Book
 {

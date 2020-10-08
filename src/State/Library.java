@@ -1,13 +1,15 @@
 package State;
 
 import Books.Book;
+import Books.CheckOut;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Calendar;
+import java.util.ArrayList;
+
 import State.LibraryState;
 import State.Open;
-
-import java.util.ArrayList;
 
 public class Library {
 
@@ -15,6 +17,8 @@ public class Library {
     LibraryState closed;
 
     LibraryState libraryState;
+
+    List<CheckOut> checkOuts;
 
     private HashMap<Integer, Book> searchResult;
     //Books purchased by the library: Book -> Quantity.
@@ -38,5 +42,10 @@ public class Library {
                 }
             }
         }
+    }
+
+    public void checkOutBooks(List<Integer> bookISBNs, Calendar checkInDate, Calendar checkOutDate, int visitorID){
+        CheckOut CO = new CheckOut(bookISBNs, checkInDate, checkOutDate, visitorID);
+        checkOuts.add(CO);
     }
 }

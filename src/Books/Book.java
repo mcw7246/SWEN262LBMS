@@ -13,6 +13,8 @@ public class Book
   private String publisher;
   private String publishDate;
   private int pageCount;
+  private int numCopies;
+  private int numCopiesAvailable;
 
   /**
    * Constructor for creating a Book object
@@ -31,6 +33,8 @@ public class Book
     this.publisher = publisher;
     this.publishDate = publishDate;
     this.pageCount = pageCount;
+    numCopies = 0;
+    numCopiesAvailable = 0;
   }
 
   /**
@@ -79,5 +83,21 @@ public class Book
    */
   public int getPageCount(){
     return pageCount;
+  }
+
+  public int getNumCopies(){
+    return numCopies;
+  }
+
+  public int getNumCopiesAvailable(){
+    return numCopiesAvailable;
+  }
+
+  public void setNumCopies(int value){
+    numCopies = value;
+  }
+
+  public void setNumCopiesAvailable(int value){
+    numCopiesAvailable = value;
   }
 }

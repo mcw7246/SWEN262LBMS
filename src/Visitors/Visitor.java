@@ -8,52 +8,24 @@ import java.util.List;
  */
 public class Visitor
 {
-  private int numUsers = 1;
   private String fName;
   private String lName;
   private String address;
   private String phoneNum;
-  private String id;
-  private List<Visitor> existingVisitors = new ArrayList<>();
+  private int id;
 
   /**
    * constructor for creating a new visitor
-   * @param fName
-   * @param lName
-   * @param address
-   * @param phoneNum
+   * @param fName first name
+   * @param lName last name
+   * @param address address
+   * @param phoneNum phone number
    */
   public Visitor(String fName, String lName, String address, String phoneNum){
     this.fName = fName;
     this.lName = lName;
     this.address = address;
     this.phoneNum = phoneNum;
-  }
-
-  /**
-   * Sets the visitor id to the next number available
-   */
-  public void setVisitorID(){
-    //gets how many characters are in the number of users already registered
-    int lengthOfNum = Integer.toString(numUsers).length();
-
-    //finds how many zero's will need to be in the string
-    int numZeros = 10-lengthOfNum;
-    String visitorID = "";
-
-    //loops through and adds the amount of zeros necessary to the beginning of the string
-    for(int x = 0; x < numZeros; x++){
-      visitorID += "0";
-    }
-
-    //adds the actual number that the user is
-    visitorID += Integer.toString(numUsers);
-
-    //sets the visitorID to the id
-    this.id = visitorID;
-    System.out.println(visitorID);
-    System.out.println(this.id);
-    numUsers++;
   }
 
   /**
@@ -92,7 +64,15 @@ public class Visitor
    * get method for visitor ID
    * @return visitorID
    */
-  public String getId(){
+  public long getId(){
     return id;
+  }
+
+  /**
+   * set method for visitor ID
+   * @param id visitorID
+   */
+  public void setId(int id){
+    this.id = id;
   }
 }

@@ -12,7 +12,7 @@ public class Book
   private String author;
   private String publisher;
   private String publishDate;
-  private int pageCount;
+  private String pageCount;
 
   /**
    * Constructor for creating a Book object
@@ -24,7 +24,7 @@ public class Book
    * @param publishDate publish date for the given book
    * @param pageCount page count for the given book
    */
-  public Book(String isbn, String title, String author, String publisher, String publishDate, int pageCount){
+  public Book(String isbn, String title, String author, String publisher, String publishDate, String pageCount){
     this.isbn = isbn;
     this.title = title;
     this.author = author;
@@ -77,7 +77,7 @@ public class Book
    *
    * @return Page count for given book
    */
-  public int getPageCount(){
+  public String  getPageCount(){
     return pageCount;
   }
 }

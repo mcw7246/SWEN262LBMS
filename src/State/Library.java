@@ -2,13 +2,12 @@ package State;
 
 import Books.Book;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
-import State.LibraryState;
-import State.Open;
-import Visitors.Visitor;
 
-import java.util.ArrayList;
+import Books.BookStore;
+import Visitors.Visitor;
 
 /**
  * @author Yug Patel - ydp4388
@@ -22,16 +21,20 @@ public class Library {
 
     private long visitorID;
 
+    private BookStore bookStore;
+
     private HashMap<Integer, Book> searchResult;
     //Visitors in the library database: Id -> Visitor.
     private HashMap<Long, Visitor> visitors;
     //Books purchased by the library: Book -> Quantity.
     private HashMap<Book, Integer> books;
 
-    public Library(){
+    public Library() throws FileNotFoundException {
+        this.visitors = new HashMap<>();
         open = new Open();
         books = new HashMap<>();
         searchResult = new HashMap<>();
+        bookStore = new BookStore();
         visitorID = 1000000000;
     }
 
@@ -67,6 +70,8 @@ public class Library {
         visitor.setId(visitorID);
         visitors.put(visitorID, visitor);
     }
+
+
 
 
 }

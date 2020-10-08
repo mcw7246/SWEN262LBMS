@@ -1,5 +1,7 @@
 package Command;
 
+import Visitors.Visitor;
+
 public class NewVisitor implements Command{
 
     private String fName;

@@ -32,6 +32,7 @@ public class Library {
     public Library() throws FileNotFoundException {
         this.visitors = new HashMap<>();
         open = new Open();
+        closed = new Closed();
         books = new HashMap<>();
         searchResult = new HashMap<>();
         bookStore = new BookStore();

@@ -19,13 +19,13 @@ public class Library {
 
     LibraryState libraryState;
 
-    private long visitorID;
+    private int visitorID;
 
     private BookStore bookStore;
 
     private HashMap<Integer, Book> searchResult;
     //Visitors in the library database: Id -> Visitor.
-    private HashMap<Long, Visitor> visitors;
+    private HashMap<Integer, Visitor> visitors;
     //Books purchased by the library: Book -> Quantity.
     private HashMap<Book, Integer> books;
 

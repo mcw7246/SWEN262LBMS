@@ -12,14 +12,14 @@ public class Visitor
   private String lName;
   private String address;
   private String phoneNum;
-  private long id;
+  private int id;
 
   /**
    * constructor for creating a new visitor
-   * @param fName
-   * @param lName
-   * @param address
-   * @param phoneNum
+   * @param fName first name
+   * @param lName last name
+   * @param address address
+   * @param phoneNum phone number
    */
   public Visitor(String fName, String lName, String address, String phoneNum){
     this.fName = fName;
@@ -72,7 +72,7 @@ public class Visitor
    * set method for visitor ID
    * @param id visitorID
    */
-  public void setId(long id){
+  public void setId(int id){
     this.id = id;
   }
 }

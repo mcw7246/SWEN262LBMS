@@ -10,12 +10,6 @@ public class Sort //implements SortOrder
 
     public Sort() {}
 
-    private int sortType; // 1=title, 2=publish date, 3=total # copies, 4=available # copies
-
-    public Sort(int sortType){
-        this.sortType = sortType;
-    }
-
     /**
      * Sorts a list of books by title.
      *

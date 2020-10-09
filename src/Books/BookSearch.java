@@ -5,18 +5,17 @@ import Sort.Sort;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookQuery {
+public class BookSearch {
     
-    private int sortType; // 1=title, 2=publish date, 3=total # copies, 4=available # copies
-
-    public BookQuery(int sortType){
-        this.sortType = sortType;
+    
+    // sortOrder: title, publish-date, book-status(any copies left)
+    public BookSearch(String title, String authors, int isbn, String publisher, String sortOrder){
     }
 
     public String Search(){
-        String result = "";
+        String result = ""; //get results that match search criteria
 
-        Sort s = new Sort(sortType);
+        Sort s = new Sort();
         List<Book> books = new ArrayList<Book>();
 
         s.sort(books);

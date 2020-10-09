@@ -72,7 +72,25 @@ public class Library {
         visitors.put(visitorID, visitor);
     }
 
+    public boolean existingVisitor(String fName, String lName, String address, String pNumber){
+        boolean existing = false;
+        for(Visitor visitor : visitors.values()){
+            if(fName.equals(visitor.getfName()) && lName.equals(visitor.getlName()) && address.equals(visitor.getAddress()) && pNumber.equals(visitor.getPhoneNum())){
+                existing = true;
+                break;
+            }
+        }
+        return existing;
+    }
 
+    public boolean invalidID(Integer visitorID){
+        if(visitors.containsKey(visitorID)){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 
 
 }

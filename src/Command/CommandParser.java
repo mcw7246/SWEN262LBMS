@@ -1,5 +1,6 @@
 package Command;
 
+import Client.Client;
 import State.Library;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
  */
 public class CommandParser
 {
+  private Client client;
   private ArrayList<Command> allCommands;
   private Library library;
 
@@ -19,8 +21,9 @@ public class CommandParser
    * constructor for the CommandParser class
    * @param library the library that is being used
    */
-  public CommandParser(Library library){
+  public CommandParser(Library library, Client client){
     this.library = library;
+    this.client = client;
   }
 
   /**

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import Books.BookStore;
+import Client.Client;
 import Visitors.Visitor;
 
 /**
@@ -22,20 +23,20 @@ public class Library {
     private int visitorID;
 
     private BookStore bookStore;
+    private Client client;
 
-    private HashMap<Integer, Book> searchResult;
     //Visitors in the library database: Id -> Visitor.
     private HashMap<Integer, Visitor> visitors;
     //Books purchased by the library: Book -> Quantity.
     private HashMap<Book, Integer> books;
 
-    public Library() throws FileNotFoundException {
+    public Library(Client client) throws FileNotFoundException {
         this.visitors = new HashMap<>();
         open = new Open();
         closed = new Closed();
         books = new HashMap<>();
-        searchResult = new HashMap<>();
         bookStore = new BookStore();
+        this.client = client;
         visitorID = 1000000000;
     }
 
@@ -49,10 +50,10 @@ public class Library {
      * @param ID book id for search results
      */
     public void purchaseBooks(Integer qty, List<Integer> ID){
-        for(Integer num: searchResult.keySet()){
+        for(Integer num: client.getSearchResult().keySet()){
             for(Integer id : ID){
                 if(id == num){
-                    books.put(searchResult.get(num), qty);
+                    books.put(client.getSearchResult().get(num), qty);
                 }
             }
         }

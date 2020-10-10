@@ -1,5 +1,6 @@
 package Client;
 
+import Books.Book;
 import Command.CommandParser;
 import State.Library;
 
@@ -10,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 public class Client {
 
@@ -21,8 +24,10 @@ public class Client {
     private Calendar cal;
     private DateFormat dateFormat;
 
+    private HashMap<Integer, Book> searchResult;
+
     public Client() throws FileNotFoundException {
-        library = new Library();
+        library = new Library(this);
         commandParser = new CommandParser(library, this);
         this.cal = Calendar.getInstance();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -52,6 +57,18 @@ public class Client {
             cal.add(Calendar.DATE, days);
             cal.add(Calendar.HOUR, hours);
         }
+    }
+
+    public void setSearchResult(List<Book> bookList){
+        searchResult = new HashMap<>();
+        int i = 1;
+        for(Book book:bookList){
+            searchResult.put(i, book);
+        }
+    }
+
+    public HashMap<Integer, Book> getSearchResult(){
+        return searchResult;
     }
 
 }

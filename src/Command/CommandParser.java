@@ -4,6 +4,7 @@ import State.Library;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Parses through the commands that are given
@@ -185,12 +186,76 @@ public class CommandParser
           allCommands.add(command);
         }
       case "return":
+        if(params.size() == 2){
+          int id = Integer.parseInt(params.get(0));
+          List<String> bookIds = Arrays.asList(params.get(1).split(","));
 
+          command = new ReturnBook(id, bookIds);
+        }
       case "pay":
+        if(params.size() == 2){
+          int visitorID = Integer.parseInt(params.get(0));
+          double amount = Double.parseDouble(params.get(1));
 
+          command = new PayFine(visitorID, amount);
+        }
       case "search":
+        String title = "";
+        List<String> authors;
+        String isbn;
+        String publisher;
+        String sortOrder;
+        if(params.size() == 2){
+          title = params.get(0);
+          authors = Arrays.asList(params.get(1).split(","));
+
+          command = new StoreSearch(title, authors);
+          allCommands.add(command);
+        }
+        else if(params.size() == 3){
+          title = params.get(0);
+          authors = Arrays.asList(params.get(1));
+          isbn = params.get(2);
+
+          command = new StoreSearch(title, authors, isbn);
+          allCommands.add(command);
+        }
+        else if(params.size() == 4){
+          title = params.get(0);
+          authors = Arrays.asList(params.get(1));
+          isbn = params.get(2);
+          publisher = params.get(3);
+
+          command = new StoreSearch(title, authors, isbn, publisher);
+          allCommands.add(command);
+        }
+        else if(params.size() == 5){
+          title = params.get(0);
+          authors = Arrays.asList(params.get(1));
+          isbn = params.get(2);
+          publisher = params.get(3);
+          sortOrder = params.get(4);
+
+          command = new StoreSearch(title, authors, isbn, publisher, sortOrder);
+          allCommands.add(command);
+        }
 
       case "buy":
+        if(params.size() == 2){
+          int quantity = Integer.parseInt(params.get(0));
+          int visitorID = Integer.parseInt(params.get(1));
+
+          command = new PurchaseBook(quantity, visitorID);
+          allCommands.add(command);
+        }
+        else if(params.size() == 3){
+          int quantity = Integer.parseInt(params.get(0));
+          int visitorID = Integer.parseInt(params.get(1));
+          List<String> bookIDs = Arrays.asList(params.get(2));
+
+          command = new PurchaseBook(quantity, visitorID, bookIDs);
+          allCommands.add(command);
+        }
 
       case "advance":
 

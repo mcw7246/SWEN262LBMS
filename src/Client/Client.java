@@ -71,4 +71,8 @@ public class Client {
         return searchResult;
     }
 
+    public CommandParser getCommandParser(){
+        return commandParser;
+    }
+
 }

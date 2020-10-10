@@ -12,7 +12,7 @@ public class BookStore {
 
     public BookStore() throws FileNotFoundException {
         bookList = new ArrayList<>();
-        File books = new File("Books.txt");
+        File books = new File("src/Books/books.txt");
         Scanner scanner = new Scanner(books);
 
         while(scanner.hasNext()) {

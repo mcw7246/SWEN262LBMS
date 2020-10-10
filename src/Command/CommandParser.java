@@ -2,11 +2,11 @@ package Command;
 
 import State.Library;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 
 /**
+ * Parses through the commands that are given
  * @author Mikayla Wishart - mcw7246
  */
 public class CommandParser
@@ -14,6 +14,10 @@ public class CommandParser
   private ArrayList<Command> allCommands;
   private Library library;
 
+  /**
+   * constructor for the CommandParser class
+   * @param library the library that is being used
+   */
   public CommandParser(Library library){
     this.library = library;
   }
@@ -66,14 +70,13 @@ public class CommandParser
     ArrayList<String> paramGiven = cmd;
 
     createCommand(cmdType, paramGiven);
+    System.out.println();
   }
 
   public void createCommand(String cmd, ArrayList<String> params){
     Command command;
     switch (cmd){
       case "register":
-        //TODO: error(duplicate); need to create a method inside of visitor to make sure there is no duplicate people
-
         //makes sure there is the right number of parameters
         if(params.size() == 4){
           String fName = params.get(0);
@@ -130,9 +133,71 @@ public class CommandParser
           missingParameters(cmd);
         }
       case "info":
-        if(params.size() >= 3){
+        //only given title and author(s)
 
+        if(params.size() == 2){
+          String title = params.get(0);
+          ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
+          command = new BookSearch(title, authors);
+          allCommands.add(command);
         }
+        else if(params.size() == 3){
+          String title = params.get(0);
+          ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
+          String isbn = params.get(2);
+
+          command = new BookSearch(title, authors, isbn);
+          allCommands.add(command);
+        }
+        else if(params.size() == 4){
+          String title = params.get(0);
+          ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
+          String isbn = params.get(2);
+          String publisher = params.get(3);
+
+          command = new BookSearch(title, authors, isbn, publisher);
+          allCommands.add(command);
+        }
+
+        else if(params.size() == 5){
+          String title = params.get(0);
+          ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
+          String isbn = params.get(2);
+          String publisher = params.get(3);
+          String sortOrder = params.get(4);
+
+          command = new BookSearch(title, authors, isbn, publisher, sortOrder);
+          allCommands.add(command);
+        }
+      case "borrow":
+        if (params.size() == 2){
+          int visitorID = Integer.parseInt(params.get(0));
+          ArrayList<Integer> bookIDs = new ArrayList<>(Arrays.asList(Integer.parseInt(params.get(1))));
+
+          command = new BorrowBook(visitorID, bookIDs);
+          allCommands.add(command);
+        }
+      case "borrowed":
+        if(params.size() == 1){
+          String visitorID = params.get(0);
+
+          command = new BorrowedBooks(Integer.parseInt(visitorID));
+          allCommands.add(command);
+        }
+      case "return":
+
+      case "pay":
+
+      case "search":
+
+      case "buy":
+
+      case "advance":
+
+      case "datetime":
+
+      case "report":
+
     }
 
 

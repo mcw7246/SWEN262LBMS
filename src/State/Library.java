@@ -3,6 +3,7 @@ package State;
 import Books.Book;
 import Books.CheckOut;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Calendar;
@@ -38,7 +39,8 @@ public class Library {
     //Books purchased by the library: Book -> Quantity.
     private HashMap<Book, Integer> books;
 
-    public Library(Client client) throws FileNotFoundException {
+    public Library(Client client) throws FileNotFoundException
+    {
         this.visitors = new HashMap<>();
         open = new Open();
         closed = new Closed();

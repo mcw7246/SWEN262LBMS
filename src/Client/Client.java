@@ -33,6 +33,7 @@ public class Client {
         this.dateFormat = new SimpleDateFormat("yyyy/MM/dd,HH:mm:ss");
         startDateTime = cal;
         this.allVisits = new ArrayList<>();
+        cal.set(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE),8,0,0);
     }
 
     public void setMessage(String string){
@@ -65,6 +66,7 @@ public class Client {
         else{
             cal.add(Calendar.DATE, days);
             cal.add(Calendar.HOUR_OF_DAY, hours);
+            setMessage("advance,success;");
         }
     }
 

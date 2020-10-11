@@ -274,7 +274,24 @@ public class CommandParser
         break;
 
       case "advance":
+        if(params.size() == 1){
+          int days = Integer.parseInt(params.get(0));
+
+          command = new AdvanceTime(days, client);
+          allCommands.add(command);
+        }
+        else if(params.size() == 2){
+          int days = Integer.parseInt(params.get(0));
+          int hours = Integer.parseInt(params.get(1));
+
+          command = new AdvanceTime(days, hours, client);
+          allCommands.add(command);
+        }
+        break;
       case "datetime":
+        command = new DateTime(client);
+        allCommands.add(command);
+        break;
       case "report":
         break;
     }

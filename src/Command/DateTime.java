@@ -1,8 +1,18 @@
 package Command;
 
-public class DateTime implements Command
-{
+import Client.Client;
+
+public class DateTime implements Command {
+
+  private Client client;
+
+  public DateTime(Client client){
+    this.client = client;
+  }
+
 
   @Override
-  public void execute(){}
+  public void execute(){
+    client.setMessage("datetime," + client.getDateTime());
+  }
 }

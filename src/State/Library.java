@@ -1,10 +1,15 @@
 package State;
 
 import Books.Book;
+import Books.CheckOut;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Calendar;
+import java.util.ArrayList;
+
+import State.LibraryState;
+import State.Open;
 
 import Books.BookStore;
 import Client.Client;
@@ -20,6 +25,9 @@ public class Library {
 
     LibraryState libraryState;
 
+    List<CheckOut> checkOuts;
+
+    private HashMap<Integer, Book> searchResult;
     private int visitorID;
 
     private BookStore bookStore;
@@ -57,6 +65,11 @@ public class Library {
                 }
             }
         }
+    }
+
+    public void checkOutBooks(List<Integer> bookISBNs, Calendar checkInDate, Calendar checkOutDate, int visitorID){
+        CheckOut CO = new CheckOut(bookISBNs, checkInDate, checkOutDate, visitorID);
+        checkOuts.add(CO);
     }
 
     /**

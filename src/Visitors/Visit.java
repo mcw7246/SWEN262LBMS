@@ -11,6 +11,7 @@ public class Visit
   private Calendar endTime;
   private String visitorID;
   private Calendar date;
+  private Integer visitLength;
 
   /**
    * main constructor for a visit.
@@ -24,6 +25,10 @@ public class Visit
     this.visitorID = visitorID;
     this.endTime = endTime;
     this.date = date;
+    visitLength = endTime.get(Calendar.HOUR) - endTime.get(Calendar.HOUR);
   }
 
+  public Integer getVisitLength() {
+    return visitLength;
+  }
 }

@@ -24,6 +24,7 @@ public class CommandParser
   public CommandParser(Library library, Client client){
     this.library = library;
     this.client = client;
+    this.allCommands = new ArrayList<>();
   }
 
   /**
@@ -74,7 +75,11 @@ public class CommandParser
     ArrayList<String> paramGiven = cmd;
 
     createCommand(cmdType, paramGiven);
-    System.out.println();
+    for(Command command:allCommands){
+      command.execute();
+    }
+    allCommands.clear();
+    System.out.println(client.getMessage());
   }
 
   public void createCommand(String cmd, ArrayList<String> params){
@@ -95,7 +100,7 @@ public class CommandParser
             errorDuplicateVisitor();
           //no duplicate user
           else{
-            command = new NewVisitor(fName, lName, address, phoneNum);
+            command = new NewVisitor(fName, lName, address, phoneNum, library);
 
             allCommands.add(command);
           }
@@ -105,6 +110,7 @@ public class CommandParser
         else{
           missingParameters(cmd);
         }
+        break;
       case "arrive":
         if(params.size() == 1)
         {
@@ -122,6 +128,7 @@ public class CommandParser
         else{
           missingParameters(cmd);
         }
+        break;
       case "depart":
         if(params.size() == 1){
           int id = Integer.parseInt(params.get(0));
@@ -136,6 +143,7 @@ public class CommandParser
         else{
           missingParameters(cmd);
         }
+        break;
       case "info":
         //only given title and author(s)
 
@@ -173,6 +181,7 @@ public class CommandParser
           command = new BookSearch(title, authors, isbn, publisher, sortOrder);
           allCommands.add(command);
         }
+        break;
       case "borrow":
         if (params.size() == 2){
           int visitorID = Integer.parseInt(params.get(0));
@@ -188,6 +197,7 @@ public class CommandParser
           command = new BorrowedBooks(Integer.parseInt(visitorID));
           allCommands.add(command);
         }
+        break;
       case "return":
         if(params.size() == 2){
           int id = Integer.parseInt(params.get(0));
@@ -195,6 +205,7 @@ public class CommandParser
 
           command = new ReturnBook(id, bookIds);
         }
+        break;
       case "pay":
         if(params.size() == 2){
           int visitorID = Integer.parseInt(params.get(0));
@@ -202,6 +213,7 @@ public class CommandParser
 
           command = new PayFine(visitorID, amount);
         }
+        break;
       case "search":
         String title = "";
         List<String> authors;
@@ -242,7 +254,7 @@ public class CommandParser
           command = new StoreSearch(title, authors, isbn, publisher, sortOrder);
           allCommands.add(command);
         }
-
+        break;
       case "buy":
         if(params.size() == 2){
           int quantity = Integer.parseInt(params.get(0));
@@ -259,20 +271,19 @@ public class CommandParser
           command = new PurchaseBook(quantity, visitorID, bookIDs);
           allCommands.add(command);
         }
+        break;
 
       case "advance":
-
       case "datetime":
-
       case "report":
-
+        break;
     }
 
 
   }
 
   public void errorDuplicateVisitor(){
-
+    client.setMessage("register,duplicate;");
   }
 
   public void missingParameters(String cmdType){

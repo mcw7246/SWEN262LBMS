@@ -26,4 +26,7 @@ public class BookStore {
         }
     }
 
+    public List<Book> getBookList() {
+        return bookList;
+    }
 }

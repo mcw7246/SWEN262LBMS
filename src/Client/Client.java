@@ -30,7 +30,7 @@ public class Client {
         library = new Library(this);
         commandParser = new CommandParser(library, this);
         this.cal = Calendar.getInstance();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        this.dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         startDateTime = cal;
     }
 

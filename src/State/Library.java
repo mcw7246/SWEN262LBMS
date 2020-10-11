@@ -71,6 +71,7 @@ public class Library {
         Visitor visitor = new Visitor(fName,lName,address,pNumber);
         visitor.setId(visitorID);
         visitors.put(visitorID, visitor);
+        client.setMessage("register," + visitorID + "," + client.getDateTime() + ";");
     }
 
     public boolean existingVisitor(String fName, String lName, String address, String pNumber){

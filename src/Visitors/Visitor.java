@@ -64,7 +64,7 @@ public class Visitor
    * get method for visitor ID
    * @return visitorID
    */
-  public long getId(){
+  public Integer getId(){
     return id;
   }
 

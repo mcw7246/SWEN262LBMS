@@ -15,6 +15,7 @@ public class Visitor
   private int id;
   private boolean inVisit;
 
+
   /**
    * constructor for creating a new visitor
    * @param fName first name
@@ -35,7 +36,7 @@ public class Visitor
    * @return first name
    */
   public String getfName(){
-    return fName;
+    return this.fName;
   }
 
   /**
@@ -43,7 +44,7 @@ public class Visitor
    * @return last name
    */
   public String getlName(){
-    return lName;
+    return this.lName;
   }
 
   /**
@@ -51,7 +52,7 @@ public class Visitor
    * @return address
    */
   public String getAddress(){
-    return address;
+    return this.address;
   }
 
   /**
@@ -59,7 +60,7 @@ public class Visitor
    * @return phone number
    */
   public String getPhoneNum(){
-    return phoneNum;
+    return this.phoneNum;
   }
 
   /**
@@ -67,7 +68,7 @@ public class Visitor
    * @return visitorID
    */
   public Integer getId(){
-    return id;
+    return this.id;
   }
 
   /**
@@ -88,5 +89,15 @@ public class Visitor
 
   public boolean isVisit(){
     return inVisit;
+  }
+
+  /**
+   * Create a string for visitors
+   * @return a string that contains visitor's information
+   */
+  @Override
+  public String toString(){
+    return "First Name: " + this.fName + "\nLast Name: " + this.lName + "\nAddress: " + this.address + "\nPhone Number: "
+            + this.phoneNum + "\nID: " + this.id + "\nIs In Library: " + this.inVisit;
   }
 }

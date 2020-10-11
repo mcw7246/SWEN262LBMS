@@ -117,7 +117,7 @@ public class CommandParser
           int id = Integer.parseInt(params.get(0));
           if (library.invalidID(id))
           {
-            invalidID();
+            arriveInvalidID();
           }
           else
           {
@@ -133,10 +133,10 @@ public class CommandParser
         if(params.size() == 1){
           int id = Integer.parseInt(params.get(0));
           if(library.invalidID(id)){
-            invalidID();
+            departInvalidID();
           }
           else{
-            command = new EndVisit(id);
+            command = new EndVisit(id, library);
             allCommands.add(command);
           }
         }
@@ -282,6 +282,12 @@ public class CommandParser
 
   }
 
+  private void departInvalidID() {
+    client.setMessage("depart,invalid-id;");
+  }
+  public void arriveInvalidID(){
+    client.setMessage("arrive,invalid-id;");
+  }
   public void errorDuplicateVisitor(){
     client.setMessage("register,duplicate;");
   }
@@ -291,8 +297,6 @@ public class CommandParser
       System.err.print("You are missing the VisitorID for \"" + cmdType + "\" type of command.");
     }
   }
-  public void invalidID(){
-    client.setMessage("arrive,invalid-id;");
-  }
+
 
 }

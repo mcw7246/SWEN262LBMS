@@ -3,16 +3,14 @@ package Client;
 import Books.Book;
 import Command.CommandParser;
 import State.Library;
+import Visitors.Visit;
 
 import java.io.FileNotFoundException;
 import java.lang.invoke.CallSite;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Client {
 
@@ -24,6 +22,8 @@ public class Client {
     private Calendar cal;
     private DateFormat dateFormat;
 
+    private List<Visit> allVisits;
+
     private HashMap<Integer, Book> searchResult;
 
     public Client() throws FileNotFoundException {
@@ -32,6 +32,7 @@ public class Client {
         this.cal = Calendar.getInstance();
         this.dateFormat = new SimpleDateFormat("yyyy/MM/dd,HH:mm:ss");
         startDateTime = cal;
+        this.allVisits = new ArrayList<>();
     }
 
     public void setMessage(String string){
@@ -83,4 +84,22 @@ public class Client {
         return commandParser;
     }
 
+    public void addNewVisit(Visit visit){
+        allVisits.add(visit);
+    }
+
+    public List<Visit> getAllVisits(){
+        return allVisits;
+    }
+
+    public Calendar getStartTime(Integer duration){
+        Calendar calendar = cal;
+        calendar.add(Calendar.HOUR_OF_DAY, -duration);
+        return calendar;
+    }
+
+    public Calendar getEndTime(){
+        Calendar calendar = cal;
+        return calendar;
+    }
 }

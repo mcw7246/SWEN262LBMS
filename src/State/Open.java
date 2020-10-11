@@ -1,6 +1,7 @@
 package State;
 
 import Client.Client;
+import Visitors.Visit;
 import Visitors.Visitor;
 
 import java.util.HashMap;
@@ -32,7 +33,18 @@ public class Open implements LibraryState{
 
     @Override
     public void endVisit(Integer visitorId) {
-
+        if(!visitors.get(visitorId).isVisit()){
+            client.setMessage("depart,invalid-id;");
+        }
+        else{
+            visitors.get(visitorId).setEndVisit();
+            //start time in hours(24 hrs)
+            Integer startTime = library.getCurrentVisitors().remove(visitorId);
+            Integer visitTime = client.getTime() - startTime;
+            Visit visit = new Visit(client.getStartTime(visitTime),visitorId,client.getEndTime());
+            client.addNewVisit(visit);
+            client.setMessage("arrive," + visitorId + "," + client.getDateTime() + ";");
+        }
     }
 
     @Override

@@ -135,4 +135,8 @@ public class Library {
     public void startVisit(Integer visitorId){
         libraryState.startVisit(visitorId);
     }
+
+    public void endVisit(Integer visitorID){
+        libraryState.endVisit(visitorID);
+    }
 }

@@ -25,7 +25,7 @@ public class Closed implements LibraryState{
 
     @Override
     public void endVisit(Integer visitorId) {
-
+        client.setMessage("Library is currently closed!");
     }
 
     @Override

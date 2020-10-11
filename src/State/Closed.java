@@ -1,17 +1,30 @@
 package State;
 
+import Client.Client;
+import Visitors.Visitor;
+
+import java.util.HashMap;
 import java.util.List;
 
 public class Closed implements LibraryState{
 
-    Library library;
+    private final Library library;
+    private HashMap<Integer, Visitor> visitors;
+    private Client client;
 
-    public Closed(){
-
+    public Closed(Library library){
+        this.library = library;
+        visitors = library.getVisitors();
+        client = library.getClient();
     }
 
     @Override
-    public void makeVisit(Integer id) {
+    public void startVisit(Integer visitorId) {
+        client.setMessage("Library is currently closed!");
+    }
+
+    @Override
+    public void endVisit(Integer visitorId) {
 
     }
 

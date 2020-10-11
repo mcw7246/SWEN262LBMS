@@ -4,6 +4,8 @@ import Books.Book;
 import Books.CheckOut;
 
 import java.io.FileNotFoundException;
+import java.lang.invoke.CallSite;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Calendar;
@@ -38,16 +40,25 @@ public class Library {
     private HashMap<Integer, Visitor> visitors;
     //Books purchased by the library: Book -> Quantity.
     private HashMap<Book, Integer> books;
+    //List of current visitors: Id -> Visit start time.
+    private HashMap<Integer, Integer> currentVisitors;
+
 
     public Library(Client client) throws FileNotFoundException
     {
         this.visitors = new HashMap<>();
-        open = new Open();
-        closed = new Closed();
         books = new HashMap<>();
         bookStore = new BookStore();
         this.client = client;
         visitorID = 1000000000;
+        currentVisitors = new HashMap<>();
+        open = new Open(this);
+        closed = new Closed(this);
+        libraryState = open;
+    }
+
+    void setLibraryState(LibraryState state){
+        libraryState = state;
     }
 
     public HashMap<Book, Integer> getBooks(){
@@ -86,7 +97,7 @@ public class Library {
         Visitor visitor = new Visitor(fName,lName,address,pNumber);
         visitor.setId(visitorID);
         visitors.put(visitorID, visitor);
-        client.setMessage("register," + visitorID + "," + client.getDateTime() + ";");
+        client.setMessage("register," + visitorID + "," + client.getDate() + ";");
     }
 
     public boolean existingVisitor(String fName, String lName, String address, String pNumber){
@@ -109,5 +120,19 @@ public class Library {
         }
     }
 
+    protected HashMap<Integer, Integer> getCurrentVisitors() {
+        return currentVisitors;
+    }
 
+    protected HashMap<Integer, Visitor> getVisitors() {
+        return visitors;
+    }
+
+    protected Client getClient() {
+        return client;
+    }
+
+    public void startVisit(Integer visitorId){
+        libraryState.startVisit(visitorId);
+    }
 }

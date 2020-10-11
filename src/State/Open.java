@@ -1,17 +1,37 @@
 package State;
 
+import Client.Client;
+import Visitors.Visitor;
+
+import java.util.HashMap;
 import java.util.List;
 
 public class Open implements LibraryState{
 
-    Library library;
+    private final Library library;
+    private HashMap<Integer, Visitor> visitors;
+    private Client client;
 
-    public Open(){
-
+    public Open(Library library){
+        this.library = library;
+        visitors = library.getVisitors();
+        client = library.getClient();
     }
 
     @Override
-    public void makeVisit(Integer id) {
+    public void startVisit(Integer visitorId) {
+        if(visitors.get(visitorId).isVisit()){
+            client.setMessage("arrive,duplicate;");
+        }
+        else{
+            visitors.get(visitorId).setInVisit();
+            library.getCurrentVisitors().put(visitorId, client.getTime());
+            client.setMessage("arrive," + visitorId + "," + client.getDateTime() + ";");
+        }
+    }
+
+    @Override
+    public void endVisit(Integer visitorId) {
 
     }
 

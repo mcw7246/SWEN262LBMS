@@ -13,6 +13,7 @@ public class Visitor
   private String address;
   private String phoneNum;
   private int id;
+  private boolean inVisit;
 
   /**
    * constructor for creating a new visitor
@@ -26,6 +27,7 @@ public class Visitor
     this.lName = lName;
     this.address = address;
     this.phoneNum = phoneNum;
+    this.inVisit = false;
   }
 
   /**
@@ -74,5 +76,17 @@ public class Visitor
    */
   public void setId(int id){
     this.id = id;
+  }
+
+  public void setInVisit(){
+    inVisit = true;
+  }
+
+  public void setEndVisit(){
+    inVisit = false;
+  }
+
+  public boolean isVisit(){
+    return inVisit;
   }
 }

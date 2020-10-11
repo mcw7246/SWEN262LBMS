@@ -30,7 +30,7 @@ public class Client {
         library = new Library(this);
         commandParser = new CommandParser(library, this);
         this.cal = Calendar.getInstance();
-        this.dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        this.dateFormat = new SimpleDateFormat("yyyy/MM/dd,HH:mm:ss");
         startDateTime = cal;
     }
 
@@ -46,6 +46,14 @@ public class Client {
         return dateFormat.format(cal.getTime());
     }
 
+    public Integer getTime(){
+        return cal.get(Calendar.HOUR_OF_DAY);
+    }
+
+    public String getDate(){
+        return new SimpleDateFormat("yyyy/MM/dd").format(cal.getTime());
+    }
+
     public void advanceTime(Integer days, Integer hours){
         if(days > 7 || days < 0){
             setMessage("Invalid-number-of-days," + days + ";");
@@ -55,7 +63,7 @@ public class Client {
         }
         else{
             cal.add(Calendar.DATE, days);
-            cal.add(Calendar.HOUR, hours);
+            cal.add(Calendar.HOUR_OF_DAY, hours);
         }
     }
 

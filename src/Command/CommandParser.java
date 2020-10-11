@@ -121,7 +121,7 @@ public class CommandParser
           }
           else
           {
-            command = new BeginVisit(id);
+            command = new BeginVisit(id, library);
             allCommands.add(command);
           }
         }
@@ -291,6 +291,8 @@ public class CommandParser
       System.err.print("You are missing the VisitorID for \"" + cmdType + "\" type of command.");
     }
   }
-  public void invalidID(){}
+  public void invalidID(){
+    client.setMessage("arrive,invalid-id;");
+  }
 
 }

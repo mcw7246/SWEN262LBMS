@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Calendar;
 import java.util.ArrayList;
 
+import Command.*;
 import State.LibraryState;
 import State.Open;
 
@@ -61,8 +62,25 @@ public class Library {
         libraryState = state;
     }
 
+    public boolean isOpen() {
+        return libraryState == open;
+    }
+
     public HashMap<Book, Integer> getBooks(){
         return books;
+    }
+
+    public void closeLibrary(){
+        Command command;
+        for(Integer visitorId:currentVisitors.keySet()){
+            command = new EndVisit(visitorId, this);
+            command.execute();
+        }
+        setLibraryState(closed);
+    }
+
+    public void openLibrary(){
+        setLibraryState(open);
     }
 
     /**

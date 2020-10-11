@@ -2,6 +2,7 @@ package Client;
 
 import Books.Book;
 import Command.CommandParser;
+import State.Closed;
 import State.Library;
 import Visitors.Visit;
 
@@ -58,15 +59,29 @@ public class Client {
 
     public void advanceTime(Integer days, Integer hours){
         if(days > 7 || days < 0){
-            setMessage("Invalid-number-of-days," + days + ";");
+            setMessage("advance,invalid-number-of-days," + days + ";");
         }
         else if(hours > 23 || hours < 0){
-            setMessage("Invalid-number-of-hours," + hours + ";");
+            setMessage("advance,invalid-number-of-hours," + hours + ";");
         }
         else{
             cal.add(Calendar.DATE, days);
             cal.add(Calendar.HOUR_OF_DAY, hours);
             setMessage("advance,success;");
+            checkLibraryState();
+        }
+    }
+
+    private void checkLibraryState(){
+        if(cal.get(Calendar.HOUR_OF_DAY) < 8 || cal.get(Calendar.HOUR_OF_DAY) >= 19){
+            if(library.isOpen()){
+                library.closeLibrary();
+            }
+        }
+        else{
+            if(!library.isOpen()){
+                library.openLibrary();
+            }
         }
     }
 

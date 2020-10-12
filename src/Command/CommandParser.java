@@ -51,6 +51,7 @@ public class CommandParser
     for(char current : givenCommand.toCharArray()){
       if((current == '{' || current == '\"') && !longCmd){
         longCmd = true;
+        arg += "";
       }
       else if((current == '}' || current == '\"') && longCmd){
         longCmd = false;
@@ -65,8 +66,8 @@ public class CommandParser
         arg = "";
         break;
       }
-      else if(current == '}' || current == '{'){
-        continue;
+      else if(current == '{' || current == '}'){
+        arg += "";
       }
       else{
         arg += current;

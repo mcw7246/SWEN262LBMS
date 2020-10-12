@@ -32,6 +32,7 @@ public class BookStore {
         //loops through every line
         for(String line : lines){
           List<String> bookInfo = new ArrayList<>();
+
           int numChar = 0;
           //loops through all the characters in the line
           for(char current : line.toCharArray()){
@@ -60,7 +61,6 @@ public class BookStore {
               arg = "";
             }
           }
-          System.out.println(bookInfo);
           Book newBook = new Book(bookInfo.get(0), bookInfo.get(1), bookInfo.get(2), bookInfo.get(3), bookInfo.get(4), bookInfo.get(5));
           bookList.add(newBook);
         }

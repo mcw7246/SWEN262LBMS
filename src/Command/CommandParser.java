@@ -306,6 +306,16 @@ public class CommandParser
         allCommands.add(command);
         break;
       case "report":
+        if(params.size() == 1){
+          int days = Integer.parseInt(params.get(0));;
+
+          command = new Report(days, client);
+          allCommands.add(command);
+        }
+        else{
+          command = new Report(client);
+          allCommands.add(command);
+        }
         break;
     }
 

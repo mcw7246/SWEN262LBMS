@@ -79,14 +79,23 @@ public class Visitor
     this.id = id;
   }
 
+  /**
+   * Method to assign state - In Visit.
+   */
   public void setInVisit(){
     inVisit = true;
   }
 
+  /**
+   * Method to assign state - End Visit.
+   */
   public void setEndVisit(){
     inVisit = false;
   }
 
+  /**
+   * Method to get a boolean if state - In Visit.
+   */
   public boolean isVisit(){
     return inVisit;
   }

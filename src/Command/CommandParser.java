@@ -304,12 +304,21 @@ public class CommandParser
 
   }
 
+  /**
+   * Method to set the error message for depart feature.
+   */
   private void departInvalidID() {
     client.setMessage("depart,invalid-id;");
   }
+  /**
+   * Method to set the error message for arrive feature.
+   */
   public void arriveInvalidID(){
     client.setMessage("arrive,invalid-id;");
   }
+  /**
+   * Method to set the error message for register visitor feature.
+   */
   public void errorDuplicateVisitor(){
     client.setMessage("register,duplicate;");
   }

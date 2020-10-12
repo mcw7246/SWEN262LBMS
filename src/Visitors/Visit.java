@@ -25,6 +25,10 @@ public class Visit
     visitLength = endDateTime.get(Calendar.HOUR) - endDateTime.get(Calendar.HOUR);
   }
 
+  /**
+   * Method to get the visit duration in hours(24 hr).
+   * @return
+   */
   public Integer getVisitLength() {
     return visitLength;
   }

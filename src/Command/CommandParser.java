@@ -78,11 +78,18 @@ public class CommandParser
     ArrayList<String> paramGiven = cmd;
 
     createCommand(cmdType, paramGiven);
+    //loop through all commands.
     for(Command command:allCommands){
       command.execute();
     }
+    //empty all commands.
     allCommands.clear();
-    System.out.println(client.getMessage());
+    //loop through all response.
+    for(String message: client.getMessage()) {
+      System.out.println(message);
+    }
+    //empty all messages.
+    client.getMessage().clear();
   }
 
   public void createCommand(String cmd, ArrayList<String> params){

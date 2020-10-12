@@ -76,8 +76,8 @@ public class Library {
     }
 
     /**
-     * Mehtod to get all the books purchased by the library.
-     * @return
+     * Method to get all the books purchased by the library.
+     * @return Hashmap of all books
      */
     public HashMap<Book, Integer> getBooks(){
         return books;
@@ -87,12 +87,16 @@ public class Library {
      * Method to simulate the closure of the Library.
      */
     public void closeLibrary(){
-        Command command;
+        client.setMessage("Library is now closing!");
+        List<Command> commands = new ArrayList<>();
         for(Integer visitorId:currentVisitors.keySet()){
-            command = new EndVisit(visitorId, this);
+            commands.add(new EndVisit(visitorId, this));
+        }
+        for(Command command: commands){
             command.execute();
         }
         setLibraryState(closed);
+        client.setMessage("The library is now closed!");
     }
 
     /**
@@ -100,6 +104,7 @@ public class Library {
      */
     public void openLibrary(){
         setLibraryState(open);
+        client.setMessage("The Library is now open!");
     }
 
     /**

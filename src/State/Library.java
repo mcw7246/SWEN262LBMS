@@ -59,18 +59,33 @@ public class Library {
         libraryState = open;
     }
 
+    /**
+     * Method to change the Library State
+     * @param state - State of Library.
+     */
     void setLibraryState(LibraryState state){
         libraryState = state;
     }
 
+    /**
+     * Method to check is the library is open or not.
+     * @return - true  - if open.
+     */
     public boolean isOpen() {
         return libraryState == open;
     }
 
+    /**
+     * Mehtod to get all the books purchased by the library.
+     * @return
+     */
     public HashMap<Book, Integer> getBooks(){
         return books;
     }
 
+    /**
+     * Method to simulate the closure of the Library.
+     */
     public void closeLibrary(){
         Command command;
         for(Integer visitorId:currentVisitors.keySet()){
@@ -80,6 +95,9 @@ public class Library {
         setLibraryState(closed);
     }
 
+    /**
+     * Method to simulate the opening of the Library.
+     */
     public void openLibrary(){
         setLibraryState(open);
     }
@@ -98,6 +116,7 @@ public class Library {
             }
         }
     }
+
 
     public void checkOutBooks(List<Integer> bookISBNs, Calendar checkInDate, Calendar checkOutDate, int visitorID){
         CheckOut CO = new CheckOut(bookISBNs, checkInDate, checkOutDate, visitorID);
@@ -119,6 +138,14 @@ public class Library {
         client.setMessage("register," + visitorID + "," + client.getDate() + ";");
     }
 
+    /**
+     * Method to check if a Visitor is registered or not.
+     * @param fName - first name.
+     * @param lName - last name.
+     * @param address - address.
+     * @param pNumber - phone number.
+     * @return - ture if registered.
+     */
     public boolean existingVisitor(String fName, String lName, String address, String pNumber){
         boolean existing = false;
         for(Visitor visitor : visitors.values()){
@@ -130,6 +157,11 @@ public class Library {
         return existing;
     }
 
+    /**
+     * Method to check if a visitor id exists or not.
+     * @param visitorID - visitor id.
+     * @return - false if exists.
+     */
     public boolean invalidID(Integer visitorID){
         if(visitors.containsKey(visitorID)){
             return false;
@@ -139,22 +171,42 @@ public class Library {
         }
     }
 
+    /**
+     * Method to get all the current visitors in the library.
+     * @return - Hashmap of current visitors.
+     */
     protected HashMap<Integer, Integer> getCurrentVisitors() {
         return currentVisitors;
     }
 
+    /**
+     * Method to get all registered visitor of the library.
+     * @return - Hashmap of all registered visitors.
+     */
     protected HashMap<Integer, Visitor> getVisitors() {
         return visitors;
     }
 
+    /**
+     * Method to get the client class through which the library responds.
+     * @return - the client.
+     */
     protected Client getClient() {
         return client;
     }
 
+    /**
+     * Method to start a visit in the library.
+     * @param visitorId - visitor id.
+     */
     public void startVisit(Integer visitorId){
         libraryState.startVisit(visitorId);
     }
 
+    /**
+     * Method to end a visit in the library.
+     * @param visitorID - visitor id.
+     */
     public void endVisit(Integer visitorID){
         libraryState.endVisit(visitorID);
     }

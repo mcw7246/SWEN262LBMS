@@ -1,24 +1,28 @@
 package Command;
 
 import java.util.List;
+import State.Library;
 
 public class PurchaseBook implements Command
 {
-  int quantity;
-  int visitorID;
-  List<String> bookIDs;
+  private int quantity;
+  private int visitorID;
+  private List<Integer> bookIDs;
+  private Library library;
 
   public PurchaseBook(Integer quantity, int visitorID){
     this.quantity = quantity;
     this.visitorID = visitorID;
   }
 
-  public PurchaseBook(int quantity, int visitorID, List<String> bookIDs){
+  public PurchaseBook(int quantity, int visitorID, List<Integer> bookIDs, Library library){
     this.quantity = quantity;
-    this.visitorID = visitorID;
     this.bookIDs = bookIDs;
+    this.library = library;
+    this.visitorID = visitorID;
   }
 
+
   @Override
-  public void execute(){}
+  public void execute(){ library.purchaseBooks(quantity, bookIDs);}
 }

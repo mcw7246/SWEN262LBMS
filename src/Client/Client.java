@@ -19,12 +19,15 @@ public class Client {
     private Library library;
     BookStore bookStore;
     private CommandParser commandParser;
+    //Response to the user.
     private String message;
 
     private Calendar startDateTime;
+    //Simulation time of the library.
     private Calendar cal;
     private DateFormat dateFormat;
 
+    //List of all visits made by the visitors.
     private List<Visit> allVisits;
 
     private HashMap<Integer, Book> searchResult;
@@ -39,26 +42,51 @@ public class Client {
         cal.set(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE),8,0,0);
     }
 
+    /**
+     * Method to set the response to the user.
+     * @param string - the message.
+     */
     public void setMessage(String string){
         this.message = string;
     }
 
+    /**
+     * Method to get the response.
+     * @return - the message.
+     */
     public String getMessage(){
         return message;
     }
 
+    /**
+     * Method to get date and time in a string format.
+     * @return - "date,time"
+     */
     public String getDateTime(){
         return dateFormat.format(cal.getTime());
     }
 
+    /**
+     * Method to get the hours of the day.
+     * @return - Hour.
+     */
     public Integer getTime(){
         return cal.get(Calendar.HOUR_OF_DAY);
     }
 
+    /**
+     * Method to get the date in a string format.
+     * @return - "date"
+     */
     public String getDate(){
         return new SimpleDateFormat("yyyy/MM/dd").format(cal.getTime());
     }
 
+    /**
+     * Method to advance the simulation time.
+     * @param days - days to advance.
+     * @param hours - hours to advance.
+     */
     public void advanceTime(Integer days, Integer hours){
         if(days > 7 || days < 0){
             setMessage("advance,invalid-number-of-days," + days + ";");
@@ -74,6 +102,9 @@ public class Client {
         }
     }
 
+    /**
+     * Method to check and change the library state if needed.
+     */
     private void checkLibraryState(){
         if(cal.get(Calendar.HOUR_OF_DAY) < 8 || cal.get(Calendar.HOUR_OF_DAY) >= 19){
             if(library.isOpen()){
@@ -95,30 +126,54 @@ public class Client {
         }
     }
 
+    /**
+     * Method to get the most recent search results.
+     * @return - Hashmap of search results.
+     */
     public HashMap<Integer, Book> getSearchResult(){
         return searchResult;
     }
 
+    /**
+     * Method to get the command parser.
+     * @return - command parser
+     */
     public CommandParser getCommandParser(){
         return commandParser;
     }
 
+    /**
+     * Method to record a new Visit completed by a visitor.
+     * @param visit - the visit.
+     */
     public void addNewVisit(Visit visit){
         allVisits.add(visit);
     }
 
+    /**
+     * Method to get all the visits.
+     * @return - List of all visits.
+     */
     public List<Visit> getAllVisits(){
         return allVisits;
     }
 
+    /**
+     * Method to get the start time of the Visit.
+     * @param duration - total duration of the visit.
+     * @return - Calender with the the start time of the visit.
+     */
     public Calendar getStartTime(Integer duration){
         Calendar calendar = cal;
         calendar.add(Calendar.HOUR_OF_DAY, -duration);
         return calendar;
     }
 
+    /**
+     * Method to get the end time(current time) of the visit.
+     * @return - Calender with the end time of the visit.
+     */
     public Calendar getEndTime(){
-        Calendar calendar = cal;
-        return calendar;
+        return cal;
     }
 }

@@ -5,6 +5,7 @@ import Books.CheckOut;
 
 import java.io.FileNotFoundException;
 import java.lang.invoke.CallSite;
+import java.lang.reflect.Array;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -156,5 +157,48 @@ public class Library {
 
     public void endVisit(Integer visitorID){
         libraryState.endVisit(visitorID);
+    }
+
+    public void bookSearch(int id, String title, ArrayList<String> authors, String isbn, String publisher, String sortOrd){
+        ArrayList<Book> searchResults = new ArrayList<>();
+        List<Book> books = bookStore.getBookList();
+        boolean sorted = false;
+        int caseNum;
+        if(isbn.equals("")){
+            caseNum = 0;
+        }
+        else if (publisher.equals("")){
+            caseNum = 1;
+        }
+        else{
+            caseNum = 1;
+            sorted = true;
+        }
+
+        for(Book book : books){
+            if(book.getTitle().equals("*")){
+                if(authors.equals(book.getAuthor())){
+                    searchResults.add(book);
+                }
+            }
+            else
+            {
+                if (book.getTitle().equals(title) && book.getAuthor().equals(authors))
+                {
+                    switch (caseNum)
+                    {
+                        case 0:
+                            if(isbn.equals(book.getIsbn())){
+                                searchResults.add(book);
+                            }
+                        case 1:
+                            if(isbn.equals(book.getIsbn()) && publisher.equals(book.getPublisher())){
+                                searchResults.add(book);
+                            }
+                    }
+
+                }
+            }
+        }
     }
 }

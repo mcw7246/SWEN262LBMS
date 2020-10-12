@@ -1,6 +1,7 @@
 package Client;
 
 import Books.Book;
+import Books.BookStore;
 import Command.CommandParser;
 import State.Closed;
 import State.Library;
@@ -16,6 +17,7 @@ import java.util.*;
 public class Client {
 
     private Library library;
+    BookStore bookStore;
     private CommandParser commandParser;
     private String message;
 
@@ -29,7 +31,7 @@ public class Client {
 
     public Client() throws FileNotFoundException {
         library = new Library(this);
-        commandParser = new CommandParser(library, this);
+        commandParser = new CommandParser(library, this, bookStore);
         this.cal = Calendar.getInstance();
         this.dateFormat = new SimpleDateFormat("yyyy/MM/dd,HH:mm:ss");
         startDateTime = cal;

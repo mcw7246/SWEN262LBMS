@@ -1,5 +1,6 @@
 package Command;
 
+import Books.BookStore;
 import Client.Client;
 import State.Library;
 
@@ -16,13 +17,15 @@ public class CommandParser
   private Client client;
   private ArrayList<Command> allCommands;
   private Library library;
+  private BookStore bookStore;
 
   /**
    * constructor for the CommandParser class
    * @param library the library that is being used
    */
-  public CommandParser(Library library, Client client){
+  public CommandParser(Library library, Client client, BookStore bookStore){
     this.library = library;
+    this.bookStore = bookStore;
     this.client = client;
     this.allCommands = new ArrayList<>();
   }
@@ -147,38 +150,38 @@ public class CommandParser
       case "info":
         //only given title and author(s)
 
-        if(params.size() == 2){
+        if(params.size() == 3){
           String title = params.get(0);
           ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
-          command = new BookSearch(title, authors);
-          allCommands.add(command);
-        }
-        else if(params.size() == 3){
-          String title = params.get(0);
-          ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
-          String isbn = params.get(2);
-
-          command = new BookSearch(title, authors, isbn);
+          command = new BookSearch(library, title, authors);
           allCommands.add(command);
         }
         else if(params.size() == 4){
           String title = params.get(0);
           ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
           String isbn = params.get(2);
+
+          command = new BookSearch(library, title, authors, isbn);
+          allCommands.add(command);
+        }
+        else if(params.size() == 5){
+          String title = params.get(0);
+          ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
+          String isbn = params.get(2);
           String publisher = params.get(3);
 
-          command = new BookSearch(title, authors, isbn, publisher);
+          command = new BookSearch(library, title, authors, isbn, publisher);
           allCommands.add(command);
         }
 
-        else if(params.size() == 5){
+        else if(params.size() == 6){
           String title = params.get(0);
           ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
           String isbn = params.get(2);
           String publisher = params.get(3);
           String sortOrder = params.get(4);
 
-          command = new BookSearch(title, authors, isbn, publisher, sortOrder);
+          command = new BookSearch(library, title, authors, isbn, publisher, sortOrder);
           allCommands.add(command);
         }
         break;

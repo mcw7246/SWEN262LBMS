@@ -269,9 +269,11 @@ public class CommandParser
         else if(params.size() == 3){
           int quantity = Integer.parseInt(params.get(0));
           int visitorID = Integer.parseInt(params.get(1));
-          List<String> bookIDs = Arrays.asList(params.get(2));
+          //List<Integer> bookIDs = Arrays.asList(params.get(2));
+          ArrayList<Integer> bookIDs = new ArrayList<>(Arrays.asList(Integer.parseInt(params.get(2))));
 
-          command = new PurchaseBook(quantity, visitorID, bookIDs);
+
+          command = new PurchaseBook(quantity, visitorID, bookIDs, library);
           allCommands.add(command);
         }
         break;

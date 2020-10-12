@@ -2,13 +2,15 @@ package Command;
 
 import java.util.List;
 
+
+
 public class BorrowBook implements Command{
 
     private List<Integer> bookId;
-    private Integer id;
+    private Integer visitorID;
 
-    public BorrowBook(Integer visitorId, List<Integer> bookId){
-        this.id = visitorId;
+    public BorrowBook(Integer visitorID, List<Integer> bookId){
+        this.visitorID = visitorID;
         this.bookId = bookId;
     }
 

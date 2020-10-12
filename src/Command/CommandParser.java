@@ -43,35 +43,35 @@ public class CommandParser
     //when false, it is in the beginning or middle of the authors/title (do not parse through it)
     //when true, it is not inside a piece that should not be parsed
     boolean parsePiece = false;
+    String authors = "";
+
+    boolean longCmd = false;
 
     //loops through all of the characters in the given command
-    for(char currentChar : givenCommand.toCharArray()){
-
-      //if it is the beginning of authors, or the start of the
-      //indicates it is at the beginning of something that should not be parsed
-      if((currentChar == '{' || currentChar == '\"') && !parsePiece){
-        parsePiece = true;
-        continue;
-      }else if((currentChar == '}'|| currentChar == '\"') && parsePiece){
-        parsePiece = false;
-        continue;
+    for(char current : givenCommand.toCharArray()){
+      if((current == '{' || current == '\"') && !longCmd){
+        longCmd = true;
+      }
+      else if((current == '}' || current == '\"') && longCmd){
+        longCmd = false;
       }
 
-
-      if(currentChar == ',' && !parsePiece){
+      if(!longCmd && current == ','){
         cmd.add(arg);
         arg = "";
       }
-      else if (currentChar == ';' && !parsePiece){
+      else if(current == ';' && !longCmd){
         cmd.add(arg);
         arg = "";
         break;
       }
+      else if(current == '}' || current == '{'){
+        continue;
+      }
       else{
-        arg += currentChar;
+        arg += current;
       }
     }
-
     String cmdType = cmd.get(0);
 
     cmd.remove(cmdType);
@@ -150,13 +150,13 @@ public class CommandParser
       case "info":
         //only given title and author(s)
 
-        if(params.size() == 3){
+        if(params.size() == 2){
           String title = params.get(0);
           ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
           command = new BookSearch(library, title, authors);
           allCommands.add(command);
         }
-        else if(params.size() == 4){
+        else if(params.size() == 3){
           String title = params.get(0);
           ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
           String isbn = params.get(2);
@@ -164,7 +164,7 @@ public class CommandParser
           command = new BookSearch(library, title, authors, isbn);
           allCommands.add(command);
         }
-        else if(params.size() == 5){
+        else if(params.size() == 4){
           String title = params.get(0);
           ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
           String isbn = params.get(2);
@@ -174,7 +174,7 @@ public class CommandParser
           allCommands.add(command);
         }
 
-        else if(params.size() == 6){
+        else if(params.size() == 5){
           String title = params.get(0);
           ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
           String isbn = params.get(2);

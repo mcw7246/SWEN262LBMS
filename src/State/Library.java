@@ -159,26 +159,50 @@ public class Library {
         libraryState.endVisit(visitorID);
     }
 
-    public void bookSearch(int id, String title, ArrayList<String> authors, String isbn, String publisher, String sortOrd){
+    public void bookSearch(String title, ArrayList<String> authors, String isbn, String publisher, String sortOrd){
+        System.out.println("Reaches the bookSearch method in library.");
         ArrayList<Book> searchResults = new ArrayList<>();
         List<Book> books = bookStore.getBookList();
+        String message = "";
         boolean sorted = false;
         int caseNum;
-        if(isbn.equals("")){
+        if(title.equals("*")){
             caseNum = 0;
+            System.out.println("All titles by this author");
         }
-        else if (publisher.equals("")){
+        else if(isbn == null){
+            System.out.println("No isbn, publisher or sortOrder");
             caseNum = 1;
+        }
+        else if (publisher == null){
+
+            caseNum = 2;
         }
         else{
-            caseNum = 1;
+            caseNum = 2;
             sorted = true;
         }
 
+        System.out.println("title: " + title);
+        System.out.println("authors: " + authors);
         for(Book book : books){
-            if(book.getTitle().equals("*")){
+            switch(caseNum){
+                case 0:
+                    System.out.println("Reached case 0");
+                    System.out.println("Books author: " + book.getAuthor());
+                    //System.out.println("Given authors: " + authors.toString());
+                    if(book.getAuthor().contains(authors.toString())){
+                        searchResults.add(book);
+                        System.out.println("yaaf");
+                    }
+                case 1:
+                    System.out.println("Reached case 1");
+                    System.out.println("Books author: " + book.getAuthor());
+            }/**
+            if(title.equals("*")){
                 if(authors.equals(book.getAuthor())){
                     searchResults.add(book);
+                    System.out.println("fook");
                 }
             }
             else
@@ -198,7 +222,8 @@ public class Library {
                     }
 
                 }
-            }
+            }*/
         }
+        client.setSearchResult(searchResults);
     }
 }

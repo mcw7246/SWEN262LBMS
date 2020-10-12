@@ -11,9 +11,9 @@ public class BookSearch implements Command{
     Library library;
     String title;
     ArrayList<String> authors;
-    String isbn;
-    String publisher;
-    String sortOrder;
+    String isbn = null;
+    String publisher = null;
+    String sortOrder = null;
 
     public BookSearch(Library library, String title, ArrayList<String> authors){
         this.library = library;
@@ -47,7 +47,7 @@ public class BookSearch implements Command{
 
     @Override
     public void execute() {
-
+        library.bookSearch(title,authors,isbn,publisher, sortOrder);
     }
 
 

@@ -344,7 +344,7 @@ public class Library
 
         }
         client.setSearchResult(searchResults);
-        message = "info," + searchResults.size();
+        message = "search," + searchResults.size();
         for (Integer id : client.getSearchResult().keySet())
         {
             Book bookSearch = client.getSearchResult().get(id);

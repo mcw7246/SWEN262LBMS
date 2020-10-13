@@ -214,7 +214,7 @@ public class CommandParser
           int id = Integer.parseInt(params.get(0));
           List<String> bookIds = Arrays.asList(params.get(1).split(","));
 
-          command = new ReturnBook(id, bookIds);
+          command = new ReturnBook(library, id, bookIds);
         }
         break;
       case "pay":
@@ -222,38 +222,34 @@ public class CommandParser
           int visitorID = Integer.parseInt(params.get(0));
           double amount = Double.parseDouble(params.get(1));
 
-          command = new PayFine(visitorID, amount);
+          command = new PayFine(library, visitorID, amount);
         }
         break;
       case "search":
         String title = "";
-        List<String> authors;
-        String isbn;
-        String publisher;
-        String sortOrder;
-        if(params.size() == 2){
+        List<String> authors= new ArrayList<>();
+        String isbn = "*";
+        String publisher = "*";
+        String sortOrder = "*";
+        if(params.size() == 1){
+          title = params.get(0);
+          authors = Arrays.asList("*");
+        }
+        else if(params.size() == 2){
           title = params.get(0);
           authors = Arrays.asList(params.get(1).split(","));
-
-          command = new StoreSearch(title, authors);
-          allCommands.add(command);
         }
         else if(params.size() == 3){
           title = params.get(0);
           authors = Arrays.asList(params.get(1));
           isbn = params.get(2);
 
-          command = new StoreSearch(title, authors, isbn);
-          allCommands.add(command);
         }
         else if(params.size() == 4){
           title = params.get(0);
           authors = Arrays.asList(params.get(1));
           isbn = params.get(2);
           publisher = params.get(3);
-
-          command = new StoreSearch(title, authors, isbn, publisher);
-          allCommands.add(command);
         }
         else if(params.size() == 5){
           title = params.get(0);
@@ -261,10 +257,10 @@ public class CommandParser
           isbn = params.get(2);
           publisher = params.get(3);
           sortOrder = params.get(4);
-
-          command = new StoreSearch(title, authors, isbn, publisher, sortOrder);
-          allCommands.add(command);
         }
+
+        command = new StoreSearch(bookStore, title, authors, isbn, publisher, sortOrder);
+        allCommands.add(command);
         break;
       case "buy":
         if(params.size() == 2){

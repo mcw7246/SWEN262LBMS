@@ -48,7 +48,7 @@ public class Library
     {
         this.visitors = new HashMap<>();
         books = new HashMap<>();
-        bookStore = new BookStore();
+        bookStore = new BookStore(client);
         this.client = client;
         visitorID = 1000000000;
         currentVisitors = new HashMap<>();
@@ -146,12 +146,6 @@ public class Library
 
     public HashMap<Integer, Integer> getNumPurchased() {
         return numPurchased;
-    }
-
-    public void checkOutBooks(List<Integer> bookISBNs, Calendar checkInDate, Calendar checkOutDate, int visitorID)
-    {
-        CheckOut CO = new CheckOut(bookISBNs, checkInDate, checkOutDate, visitorID);
-        checkOuts.add(CO);
     }
 
     /**
@@ -271,12 +265,12 @@ public class Library
         //gets rid of the \" in the front and end of the title
         String titleSub = title.substring(1, title.length() - 1);
         ArrayList<Book> searchResults = new ArrayList<>();
-        List<Book> books = bookStore.getBookList();
+        List<Book> booksTest = bookStore.getBookList();
         boolean sorted = false;
         String message = "";
 
         //loops through all the books
-        for(Book book : books){
+        for(Book book : books.keySet()){
             int numAuthors = 0;
             //checks if it is any title
             if(titleSub.equals("*")){
@@ -351,11 +345,60 @@ public class Library
         }
         client.setSearchResult(searchResults);
         message = "info," + searchResults.size();
-        for (Book bookSearch : searchResults)
+        for (Integer id : client.getSearchResult().keySet())
         {
+            Book bookSearch = client.getSearchResult().get(id);
             message += "\n";
-            message += bookSearch.getNumCopies() + "," + bookSearch.getIsbn() + "," + bookSearch.getTitle() + ",{" + bookSearch.getAuthor() + "}," + bookSearch.getPublisher() + "," + bookSearch.getPublishDate() + "," + bookSearch.getPageCount();
+            message += id + " - " + bookSearch.getNumCopies() + "," + bookSearch.getIsbn() + "," + bookSearch.getTitle() + ",{" + bookSearch.getAuthor() + "}," + bookSearch.getPublisher() + "," + bookSearch.getPublishDate() + "," + bookSearch.getPageCount();
         }
         client.setMessage(message);
+    }
+
+    /**
+     * When a visitor returns borrowed book(s)
+     * @param visitorID - the visitoryID of the visitor returning books
+     */
+    public void returnBooks(int visitorID)
+    {
+        ArrayList<Book> books = new ArrayList<>();
+        for (Book book: this.searchResult.values())
+        {
+            books.add(book);
+        }
+
+        Visitor visitor = this.visitors.get(visitorID);
+
+        double fines = visitor.returnBooks(books, this.client.getDateObj());
+
+        if (fines > 0)
+        {
+            //update client with amount due
+            this.client.setMessage("Late fees accrued: $" + fines);
+        }
+        else
+        {
+            //update client with success message
+            this.client.setMessage("Successfully returned books!");
+        }
+    }
+
+    /**
+     * Pay a given amount toward a visitor's fine
+     *
+     * @param visitorID - id of visitor paying the fine
+     * @param amount - amount to pay
+     */
+    public void payFine(int visitorID, double amount)
+    {
+        Visitor visitor = this.visitors.get(visitorID);
+
+        // Check for invalid visitor ID
+        if (visitor == null) { return; }
+
+        // Check for invalid amount
+        if (amount < 0 || amount > visitor.getBalance()) { return; }
+
+        visitor.payFine(amount, this.client.getDateObj());
+        this.client.setMessage("Remaining balance: " + visitor.getBalance());
     }
 }

@@ -2,8 +2,6 @@ package Command;
 
 import java.util.List;
 
-
-
 public class BorrowBook implements Command{
 
     private List<Integer> bookId;

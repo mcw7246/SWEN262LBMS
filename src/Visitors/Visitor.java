@@ -1,7 +1,10 @@
 package Visitors;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
+
+import Books.Book;
+import Books.CheckOut;
 
 /**
  * @author Mikayla Wishart - mcw7246
@@ -14,6 +17,10 @@ public class Visitor
   private String phoneNum;
   private int id;
   private boolean inVisit;
+  private ArrayList<CheckOut> checkOuts;
+  private ArrayList<PaidFine> paidFines;
+  private ArrayList<UnpaidFine> unpaidFines;
+  private int balance;
 
 
   /**
@@ -29,6 +36,10 @@ public class Visitor
     this.address = address;
     this.phoneNum = phoneNum;
     this.inVisit = false;
+    checkOuts = new ArrayList<>();
+    paidFines = new ArrayList<>();
+    unpaidFines = new ArrayList<>();
+    balance = 0;
   }
 
   /**
@@ -100,6 +111,22 @@ public class Visitor
     return inVisit;
   }
 
+    /**
+     * Gets a list of currently checked out books.
+     *
+     * @return An ArrayList of currently checked out books.
+     */
+    public ArrayList<Book> getCheckedOutBooks()
+    {
+        ArrayList<Book> books = new ArrayList<>();
+
+        for (CheckOut checkout: this.checkOuts)
+        {
+            books.addAll(checkout.getBooks());
+        }
+        return books;
+  }
+
   /**
    * Create a string for visitors
    * @return a string that contains visitor's information
@@ -109,4 +136,112 @@ public class Visitor
     return "First Name: " + this.fName + "\nLast Name: " + this.lName + "\nAddress: " + this.address + "\nPhone Number: "
             + this.phoneNum + "\nID: " + this.id + "\nIs In Library: " + this.inVisit;
   }
+
+  /**
+   * Visitor returning books
+   * @return a string that contains visitor's information
+   */
+  public double returnBooks(ArrayList<Book> books, Calendar dateReturned)
+    {
+        double totalFines = 0.0;
+
+        for (Book book: books)
+        {
+            // get all checked out books for this visitor
+            ArrayList<Book> checkedOut = this.getCheckedOutBooks();
+
+            // Confirm visitor has checked out book
+            if (!checkedOut.contains(book))
+            {
+                continue;
+            }
+
+            CheckOut checkout = findCheckOut(book);
+            boolean booksLeft = checkout.returnBook(dateReturned, book);
+            if(booksLeft)
+            {
+              // Remove the checkout
+              this.checkOuts.remove(checkout);
+            }
+
+            // Calculate any fines applied to this book.
+            int fineAmount = calculateFine(checkout);
+
+            // Create fine object if necessary
+            if (fineAmount > 0)
+            {
+                this.unpaidFines.add(new UnpaidFine(fineAmount, dateReturned));
+                this.balance += fineAmount;
+
+                // Add to total fines applied
+                totalFines += fineAmount;
+            }
+
+            // Put the copy back in the library
+            book.returnCopies(1);
+        }
+
+        return totalFines;
+    }
+
+    /**
+     * Finds checkout associated with specific book
+     * 
+     * @param book - book that is being checked out
+     * @return check out object that contains the book
+     */
+    private CheckOut findCheckOut(Book book){
+
+      for(CheckOut checkOut: this.checkOuts)
+      {
+        if(checkOut.getBooks().contains(book))
+          return checkOut;
+      }
+      return null;
+    }
+
+
+    /**
+     * Calculates the fines applied to a returned book transaction. $10 is added to the fine for 1 day late, and $2 is
+     * added for each additional week late. A fine cannot exceed $30.
+     *
+     * @param checkout - A Checkout object used to calculate fines.
+     * @return An integer representing the amount charged to the visitor.
+     */
+    private int calculateFine(CheckOut checkout)
+    {
+        int fineAmount = 0;
+        int returnDate = checkout.getCheckInDate().get(Calendar.DAY_OF_YEAR);
+        int dueDate = checkout.getCheckOutDate().get(Calendar.DAY_OF_YEAR);
+
+        int days = returnDate - dueDate;
+
+        if (days >= 1)
+        {
+            fineAmount = Integer.min(10 + (2 * (days / 7)), 30);
+        }
+
+        return fineAmount;
+    }
+
+     /**
+     * Pays a given amount toward the visitor's fine balance.
+     *
+     * @param amount - The amount to pay toward fines.
+     */
+    public void payFine(double amount, Calendar datePaid)
+    {
+        this.balance -= amount;
+        this.paidFines.add(new PaidFine(amount, datePaid));
+    }
+
+      /**
+     * Simple getter for retrieving the visitor's balance.
+     *
+     * @return The visitor's balance.
+     */
+    public int getBalance()
+    {
+        return this.balance;
+    }
 }

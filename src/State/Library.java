@@ -99,6 +99,21 @@ public class Library {
         }
     }
 
+    /**
+     * Method used by employees to borrow books.
+     * @param qty quantity of books
+     * @param ID book id for search results
+     */
+    public void borrowBooks(Integer qty, List<Integer> ID){
+        for(Integer num: client.getSearchResult().keySet()){
+            for(Integer id : ID){
+                if(id == num){
+                    books.put(client.getSearchResult().get(num), qty);
+                }
+            }
+        }
+    }
+
     public void checkOutBooks(List<Integer> bookISBNs, Calendar checkInDate, Calendar checkOutDate, int visitorID){
         CheckOut CO = new CheckOut(bookISBNs, checkInDate, checkOutDate, visitorID);
         checkOuts.add(CO);

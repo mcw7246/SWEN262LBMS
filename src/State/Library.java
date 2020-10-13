@@ -117,12 +117,6 @@ public class Library {
         }
     }
 
-
-    public void checkOutBooks(List<Integer> bookISBNs, Calendar checkInDate, Calendar checkOutDate, int visitorID){
-        CheckOut CO = new CheckOut(bookISBNs, checkInDate, checkOutDate, visitorID);
-        checkOuts.add(CO);
-    }
-
     /**
      * Method to register a new Visitor
      * @param fName first name
@@ -251,6 +245,32 @@ public class Library {
 
                 }
             }
+        }
+    }
+
+/**
+     * When a visitor returns borrowed book(s)
+     * @param visitorID - the visitoryID of the visitor returning books
+     */
+    public void returnBooks(int visitorID)
+    {
+        ArrayList<Book> books = new ArrayList<>();
+        for (Book book: this.searchResult.values())
+        {
+            books.add(book);
+        }
+
+        Visitor visitor = this.visitors.get(visitorID);
+
+        double fines = visitor.returnBooks(books, this.client.getDateObj());
+        
+        if (fines > 0)
+        {
+            //update client with amount due
+        }
+        else
+        {
+            //update client with success message
         }
     }
 }

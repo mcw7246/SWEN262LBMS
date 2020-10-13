@@ -97,7 +97,10 @@ public class Book
     numCopies = value;
   }
 
-  public void setNumCopiesAvailable(int value){
-    numCopiesAvailable = value;
+    /**
+   *  Adds to the number of copies of available when a visitor returns books
+   */
+  public void returnCopies(int amount){
+      numCopiesAvailable += amount;
   }
 }

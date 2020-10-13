@@ -3,22 +3,27 @@ package Books;
 import java.util.List;
 import java.util.Calendar;
 
+/**
+ * Creates object of a checked out book
+ *
+ * @author Ryan Tytka - rdt7867
+ */
 public class CheckOut {
     
-    private List<Integer> bookISBNs;
+    private List<Book> books;
     private Calendar checkInDate;
     private Calendar checkOutDate;
     private int visitorID;
 
-    public CheckOut(List<Integer> books, Calendar checkInDate, Calendar checkOutDate, int visitorID){
-        this.bookISBNs = books;
+    public CheckOut(List<Book> books, Calendar checkInDate, Calendar checkOutDate, int visitorID){
+        this.books = books;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.visitorID = visitorID;
     }
 
-    public List<Integer> getBookISBNs(){
-        return bookISBNs;
+    public List<Book> getBooks(){
+        return books;
     }
 
     public Calendar getCheckInDate(){
@@ -31,5 +36,13 @@ public class CheckOut {
 
     public int getVisitorID(){
         return visitorID;
+    }
+
+    /**
+     * Sets the check out date date of the checkout.
+     */
+    public void returnBook(Calendar checkOutDate)
+    {
+        this.checkOutDate = checkOutDate;
     }
 }

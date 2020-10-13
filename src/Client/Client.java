@@ -83,6 +83,14 @@ public class Client {
     }
 
     /**
+     * Method to get the date object
+     * @return - "date"
+     */
+    public Calendar getDateObj(){
+        return cal;
+    }
+
+    /**
      * Method to advance the simulation time.
      * @param days - days to advance.
      * @param hours - hours to advance.

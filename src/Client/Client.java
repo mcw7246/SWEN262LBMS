@@ -20,7 +20,7 @@ public class Client {
     BookStore bookStore;
     private CommandParser commandParser;
     //Response to the user.
-    private String message;
+    private List<String> message;
 
     private Calendar startDateTime;
     //Simulation time of the library.
@@ -33,6 +33,7 @@ public class Client {
     private HashMap<Integer, Book> searchResult;
 
     public Client() throws FileNotFoundException {
+        this.message = new ArrayList<>();
         library = new Library(this);
         commandParser = new CommandParser(library, this, bookStore);
         this.cal = Calendar.getInstance();
@@ -47,14 +48,14 @@ public class Client {
      * @param string - the message.
      */
     public void setMessage(String string){
-        this.message = string;
+        this.message.add(string);
     }
 
     /**
      * Method to get the response.
      * @return - the message.
      */
-    public String getMessage(){
+    public List<String> getMessage(){
         return message;
     }
 
@@ -103,9 +104,23 @@ public class Client {
             setMessage("advance,invalid-number-of-hours," + hours + ";");
         }
         else{
+            boolean closeLibrary = false;
+            //if day changes, close the library.
+            if(days > 0){
+                closeLibrary = true;
+            }
             cal.add(Calendar.DATE, days);
+            //if hours are past close time.
+            if(cal.get(Calendar.HOUR_OF_DAY) + hours >= 19){
+                closeLibrary = true;
+            }
             cal.add(Calendar.HOUR_OF_DAY, hours);
             setMessage("advance,success;");
+            if(closeLibrary){
+                if(library.isOpen()) {
+                    library.closeLibrary();
+                }
+            }
             checkLibraryState();
         }
     }
@@ -172,7 +187,7 @@ public class Client {
      * @return - Calender with the the start time of the visit.
      */
     public Calendar getStartTime(Integer duration){
-        Calendar calendar = cal;
+        Calendar calendar = this.getEndTime();
         calendar.add(Calendar.HOUR_OF_DAY, -duration);
         return calendar;
     }
@@ -183,5 +198,48 @@ public class Client {
      */
     public Calendar getEndTime(){
         return cal;
+    }
+
+    public void generateReport(Integer days){
+        String date = this.getDate();
+        int numBooks = library.getBooks().size();
+        Integer numVisitors = library.getTotalRegistered();
+        List<Visit> visitList = new ArrayList<>();
+        //Avg Visit Length.
+        int numDay;
+        if(days == 0){
+            numDay = 0;
+        }
+        else {
+            numDay = cal.get(Calendar.DAY_OF_YEAR) - days;
+        }
+        if(numDay > 0) {
+            //Adding all visits in past "day" days.
+            for (Visit visit : allVisits) {
+                if(visit.getVisitDay() > numDay){
+                    visitList.add(visit);
+                }
+            }
+        }
+        //Calculating avg visit length.
+        int visitLength = 0;
+        for(Visit visit: visitList){
+            visitLength += visit.getVisitLength();
+        }
+        Float numAvgVisit = (float) visitLength/days;
+        //Number of Books Purchased.
+        Integer booksPurchased = 0;
+        for(Integer num: library.getNumPurchased().keySet()){
+            if(num > numDay){
+                booksPurchased += library.getNumPurchased().get(num);
+            }
+        }
+        this.setMessage("report," + getDate() +
+                ",\n Number of Books:" + numBooks +
+                "\n Number of Visitors:" + numVisitors +
+                "\n Average Length of Visit:"+ visitLength +
+                "\n Number of Books Purchased:" + booksPurchased +
+                "\n Fines Collected: fines" +
+                "\n Fines Outstanding: outstanding;");
     }
 }

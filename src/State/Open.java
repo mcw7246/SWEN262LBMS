@@ -40,10 +40,9 @@ public class Open implements LibraryState{
             visitors.get(visitorId).setEndVisit();
             //start time in hours(24 hrs)
             Integer startTime = library.getCurrentVisitors().remove(visitorId);
-            Integer visitTime = client.getTime() - startTime;
-            Visit visit = new Visit(client.getStartTime(visitTime),visitorId,client.getEndTime());
+            Visit visit = new Visit(startTime,visitorId, client.getTime(), client.getEndTime());
             client.addNewVisit(visit);
-            client.setMessage("arrive," + visitorId + "," + client.getDateTime() + ";");
+            client.setMessage("depart," + visitorId + "," + client.getDateTime() + ";");
         }
     }
 

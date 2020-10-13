@@ -15,16 +15,57 @@ public class BookStore {
         File books = new File("src/Books/books.txt");
         Scanner scanner = new Scanner(books);
 
-        while(scanner.hasNext()) {
-            String line = scanner.nextLine();
-            if(line != "") {
-                String[] bookInfo = line.split(",");
-                Book newBook = new Book(bookInfo[0], bookInfo[1].replace("\"", ""), bookInfo[2].replace("{", ""),
-                        bookInfo[3].replace("\"", ""), bookInfo[4], bookInfo[5]);
-                bookList.add(newBook);
+        boolean specialType = false;
+
+        String arg = "";
+        List<String> lines = new ArrayList<>();
+
+        //goes through the given file and puts every line into an array of lines
+        while(scanner.hasNext())
+        {
+          String line = scanner.nextLine();
+          if(line !=""){
+            lines.add(line);
+          }
+        }
+
+        //loops through every line
+        for(String line : lines){
+          List<String> bookInfo = new ArrayList<>();
+
+          int numChar = 0;
+          //loops through all the characters in the line
+          for(char current : line.toCharArray()){
+            numChar++;
+            //if it is the beginning of a special type (ie. author or title) then it sets special type to true
+            if((current == '\"' || current == '{') && !specialType){
+              specialType = true;
             }
+            //if it is already in a special type and has a special character to end it then it sets specialType to false
+            else if((current == '\"' || current == '}') && specialType){
+              specialType = false;
+            }
+            //if there is a comma and it is not a special type then the parameter for a book is done and it is added to the bookinfo array
+            else if(current == ',' && !specialType){
+              bookInfo.add(arg);
+              arg = "";
+            }
+            //else it adds the current character to the string
+            else{
+              arg += current;
+            }
+
+            //gets the last arg for the book info (the page num) and adds that to the book info array
+            if(bookInfo.size() == 5 && line.length() == numChar){
+              bookInfo.add(arg);
+              arg = "";
+            }
+          }
+          Book newBook = new Book(bookInfo.get(0), bookInfo.get(1), bookInfo.get(2), bookInfo.get(3), bookInfo.get(4), bookInfo.get(5));
+          bookList.add(newBook);
         }
     }
+
 
     public List<Book> getBookList() {
         return bookList;

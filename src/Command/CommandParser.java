@@ -7,6 +7,7 @@ import State.Library;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Calendar;
 
 /**
  * Parses through the commands that are given
@@ -18,6 +19,10 @@ public class CommandParser
   private ArrayList<Command> allCommands;
   private Library library;
   private BookStore bookStore;
+  private Calendar checkInDate;
+  private Calendar checkOutDate;
+  private Calendar calendar;
+  private Calendar timeBorrow;
 
   /**
    * constructor for the CommandParser class
@@ -28,6 +33,7 @@ public class CommandParser
     this.bookStore = bookStore;
     this.client = client;
     this.allCommands = new ArrayList<>();
+
   }
 
   /**
@@ -109,7 +115,7 @@ public class CommandParser
           //if there is a duplicate user
           if(duplicate)
             errorDuplicateVisitor();
-          //no duplicate user
+            //no duplicate user
           else{
             command = new NewVisitor(fName, lName, address, phoneNum, library);
 
@@ -198,14 +204,15 @@ public class CommandParser
           int visitorID = Integer.parseInt(params.get(0));
           ArrayList<Integer> bookIDs = new ArrayList<>(Arrays.asList(Integer.parseInt(params.get(1))));
 
-          command = new BorrowBook(visitorID, bookIDs);
+          command = new BorrowBook(visitorID, bookIDs, library, timeBorrow);
           allCommands.add(command);
         }
       case "borrowed":
-        if(params.size() == 1){
-          String visitorID = params.get(0);
+        if(params.size() == 2){
+          int visitorID = Integer.parseInt(params.get(0));
+          ArrayList<Integer> bookIDs = new ArrayList<>(Arrays.asList(Integer.parseInt(params.get(1))));
 
-          command = new BorrowedBooks(Integer.parseInt(visitorID));
+          command = new BorrowedBooks(visitorID, bookIDs, library, checkInDate, checkOutDate);
           allCommands.add(command);
         }
         break;

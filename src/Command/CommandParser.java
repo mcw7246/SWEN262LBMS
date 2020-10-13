@@ -269,12 +269,12 @@ public class CommandParser
       case "buy":
         if(params.size() == 2){
           int quantity = Integer.parseInt(params.get(0));
-          int visitorID = Integer.parseInt(params.get(1));
+          ArrayList<Integer> bookIDs = new ArrayList<>(Arrays.asList(Integer.parseInt(params.get(1))));
 
-          command = new PurchaseBook(quantity, visitorID);
+          command = new PurchaseBook(quantity, bookIDs, library);
           allCommands.add(command);
         }
-        else if(params.size() == 3){
+        /*else if(params.size() == 3){
           int quantity = Integer.parseInt(params.get(0));
           int visitorID = Integer.parseInt(params.get(1));
           //List<Integer> bookIDs = Arrays.asList(params.get(2));
@@ -283,7 +283,7 @@ public class CommandParser
 
           command = new PurchaseBook(quantity, visitorID, bookIDs, library);
           allCommands.add(command);
-        }
+        }*/
         break;
 
       case "advance":

@@ -6,20 +6,20 @@ import State.Library;
 public class PurchaseBook implements Command
 {
   private int quantity;
-  private int visitorID;
+
   private List<Integer> bookIDs;
   private Library library;
 
-  public PurchaseBook(Integer quantity, int visitorID){
+  /*public PurchaseBook(Integer quantity, int visitorID){
     this.quantity = quantity;
     this.visitorID = visitorID;
-  }
+  }*/
 
-  public PurchaseBook(int quantity, int visitorID, List<Integer> bookIDs, Library library){
+  public PurchaseBook(int quantity,List<Integer> bookIDs, Library library){
     this.quantity = quantity;
     this.bookIDs = bookIDs;
     this.library = library;
-    this.visitorID = visitorID;
+
   }
 
 

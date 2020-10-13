@@ -4,17 +4,12 @@ import Books.Book;
 import Books.CheckOut;
 
 import java.io.FileNotFoundException;
-import java.lang.invoke.CallSite;
-import java.lang.reflect.Array;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Calendar;
 import java.util.ArrayList;
 
 import Command.*;
-import State.LibraryState;
-import State.Open;
 
 import Books.BookStore;
 import Client.Client;
@@ -45,6 +40,8 @@ public class Library
     private HashMap<Book, Integer> books;
     //List of current visitors: Id -> Visit start time.
     private HashMap<Integer, Integer> currentVisitors;
+    //Number of purchased books with date: Day_Of_Year -> Number of Books.
+    private HashMap<Integer, Integer> numPurchased;
 
 
     public Library(Client client) throws FileNotFoundException
@@ -58,6 +55,7 @@ public class Library
         open = new Open(this);
         closed = new Closed(this);
         libraryState = open;
+        this.numPurchased = new HashMap<>();
     }
 
     /**
@@ -132,17 +130,22 @@ public class Library
             {
                 if (id == num)
                 {
-                    books.put(client.getSearchResult().get(num), qty);
+                    Book book = client.getSearchResult().get(num);
+                    books.put(book, qty);
+                    Integer day = client.getEndTime().get(Calendar.DAY_OF_YEAR);
+                    if(numPurchased.containsKey(day)) {
+                        numPurchased.put(day, numPurchased.get(day) + 1);
+                    }
+                    else{
+                        numPurchased.put(day, 1);
+                    }
                 }
             }
         }
     }
 
-
-    public void checkOutBooks(List<Integer> bookISBNs, Calendar checkInDate, Calendar checkOutDate, int visitorID)
-    {
-        CheckOut CO = new CheckOut(bookISBNs, checkInDate, checkOutDate, visitorID);
-        checkOuts.add(CO);
+    public HashMap<Integer, Integer> getNumPurchased() {
+        return numPurchased;
     }
 
     /**
@@ -221,6 +224,10 @@ public class Library
     protected HashMap<Integer, Visitor> getVisitors()
     {
         return visitors;
+    }
+
+    public Integer getTotalRegistered(){
+        return visitors.size();
     }
 
     /**
@@ -344,5 +351,31 @@ public class Library
             message += bookSearch.getNumCopies() + "," + bookSearch.getIsbn() + "," + bookSearch.getTitle() + ",{" + bookSearch.getAuthor() + "}," + bookSearch.getPublisher() + "," + bookSearch.getPublishDate() + "," + bookSearch.getPageCount();
         }
         client.setMessage(message);
+    }
+
+    /**
+     * When a visitor returns borrowed book(s)
+     * @param visitorID - the visitoryID of the visitor returning books
+     */
+    public void returnBooks(int visitorID)
+    {
+        ArrayList<Book> books = new ArrayList<>();
+        for (Book book: this.searchResult.values())
+        {
+            books.add(book);
+        }
+
+        Visitor visitor = this.visitors.get(visitorID);
+
+        double fines = visitor.returnBooks(books, this.client.getDateObj());
+
+        if (fines > 0)
+        {
+            //update client with amount due
+        }
+        else
+        {
+            //update client with success message
+        }
     }
 }

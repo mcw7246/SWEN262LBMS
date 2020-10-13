@@ -35,4 +35,8 @@ public class Visit
   public Integer getVisitLength() {
     return visitLength;
   }
+
+  public Integer getVisitDay(){
+    return endDateTime.get(Calendar.DAY_OF_YEAR);
+  }
 }

@@ -85,6 +85,14 @@ public class Client {
     }
 
     /**
+     * Method to get the date object
+     * @return - "date"
+     */
+    public Calendar getDateObj(){
+        return cal;
+    }
+
+    /**
      * Method to advance the simulation time.
      * @param days - days to advance.
      * @param hours - hours to advance.
@@ -191,5 +199,48 @@ public class Client {
      */
     public Calendar getEndTime(){
         return cal;
+    }
+
+    public void generateReport(Integer days){
+        String date = this.getDate();
+        int numBooks = library.getBooks().size();
+        Integer numVisitors = library.getTotalRegistered();
+        List<Visit> visitList = new ArrayList<>();
+        //Avg Visit Length.
+        int numDay;
+        if(days == 0){
+            numDay = 0;
+        }
+        else {
+            numDay = cal.get(Calendar.DAY_OF_YEAR) - days;
+        }
+        if(numDay > 0) {
+            //Adding all visits in past "day" days.
+            for (Visit visit : allVisits) {
+                if(visit.getVisitDay() > numDay){
+                    visitList.add(visit);
+                }
+            }
+        }
+        //Calculating avg visit length.
+        int visitLength = 0;
+        for(Visit visit: visitList){
+            visitLength += visit.getVisitLength();
+        }
+        Float numAvgVisit = (float) visitLength/days;
+        //Number of Books Purchased.
+        Integer booksPurchased = 0;
+        for(Integer num: library.getNumPurchased().keySet()){
+            if(num > numDay){
+                booksPurchased += library.getNumPurchased().get(num);
+            }
+        }
+        this.setMessage("report," + getDate() +
+                ",\n Number of Books:" + numBooks +
+                "\n Number of Visitors:" + numVisitors +
+                "\n Average Length of Visit:"+ visitLength +
+                "\n Number of Books Purchased:" + booksPurchased +
+                "\n Fines Collected: fines" +
+                "\n Fines Outstanding: outstanding;");
     }
 }

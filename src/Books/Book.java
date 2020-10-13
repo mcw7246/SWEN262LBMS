@@ -5,7 +5,7 @@ package Books;
  *
  * @author Mikayla Wishart - mcw7246
  */
-public class Book
+public class Book implements Product
 {
   private String isbn;
   private String title;
@@ -97,7 +97,10 @@ public class Book
     numCopies = value;
   }
 
-  public void setNumCopiesAvailable(int value){
-    numCopiesAvailable = value;
+    /**
+   *  Adds to the number of copies of available when a visitor returns books
+   */
+  public void returnCopies(int amount){
+      numCopiesAvailable += amount;
   }
 }

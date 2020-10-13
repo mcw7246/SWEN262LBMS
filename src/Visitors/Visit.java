@@ -7,7 +7,8 @@ import java.util.Calendar;
  */
 public class Visit
 {
-  private Calendar startTime;
+  private Integer startTime;
+  private Integer endTime;
   private Calendar endDateTime;
   private Integer visitorID;
   private Integer visitLength;
@@ -16,16 +17,26 @@ public class Visit
    * main constructor for a visit.
    * @param startTime start time for visit
    * @param visitorID visitor id for the person visiting
+   * @param endTime end time for the visit
    * @param endDateTime Date and time of end of the visit
    */
-  public Visit(Calendar startTime, Integer visitorID, Calendar endDateTime){
+  public Visit(Integer startTime, Integer visitorID, Integer endTime,Calendar endDateTime){
     this.startTime = startTime;
+    this.endTime = endTime;
     this.visitorID = visitorID;
     this.endDateTime = endDateTime;
-    visitLength = endDateTime.get(Calendar.HOUR) - endDateTime.get(Calendar.HOUR);
+    visitLength = endTime - startTime;
   }
 
+  /**
+   * Method to get the visit duration in hours(24 hr).
+   * @return
+   */
   public Integer getVisitLength() {
     return visitLength;
+  }
+
+  public Integer getVisitDay(){
+    return endDateTime.get(Calendar.DAY_OF_YEAR);
   }
 }

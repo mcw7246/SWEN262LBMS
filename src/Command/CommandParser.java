@@ -49,46 +49,54 @@ public class CommandParser
     //when false, it is in the beginning or middle of the authors/title (do not parse through it)
     //when true, it is not inside a piece that should not be parsed
     boolean parsePiece = false;
+    String authors = "";
+
+    boolean longCmd = false;
 
     //loops through all of the characters in the given command
-    for(char currentChar : givenCommand.toCharArray()){
-
-      //if it is the beginning of authors, or the start of the
-      //indicates it is at the beginning of something that should not be parsed
-      if((currentChar == '{' || currentChar == '\"') && !parsePiece){
-        parsePiece = true;
-        continue;
-      }else if((currentChar == '}'|| currentChar == '\"') && parsePiece){
-        parsePiece = false;
-        continue;
+    for(char current : givenCommand.toCharArray()){
+      if((current == '{' || current == '\"') && !longCmd){
+        longCmd = true;
+        arg += "";
+      }
+      else if((current == '}' || current == '\"') && longCmd){
+        longCmd = false;
       }
 
-
-      if(currentChar == ',' && !parsePiece){
+      if(!longCmd && current == ','){
         cmd.add(arg);
         arg = "";
       }
-      else if (currentChar == ';' && !parsePiece){
+      else if(current == ';' && !longCmd){
         cmd.add(arg);
         arg = "";
         break;
       }
+      else if(current == '{' || current == '}'){
+        arg += "";
+      }
       else{
-        arg += currentChar;
+        arg += current;
       }
     }
-
     String cmdType = cmd.get(0);
 
     cmd.remove(cmdType);
     ArrayList<String> paramGiven = cmd;
 
     createCommand(cmdType, paramGiven);
+    //loop through all commands.
     for(Command command:allCommands){
       command.execute();
     }
+    //empty all commands.
     allCommands.clear();
-    System.out.println(client.getMessage());
+    //loop through all response.
+    for(String message: client.getMessage()) {
+      System.out.println(message);
+    }
+    //empty all messages.
+    client.getMessage().clear();
   }
 
   public void createCommand(String cmd, ArrayList<String> params){
@@ -156,13 +164,13 @@ public class CommandParser
       case "info":
         //only given title and author(s)
 
-        if(params.size() == 3){
+        if(params.size() == 2){
           String title = params.get(0);
           ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
           command = new BookSearch(library, title, authors);
           allCommands.add(command);
         }
-        else if(params.size() == 4){
+        else if(params.size() == 3){
           String title = params.get(0);
           ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
           String isbn = params.get(2);
@@ -170,7 +178,7 @@ public class CommandParser
           command = new BookSearch(library, title, authors, isbn);
           allCommands.add(command);
         }
-        else if(params.size() == 5){
+        else if(params.size() == 4){
           String title = params.get(0);
           ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
           String isbn = params.get(2);
@@ -180,7 +188,7 @@ public class CommandParser
           allCommands.add(command);
         }
 
-        else if(params.size() == 6){
+        else if(params.size() == 5){
           String title = params.get(0);
           ArrayList<String> authors = new ArrayList<>(Arrays.asList(params.get(1).split(",")));
           String isbn = params.get(2);
@@ -213,7 +221,7 @@ public class CommandParser
           int id = Integer.parseInt(params.get(0));
           List<String> bookIds = Arrays.asList(params.get(1).split(","));
 
-          command = new ReturnBook(id, bookIds);
+          command = new ReturnBook(library, id, bookIds);
         }
         break;
       case "pay":
@@ -221,38 +229,34 @@ public class CommandParser
           int visitorID = Integer.parseInt(params.get(0));
           double amount = Double.parseDouble(params.get(1));
 
-          command = new PayFine(visitorID, amount);
+          command = new PayFine(library, visitorID, amount);
         }
         break;
       case "search":
         String title = "";
-        List<String> authors;
-        String isbn;
-        String publisher;
-        String sortOrder;
-        if(params.size() == 2){
+        List<String> authors= new ArrayList<>();
+        String isbn = "*";
+        String publisher = "*";
+        String sortOrder = "*";
+        if(params.size() == 1){
+          title = params.get(0);
+          authors = Arrays.asList("*");
+        }
+        else if(params.size() == 2){
           title = params.get(0);
           authors = Arrays.asList(params.get(1).split(","));
-
-          command = new StoreSearch(title, authors);
-          allCommands.add(command);
         }
         else if(params.size() == 3){
           title = params.get(0);
           authors = Arrays.asList(params.get(1));
           isbn = params.get(2);
 
-          command = new StoreSearch(title, authors, isbn);
-          allCommands.add(command);
         }
         else if(params.size() == 4){
           title = params.get(0);
           authors = Arrays.asList(params.get(1));
           isbn = params.get(2);
           publisher = params.get(3);
-
-          command = new StoreSearch(title, authors, isbn, publisher);
-          allCommands.add(command);
         }
         else if(params.size() == 5){
           title = params.get(0);
@@ -260,20 +264,20 @@ public class CommandParser
           isbn = params.get(2);
           publisher = params.get(3);
           sortOrder = params.get(4);
-
-          command = new StoreSearch(title, authors, isbn, publisher, sortOrder);
-          allCommands.add(command);
         }
+
+        command = new StoreSearch(bookStore, title, authors, isbn, publisher, sortOrder);
+        allCommands.add(command);
         break;
       case "buy":
         if(params.size() == 2){
           int quantity = Integer.parseInt(params.get(0));
-          int visitorID = Integer.parseInt(params.get(1));
+          ArrayList<Integer> bookIDs = new ArrayList<>(Arrays.asList(Integer.parseInt(params.get(1))));
 
-          command = new PurchaseBook(quantity, visitorID);
+          command = new PurchaseBook(quantity, bookIDs, library);
           allCommands.add(command);
         }
-        else if(params.size() == 3){
+        /*else if(params.size() == 3){
           int quantity = Integer.parseInt(params.get(0));
           int visitorID = Integer.parseInt(params.get(1));
           //List<Integer> bookIDs = Arrays.asList(params.get(2));
@@ -282,7 +286,7 @@ public class CommandParser
 
           command = new PurchaseBook(quantity, visitorID, bookIDs, library);
           allCommands.add(command);
-        }
+        }*/
         break;
 
       case "advance":
@@ -305,18 +309,37 @@ public class CommandParser
         allCommands.add(command);
         break;
       case "report":
+        if(params.size() == 1){
+          int days = Integer.parseInt(params.get(0));;
+
+          command = new Report(days, client);
+          allCommands.add(command);
+        }
+        else{
+          command = new Report(client);
+          allCommands.add(command);
+        }
         break;
     }
 
 
   }
 
+  /**
+   * Method to set the error message for depart feature.
+   */
   private void departInvalidID() {
     client.setMessage("depart,invalid-id;");
   }
+  /**
+   * Method to set the error message for arrive feature.
+   */
   public void arriveInvalidID(){
     client.setMessage("arrive,invalid-id;");
   }
+  /**
+   * Method to set the error message for register visitor feature.
+   */
   public void errorDuplicateVisitor(){
     client.setMessage("register,duplicate;");
   }

@@ -40,9 +40,12 @@ public class CheckOut {
 
     /**
      * Sets the check out date date of the checkout.
+     * @return true if there are still books checkedout
      */
-    public void returnBook(Calendar checkOutDate)
+    public boolean returnBook(Calendar checkOutDate, Book book)
     {
         this.checkOutDate = checkOutDate;
+        books.remove(book);
+        return books.size() == 0;
     }
 }

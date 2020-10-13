@@ -372,10 +372,12 @@ public class Library
         if (fines > 0)
         {
             //update client with amount due
+            this.client.setMessage("Late fees accrued: $" + fines);
         }
         else
         {
             //update client with success message
+            this.client.setMessage("Successfully returned books!");
         }
     }
 
@@ -385,7 +387,7 @@ public class Library
      * @param visitorID - id of visitor paying the fine
      * @param amount - amount to pay
      */
-    public void payFine(int visitorID, int amount)
+    public void payFine(int visitorID, double amount)
     {
         Visitor visitor = this.visitors.get(visitorID);
 
@@ -396,5 +398,6 @@ public class Library
         if (amount < 0 || amount > visitor.getBalance()) { return; }
 
         visitor.payFine(amount, this.client.getDateObj());
+        this.client.setMessage("Remaining balance: " + visitor.getBalance());
     }
 }

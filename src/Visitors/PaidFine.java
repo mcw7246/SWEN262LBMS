@@ -9,7 +9,7 @@ import java.util.Calendar;
  */
 public class PaidFine
 {
-    private int amount;
+    private double amount;
     private Calendar datePaid;
 
     /**
@@ -17,7 +17,7 @@ public class PaidFine
      *
      * @param amount - The amount charged due to the fine.
      */
-    public PaidFine(int amount, Calendar datePaid)
+    public PaidFine(double amount, Calendar datePaid)
     {
         this.amount = amount;
         this.datePaid = datePaid;
@@ -38,7 +38,7 @@ public class PaidFine
      *
      * @return The fine's amount.
      */
-    public int getAmount()
+    public double getAmount()
     {
         return this.amount;
     }

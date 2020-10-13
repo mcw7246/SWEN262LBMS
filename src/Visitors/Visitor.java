@@ -156,8 +156,13 @@ public class Visitor
                 continue;
             }
 
-            CheckOut checkout = this.checkOuts.get(checkedOut.indexOf(book));
-            checkout.returnBook(dateReturned);
+            CheckOut checkout = findCheckOut(book);
+            boolean booksLeft = checkout.returnBook(dateReturned, book);
+            if(booksLeft)
+            {
+              // Remove the checkout
+              this.checkOuts.remove(checkout);
+            }
 
             // Calculate any fines applied to this book.
             int fineAmount = calculateFine(checkout);
@@ -174,14 +179,27 @@ public class Visitor
 
             // Put the copy back in the library
             book.returnCopies(1);
-
-
-            // Remove the checkout
-            this.checkOuts.remove(checkout);
         }
 
         return totalFines;
     }
+
+    /**
+     * Finds checkout associated with specific book
+     * 
+     * @param book - book that is being checked out
+     * @return check out object that contains the book
+     */
+    private CheckOut findCheckOut(Book book){
+
+      for(CheckOut checkOut: this.checkOuts)
+      {
+        if(checkOut.getBooks().contains(book))
+          return checkOut;
+      }
+      return null;
+    }
+
 
     /**
      * Calculates the fines applied to a returned book transaction. $10 is added to the fine for 1 day late, and $2 is
@@ -211,7 +229,7 @@ public class Visitor
      *
      * @param amount - The amount to pay toward fines.
      */
-    public void payFine(int amount, Calendar datePaid)
+    public void payFine(double amount, Calendar datePaid)
     {
         this.balance -= amount;
         this.paidFines.add(new PaidFine(amount, datePaid));

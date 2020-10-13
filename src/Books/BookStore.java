@@ -1,3 +1,8 @@
+/**
+ * Stores all books availabel for purchase
+ *
+ * @author Mikayla Wishart - mcw7246
+ */
 package Books;
 
 import Client.Client;

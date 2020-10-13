@@ -14,6 +14,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Handles requests and responses
+ *
+ * @author Mikayla Wishart - mcw7246
+ */
 public class Client {
 
     private Library library;

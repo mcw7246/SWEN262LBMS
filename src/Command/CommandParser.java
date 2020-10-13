@@ -214,7 +214,7 @@ public class CommandParser
           int id = Integer.parseInt(params.get(0));
           List<String> bookIds = Arrays.asList(params.get(1).split(","));
 
-          command = new ReturnBook(id, bookIds);
+          command = new ReturnBook(library, id, bookIds);
         }
         break;
       case "pay":
@@ -222,7 +222,7 @@ public class CommandParser
           int visitorID = Integer.parseInt(params.get(0));
           double amount = Double.parseDouble(params.get(1));
 
-          command = new PayFine(visitorID, amount);
+          command = new PayFine(library, visitorID, amount);
         }
         break;
       case "search":

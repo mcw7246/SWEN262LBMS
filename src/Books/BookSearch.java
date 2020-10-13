@@ -16,7 +16,7 @@ public class BookSearch {
         String result = ""; //get results that match search criteria
 
         Sort s = new Sort();
-        List<Book> books = new ArrayList<Book>();
+        List<Book> books = new ArrayList<>();
 
         s.sort(books);
 

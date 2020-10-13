@@ -4,10 +4,10 @@ import java.util.List;
 
 public class ReturnBook implements Command{
 
-    private List<Integer> bookId;
+    private List<String> bookId;
     private Integer id;
 
-    public ReturnBook(Integer visitorId, List<Integer> bookId){
+    public ReturnBook(Integer visitorId, List<String> bookId){
         this.id = visitorId;
         this.bookId = bookId;
     }

@@ -133,10 +133,12 @@ public class Library
                     Book book = client.getSearchResult().get(num);
                     books.put(book, qty);
                     Integer day = client.getEndTime().get(Calendar.DAY_OF_YEAR);
-                    if(numPurchased.containsKey(day)) {
+                    if (numPurchased.containsKey(day))
+                    {
                         numPurchased.put(day, numPurchased.get(day) + 1);
                     }
-                    else{
+                    else
+                    {
                         numPurchased.put(day, 1);
                     }
                 }
@@ -145,26 +147,34 @@ public class Library
     }
 
 
-    public HashMap<Integer, Integer> getNumPurchased() {
+    public HashMap<Integer, Integer> getNumPurchased()
+    {
         return numPurchased;
 
+
+    }
     /**
      * Method used by employees to borrow books.
      * @param qty quantity of books
      * @param ID book id for search results
      */
-    public void borrowBooks(Integer qty, List<Integer> ID){
-        for(Integer num: client.getSearchResult().keySet()){
-            for(Integer id : ID){
-                if(id == num){
+    public void borrowBooks (Integer qty, List < Integer > ID)
+    {
+        for (Integer num : client.getSearchResult().keySet())
+        {
+            for (Integer id : ID)
+            {
+                if (id == num)
+                {
                     books.put(client.getSearchResult().get(num), qty);
                 }
             }
         }
     }
 
-    public void checkOutBooks(List<Integer> bookISBNs, Calendar checkInDate, Calendar checkOutDate, int visitorID){
-        CheckOut CO = new CheckOut(bookISBNs, checkInDate, checkOutDate, visitorID);
+    public void checkOutBooks (List <Book> books, Calendar checkInDate, Calendar
+        checkOutDate,int visitorID){
+        CheckOut CO = new CheckOut(books, checkInDate, checkOutDate, visitorID);
         checkOuts.add(CO);
 
     }
@@ -177,7 +187,7 @@ public class Library
      * @param address address
      * @param pNumber phone number
      */
-    public void registerVisitor(String fName, String lName, String address, String pNumber)
+    public void registerVisitor (String fName, String lName, String address, String pNumber)
     {
         visitorID++;
         Visitor visitor = new Visitor(fName, lName, address, pNumber);
@@ -195,231 +205,259 @@ public class Library
      * @param pNumber - phone number.
      * @return - ture if registered.
      */
-    public boolean existingVisitor(String fName, String lName, String address, String pNumber)
-    {
-        boolean existing = false;
-        for (Visitor visitor : visitors.values())
-        {
+     public boolean existingVisitor (String fName, String lName, String address, String pNumber)
+     {
+         boolean existing = false;
+         for (Visitor visitor : visitors.values())
+         {
             if (fName.equals(visitor.getfName()) && lName.equals(visitor.getlName()) && address.equals(visitor.getAddress()) && pNumber.equals(visitor.getPhoneNum()))
             {
                 existing = true;
                 break;
             }
-        }
-        return existing;
-    }
+         }
+         return existing;
+     }
 
-    /**
-     * Method to check if a visitor id exists or not.
-     *
-     * @param visitorID - visitor id.
-     * @return - false if exists.
-     */
-    public boolean invalidID(Integer visitorID)
-    {
-        if (visitors.containsKey(visitorID))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
+     /**
+      * Method to check if a visitor id exists or not.
+      *
+      * @param visitorID - visitor id.
+      * @return - false if exists.
+      */
+     public boolean invalidID (Integer visitorID)
+     {
+         if (visitors.containsKey(visitorID))
+         {
+             return false;
+         }
+         else {
+             return true;
+         }
+     }
+     /**
+      * Method to get all the current visitors in the library.
+      *
+      * @return - Hashmap of current visitors.
+      */
+     protected HashMap<Integer, Integer> getCurrentVisitors ()
+     {
+         return currentVisitors;
+     }
 
-    /**
-     * Method to get all the current visitors in the library.
-     *
-     * @return - Hashmap of current visitors.
-     */
-    protected HashMap<Integer, Integer> getCurrentVisitors()
-    {
-        return currentVisitors;
-    }
+     /**
+      * Method to get all registered visitor of the library.
+      *
+      * @return - Hashmap of all registered visitors.
+      */
+     protected HashMap<Integer, Visitor> getVisitors ()
+     {
+         return visitors;
+     }
 
-    /**
-     * Method to get all registered visitor of the library.
-     *
-     * @return - Hashmap of all registered visitors.
-     */
-    protected HashMap<Integer, Visitor> getVisitors()
-    {
-        return visitors;
-    }
+     public Integer getTotalRegistered () {
+         return visitors.size();
+     }
 
-    public Integer getTotalRegistered(){
-        return visitors.size();
-    }
+     /**
+      * Method to get the client class through which the library responds.
+      *
+      * @return - the client.
+      */
+     protected Client getClient ()
+     {
+         return client;
+     }
 
-    /**
-     * Method to get the client class through which the library responds.
-     *
-     * @return - the client.
-     */
-    protected Client getClient()
-    {
-        return client;
-    }
+     /**
+      * Method to start a visit in the library.
+      *
+      * @param visitorId - visitor id.
+      */
+     public void startVisit (Integer visitorId)
+     {
+         libraryState.startVisit(visitorId);
+     }
 
-    /**
-     * Method to start a visit in the library.
-     *
-     * @param visitorId - visitor id.
-     */
-    public void startVisit(Integer visitorId)
-    {
-        libraryState.startVisit(visitorId);
-    }
+     /**
+      * Method to end a visit in the library.
+      *
+      * @param visitorID - visitor id.
+      */
+     public void endVisit (Integer visitorID)
+     {
+         libraryState.endVisit(visitorID);
+     }
 
-    /**
-     * Method to end a visit in the library.
-     *
-     * @param visitorID - visitor id.
-     */
-    public void endVisit(Integer visitorID)
-    {
-        libraryState.endVisit(visitorID);
-    }
+     public void bookSearch(String title, ArrayList < String > authors, String isbn, String publisher, String sortOrd)
+     {
+         //gets rid of the \" in the front and end of the title
+         String titleSub = title.substring(1, title.length() - 1);
+         ArrayList<Book> searchResults = new ArrayList<>();
+         List<Book> booksTest = bookStore.getBookList();
+         boolean sorted = false;
+         String message = "";
 
-    public void bookSearch(String title, ArrayList<String> authors, String isbn, String publisher, String sortOrd)
-    {
-        //gets rid of the \" in the front and end of the title
-        String titleSub = title.substring(1, title.length() - 1);
-        ArrayList<Book> searchResults = new ArrayList<>();
-        List<Book> booksTest = bookStore.getBookList();
-        boolean sorted = false;
-        String message = "";
+         //loops through all the books
+         for (Book book : books.keySet())
+         {
+             int numAuthors = 0;
+             //checks if it is any title
+             if (titleSub.equals("*"))
+             {
+                 if (authors.get(0).equals("*"))
+                 {
+                     if (isbn.equals("*"))
+                     {
+                         if (publisher.equals(book.getPublisher()))
+                         {
+                             if (!searchResults.contains(book))
+                             {
+                                 searchResults.add(book);
+                             }
+                         }
+                     }
+                     else {
+                         if (isbn.equals(book.getIsbn()))
+                         {
+                             if (!searchResults.contains(book))
+                             {
+                                 searchResults.add(book);
+                             }
+                         }
+                     }
+                 }
+                 else {
+                     for (String author : authors)
+                     {
+                         if (book.getAuthor().contains(author))
+                         {
+                             numAuthors++;
+                             if (numAuthors == authors.size())
+                             {
+                                 if (!searchResults.contains(book))
+                                 {
+                                     searchResults.add(book);
+                                 }
+                             }
+                         }
+                     }
+                 }
 
-        //loops through all the books
-        for(Book book : books.keySet()){
-            int numAuthors = 0;
-            //checks if it is any title
-            if(titleSub.equals("*")){
-                if(authors.get(0).equals("*")){
-                    if(isbn.equals("*")){
-                        if(publisher.equals(book.getPublisher())){
-                            if(!searchResults.contains(book)){
-                                searchResults.add(book);
-                            }
-                        }
-                    }
-                    else{
-                        if(isbn.equals(book.getIsbn())){
-                            if(!searchResults.contains(book)){
-                                searchResults.add(book);
-                            }
-                        }
-                    }
-                }
-                else{
-                    for(String author : authors){
-                        if(book.getAuthor().contains(author)){
-                            numAuthors++;
-                            if(numAuthors == authors.size()){
-                                if(!searchResults.contains(book)){
-                                    searchResults.add(book);
-                                }
-                            }
-                        }
-                    }
-                }
+             }
+             else if (book.getTitle().toLowerCase().contains(titleSub.toLowerCase()))
+             {
+                 if (authors.get(0).equals("*"))
+                 {
+                     if (!searchResults.contains(book))
+                     {
+                         searchResults.add(book);
+                     }
+                 }
+                 for (String author : authors)
+                 {
+                     if (!author.equals("*"))
+                     {
+                         if ((!publisher.equals("*") && !publisher.equals("")) || (!isbn.equals("*") && !isbn.equals("")))
+                         {
+                             if (publisher.equals(book.getPublisher()))
+                             {
+                                 if (isbn.equals(book.getIsbn()))
+                                 {
+                                     if (!searchResults.contains(book))
+                                     {
+                                         searchResults.add(book);
+                                     }
+                                 }
+                             }
+                             else {
+                                 if (isbn.equals(book.getIsbn()))
+                                 {
+                                     if (!searchResults.contains(book))
+                                     {
+                                         searchResults.add(book);
+                                     }
+                                 }
+                             }
 
-            }
-            else if(book.getTitle().toLowerCase().contains(titleSub.toLowerCase())){
-                if(authors.get(0).equals("*")){
-                    if(!searchResults.contains(book)){
-                        searchResults.add(book);
-                    }
-                }
-                for(String author : authors){
-                    if(!author.equals("*")){
-                        if((!publisher.equals("*") && !publisher.equals("")) || (!isbn.equals("*") && !isbn.equals(""))){
-                            if(publisher.equals(book.getPublisher())){
-                                if(isbn.equals(book.getIsbn())){
-                                    if(!searchResults.contains(book)){
-                                        searchResults.add(book);
-                                    }
-                                }
-                            }
-                            else{
-                                if(isbn.equals(book.getIsbn())){
-                                    if(!searchResults.contains(book)){
-                                        searchResults.add(book);
-                                    }
-                                }
-                            }
+                         }
+                         if (book.getAuthor().contains(author))
+                         {
+                             numAuthors++;
+                             if (numAuthors == authors.size())
+                             {
+                                 if (!searchResults.contains(book))
+                                 {
+                                     searchResults.add(book);
+                                 }
+                             }
+                         }
+                     }
+                 }
+             }
+         }
+         client.setSearchResult(searchResults);
+         message = "search," + searchResults.size();
+         for (Integer id : client.getSearchResult().keySet())
+         {
+             Book bookSearch = client.getSearchResult().get(id);
+             message += "\n";
+             message += id + " - " + bookSearch.getNumCopies() + "," + bookSearch.getIsbn() + "," + bookSearch.getTitle() + ",{" + bookSearch.getAuthor() + "}," + bookSearch.getPublisher() + "," + bookSearch.getPublishDate() + "," + bookSearch.getPageCount();
+         }
+         client.setMessage(message);
+     }
 
-                        }
-                        if(book.getAuthor().contains(author)){
-                            numAuthors++;
-                            if(numAuthors == authors.size()){
-                                if(!searchResults.contains(book)){
-                                    searchResults.add(book);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+     /**
+      * When a visitor returns borrowed book(s)
+      * @param visitorID - the visitoryID of the visitor returning books
+      */
+     public void returnBooks ( int visitorID)
+     {
+         ArrayList<Book> books = new ArrayList<>();
+         for (Book book : this.searchResult.values())
+         {
+             books.add(book);
+         }
 
+         Visitor visitor = this.visitors.get(visitorID);
 
-        }
-        client.setSearchResult(searchResults);
-        message = "search," + searchResults.size();
-        for (Integer id : client.getSearchResult().keySet())
-        {
-            Book bookSearch = client.getSearchResult().get(id);
-            message += "\n";
-            message += id + " - " + bookSearch.getNumCopies() + "," + bookSearch.getIsbn() + "," + bookSearch.getTitle() + ",{" + bookSearch.getAuthor() + "}," + bookSearch.getPublisher() + "," + bookSearch.getPublishDate() + "," + bookSearch.getPageCount();
-        }
-        client.setMessage(message);
-    }
+         double fines = visitor.returnBooks(books, this.client.getDateObj());
 
-    /**
-     * When a visitor returns borrowed book(s)
-     * @param visitorID - the visitoryID of the visitor returning books
-     */
-    public void returnBooks(int visitorID)
-    {
-        ArrayList<Book> books = new ArrayList<>();
-        for (Book book: this.searchResult.values())
-        {
-            books.add(book);
-        }
+         if (fines > 0)
+         {
+             //update client with amount due
+             this.client.setMessage("Late fees accrued: $" + fines);
+         }
+         else {
+             //update client with success message
+             this.client.setMessage("Successfully returned books!");
+         }
+     }
 
-        Visitor visitor = this.visitors.get(visitorID);
+     /**
+      * Pay a given amount toward a visitor's fine
+      *
+      * @param visitorID - id of visitor paying the fine
+      * @param amount - amount to pay
+      */
+     public void payFine ( int visitorID, double amount)
+     {
+         Visitor visitor = this.visitors.get(visitorID);
 
-        double fines = visitor.returnBooks(books, this.client.getDateObj());
+         // Check for invalid visitor ID
+         if (visitor == null)
+         {
+             return;
+         }
 
-        if (fines > 0)
-        {
-            //update client with amount due
-            this.client.setMessage("Late fees accrued: $" + fines);
-        }
-        else
-        {
-            //update client with success message
-            this.client.setMessage("Successfully returned books!");
-        }
-    }
+         // Check for invalid amount
+         if (amount < 0 || amount > visitor.getBalance())
+         {
+             return;
+         }
 
-    /**
-     * Pay a given amount toward a visitor's fine
-     *
-     * @param visitorID - id of visitor paying the fine
-     * @param amount - amount to pay
-     */
-    public void payFine(int visitorID, double amount)
-    {
-        Visitor visitor = this.visitors.get(visitorID);
-
-        // Check for invalid visitor ID
-        if (visitor == null) { return; }
-
-        // Check for invalid amount
-        if (amount < 0 || amount > visitor.getBalance()) { return; }
-
-        visitor.payFine(amount, this.client.getDateObj());
-        this.client.setMessage("Remaining balance: " + visitor.getBalance());
-    }
+         visitor.payFine(amount, this.client.getDateObj());
+         this.client.setMessage("Remaining balance: " + visitor.getBalance());
+     }
 }
+

@@ -1,7 +1,6 @@
 package Visitors;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Calendar;
 
 import Books.Book;
@@ -19,7 +18,9 @@ public class Visitor
   private int id;
   private boolean inVisit;
   private ArrayList<CheckOut> checkOuts;
-  private ArrayList<Fine> fines;
+  private ArrayList<PaidFine> paidFines;
+  private ArrayList<UnpaidFine> unpaidFines;
+  private int balance;
 
 
   /**
@@ -36,7 +37,9 @@ public class Visitor
     this.phoneNum = phoneNum;
     this.inVisit = false;
     checkOuts = new ArrayList<>();
-    fines = new ArrayList<>();
+    paidFines = new ArrayList<>();
+    unpaidFines = new ArrayList<>();
+    balance = 0;
   }
 
   /**
@@ -162,8 +165,8 @@ public class Visitor
             // Create fine object if necessary
             if (fineAmount > 0)
             {
-                this.fines.add(new Fine(fineAmount, dateReturned));
-                //this.balance += fineAmount;
+                this.unpaidFines.add(new UnpaidFine(fineAmount, dateReturned));
+                this.balance += fineAmount;
 
                 // Add to total fines applied
                 totalFines += fineAmount;
@@ -201,5 +204,26 @@ public class Visitor
         }
 
         return fineAmount;
+    }
+
+     /**
+     * Pays a given amount toward the visitor's fine balance.
+     *
+     * @param amount - The amount to pay toward fines.
+     */
+    public void payFine(int amount, Calendar datePaid)
+    {
+        this.balance -= amount;
+        this.paidFines.add(new PaidFine(amount, datePaid));
+    }
+
+      /**
+     * Simple getter for retrieving the visitor's balance.
+     *
+     * @return The visitor's balance.
+     */
+    public int getBalance()
+    {
+        return this.balance;
     }
 }

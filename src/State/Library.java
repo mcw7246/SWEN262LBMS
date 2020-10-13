@@ -378,4 +378,23 @@ public class Library
             //update client with success message
         }
     }
+
+    /**
+     * Pay a given amount toward a visitor's fine
+     *
+     * @param visitorID - id of visitor paying the fine
+     * @param amount - amount to pay
+     */
+    public void payFine(int visitorID, int amount)
+    {
+        Visitor visitor = this.visitors.get(visitorID);
+
+        // Check for invalid visitor ID
+        if (visitor == null) { return; }
+
+        // Check for invalid amount
+        if (amount < 0 || amount > visitor.getBalance()) { return; }
+
+        visitor.payFine(amount, this.client.getDateObj());
+    }
 }

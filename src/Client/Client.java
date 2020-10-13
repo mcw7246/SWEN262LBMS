@@ -152,6 +152,7 @@ public class Client {
         int i = 1;
         for(Book book:bookList){
             searchResult.put(i, book);
+            i++;
         }
     }
 

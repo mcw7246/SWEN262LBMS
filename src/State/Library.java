@@ -345,10 +345,11 @@ public class Library
         }
         client.setSearchResult(searchResults);
         message = "info," + searchResults.size();
-        for (Book bookSearch : searchResults)
+        for (Integer id : client.getSearchResult().keySet())
         {
+            Book bookSearch = client.getSearchResult().get(id);
             message += "\n";
-            message += bookSearch.getNumCopies() + "," + bookSearch.getIsbn() + "," + bookSearch.getTitle() + ",{" + bookSearch.getAuthor() + "}," + bookSearch.getPublisher() + "," + bookSearch.getPublishDate() + "," + bookSearch.getPageCount();
+            message += id + " - " + bookSearch.getNumCopies() + "," + bookSearch.getIsbn() + "," + bookSearch.getTitle() + ",{" + bookSearch.getAuthor() + "}," + bookSearch.getPublisher() + "," + bookSearch.getPublishDate() + "," + bookSearch.getPageCount();
         }
         client.setMessage(message);
     }

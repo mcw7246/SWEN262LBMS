@@ -5,7 +5,7 @@ package Books;
  *
  * @author Mikayla Wishart - mcw7246
  */
-public class Book
+public class Book implements Product
 {
   private String isbn;
   private String title;

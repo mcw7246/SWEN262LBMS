@@ -35,6 +35,7 @@ public class Client {
     public Client() throws FileNotFoundException {
         this.message = new ArrayList<>();
         library = new Library(this);
+        bookStore = new BookStore(this);
         commandParser = new CommandParser(library, this, bookStore);
         this.cal = Calendar.getInstance();
         this.dateFormat = new SimpleDateFormat("yyyy/MM/dd,HH:mm:ss");

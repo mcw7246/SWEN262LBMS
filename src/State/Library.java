@@ -48,7 +48,7 @@ public class Library
     {
         this.visitors = new HashMap<>();
         books = new HashMap<>();
-        bookStore = new BookStore();
+        bookStore = new BookStore(client);
         this.client = client;
         visitorID = 1000000000;
         currentVisitors = new HashMap<>();
@@ -265,12 +265,12 @@ public class Library
         //gets rid of the \" in the front and end of the title
         String titleSub = title.substring(1, title.length() - 1);
         ArrayList<Book> searchResults = new ArrayList<>();
-        List<Book> books = bookStore.getBookList();
-        //boolean sorted = false;
+        List<Book> booksTest = bookStore.getBookList();
+        boolean sorted = false;
         String message = "";
 
         //loops through all the books
-        for(Book book : books){
+        for(Book book : books.keySet()){
             int numAuthors = 0;
             //checks if it is any title
             if(titleSub.equals("*")){
@@ -368,7 +368,7 @@ public class Library
         Visitor visitor = this.visitors.get(visitorID);
 
         double fines = visitor.returnBooks(books, this.client.getDateObj());
-        
+
         if (fines > 0)
         {
             //update client with amount due

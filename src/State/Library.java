@@ -314,6 +314,13 @@ public class Library
                          }
                      }
                  }
+                 else{
+                     for(String author : authors){
+                         if(!searchResults.contains(book)){
+                             searchResults.add(book);
+                         }
+                     }
+                 }
              }
              else{
                  if(book.getTitle().contains(titleSub)){
@@ -342,7 +349,7 @@ public class Library
              }
          }
          client.setSearchResult(searchResults);
-         message = "search," + searchResults.size();
+         message = "info," + searchResults.size();
          for (Integer id : client.getSearchResult().keySet())
          {
              Book bookSearch = client.getSearchResult().get(id);

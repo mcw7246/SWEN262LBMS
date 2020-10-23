@@ -1,5 +1,6 @@
 package Command;
 
+import Books.Book;
 import Books.BookStore;
 import Client.Client;
 import State.Library;
@@ -212,7 +213,19 @@ public class CommandParser
           int visitorID = Integer.parseInt(params.get(0));
           ArrayList<Integer> bookIDs = new ArrayList<>(Arrays.asList(Integer.parseInt(params.get(1))));
 
-          command = new BorrowedBooks(visitorID, bookIDs, library, checkInDate, checkOutDate);
+          ArrayList<Book> books = new ArrayList<>();
+
+          for(Integer bookId : bookIDs){
+            if(library.getBooks().values().contains(bookId)){
+              for(Book book : library.getBooks().keySet()){
+                if(library.getBooks().get(book).equals(bookId)){
+                  books.add(book);
+                }
+              }
+            }
+          }
+
+          command = new BorrowedBooks(visitorID, books, library, checkInDate, checkOutDate);
           allCommands.add(command);
         }
         break;

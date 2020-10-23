@@ -294,102 +294,47 @@ public class Library
          //gets rid of the \" in the front and end of the title
          String titleSub = title.substring(1, title.length() - 1);
          ArrayList<Book> searchResults = new ArrayList<>();
-         List<Book> booksTest = bookStore.getBookList();
          boolean sorted = false;
          String message = "";
 
          //loops through all the books
-         for (Book book : books.keySet())
-         {
+         for(Book book : books.keySet()){
              int numAuthors = 0;
-             //checks if it is any title
-             if (titleSub.equals("*"))
-             {
-                 if (authors.get(0).equals("*"))
-                 {
-                     if (isbn.equals("*"))
-                     {
-                         if (publisher.equals(book.getPublisher()))
-                         {
-                             if (!searchResults.contains(book))
-                             {
-                                 searchResults.add(book);
-                             }
-                         }
-                     }
-                     else {
-                         if (isbn.equals(book.getIsbn()))
-                         {
-                             if (!searchResults.contains(book))
-                             {
-                                 searchResults.add(book);
-                             }
-                         }
-                     }
-                 }
-                 else {
-                     for (String author : authors)
-                     {
-                         if (book.getAuthor().contains(author))
-                         {
+             //all the titles
+             if(titleSub.equals("*")){
+                 if(!authors.get(0).equals("*")){
+                     //loops through the authors given by user
+                     for(String author : authors){
+                         //if author is an author of the book
+                         if(book.getAuthor().contains(author)){
                              numAuthors++;
-                             if (numAuthors == authors.size())
-                             {
-                                 if (!searchResults.contains(book))
-                                 {
-                                     searchResults.add(book);
-                                 }
+                             if(!searchResults.contains(book)){
+                                 searchResults.add(book);
                              }
                          }
                      }
                  }
-
              }
-             else if (book.getTitle().toLowerCase().contains(titleSub.toLowerCase()))
-             {
-                 if (authors.get(0).equals("*"))
-                 {
-                     if (!searchResults.contains(book))
-                     {
-                         searchResults.add(book);
-                     }
-                 }
-                 for (String author : authors)
-                 {
-                     if (!author.equals("*"))
-                     {
-                         if ((!publisher.equals("*") && !publisher.equals("")) || (!isbn.equals("*") && !isbn.equals("")))
-                         {
-                             if (publisher.equals(book.getPublisher()))
-                             {
-                                 if (isbn.equals(book.getIsbn()))
-                                 {
-                                     if (!searchResults.contains(book))
-                                     {
-                                         searchResults.add(book);
-                                     }
-                                 }
-                             }
-                             else {
-                                 if (isbn.equals(book.getIsbn()))
-                                 {
-                                     if (!searchResults.contains(book))
-                                     {
-                                         searchResults.add(book);
-                                     }
-                                 }
-                             }
+             else{
+                 if(book.getTitle().contains(titleSub)){
 
-                         }
-                         if (book.getAuthor().contains(author))
+                     if(!authors.get(0).equals("*"))
+                     {
+                         for (String author : authors)
                          {
-                             numAuthors++;
-                             if (numAuthors == authors.size())
+                             if (book.getAuthor().contains(author))
                              {
                                  if (!searchResults.contains(book))
                                  {
                                      searchResults.add(book);
                                  }
+                             }
+                         }
+                     }
+                     else{
+                         if(book.getTitle().toLowerCase().contains(titleSub.toLowerCase())){
+                             if(!searchResults.contains(book)){
+                                 searchResults.add(book);
                              }
                          }
                      }

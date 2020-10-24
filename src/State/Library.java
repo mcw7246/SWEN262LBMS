@@ -172,11 +172,22 @@ public class Library
         }
     }
 
-    public void checkOutBooks (List <Book> books, Calendar checkInDate, Calendar
-        checkOutDate,int visitorID){
-        CheckOut CO = new CheckOut(books, checkInDate, checkOutDate, visitorID);
-        checkOuts.add(CO);
 
+    public void checkOutBooks (List<Book> books, Calendar checkInDate, Calendar
+            checkOutDate, int visitorID){
+        if (this.invalidID(visitorID)){
+            client.setMessage(visitorID + "is invalid.");
+        }
+        else{
+            CheckOut CO = new CheckOut(books, checkInDate, checkOutDate, visitorID);
+            checkOuts.add(CO);
+            for(CheckOut c: checkOuts){
+                Calendar borrowDate = c.getCheckOutDate();
+                String date = c.getVisitorID()+ borrowDate.get(Calendar.YEAR) + "/" + borrowDate.get(Calendar.MONTH) + "/" +
+                        borrowDate.get(Calendar.DAY_OF_MONTH);
+                client.setMessage(c.getBooks() + date);
+            }
+        }
     }
 
     /**

@@ -25,6 +25,8 @@ public class CommandParser
   private Calendar calendar;
   private Calendar timeBorrow;
 
+  public String MESSAGE;
+
   /**
    * constructor for the CommandParser class
    * @param library the library that is being used
@@ -95,8 +97,10 @@ public class CommandParser
     //loop through all response.
     for(String message: client.getMessage()) {
       System.out.println(message);
+      MESSAGE = message;
     }
     //empty all messages.
+
     client.getMessage().clear();
   }
 

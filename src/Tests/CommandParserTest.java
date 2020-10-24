@@ -10,6 +10,7 @@ import org.junit.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -40,12 +41,17 @@ public class CommandParserTest
     }catch(FileNotFoundException e){
       e.printStackTrace();
     }
+    books.add(HUNGER_GAMES_TRIBUTE_GUIDE);
+    books.add(HUNGER_GAMES_AND_PHILOSOPHY);
+    books.add(HUNGER_GAMES_TRILOGY);
+    books.add(AUTOCAD_FOR_DUMMIES);
   }
 
   @Test
   public void registerNewVisitor(){
     String request = "register,mikayla,wishart,16chspk,321;";
-    String expected = "register,1000000001,2020/10/23;";
+    Date date = new Date();
+    String expected = "register,1000000001,2020/10/24;";
 
     commandParser.parseCommand(request);
     assertEquals("The messages are supposed to be the same", expected, commandParser.MESSAGE);
@@ -69,7 +75,7 @@ public class CommandParserTest
     commandParser.parseCommand(request);
     request = "arrive,1000000001;";
     commandParser.parseCommand(request);
-    String expected = "arrive,1000000001,2020/10/23,08:00:00;";
+    String expected = "arrive,1000000001,2020/10/24,08:00:00;";
     assertEquals("These should be the same",expected,commandParser.MESSAGE);
   }
 
@@ -94,5 +100,118 @@ public class CommandParserTest
     assertEquals("You should not be able to arrive without a proper visitor id", expected, commandParser.MESSAGE);
   }
 
+  @Test
+  public void endVisitTest(){
+    String request = "register,mikayla,wishart,16chesp,321;";
+    commandParser.parseCommand(request);
+
+    request = "arrive,1000000001;";
+    commandParser.parseCommand(request);
+
+    request = "depart,1000000001;";
+    commandParser.parseCommand(request);
+
+    String expected = "depart,1000000001,2020/10/24,08:00:00;";
+    assertEquals("These lines are supposed to be equal.",expected,commandParser.MESSAGE);
+  }
+
+  @Test
+  public void endVisitInvalidIDTest(){
+    String request = "register,mikayla,wishart,16chspk,321;";
+    commandParser.parseCommand(request);
+
+    request = "arrive,1000000001;";
+    commandParser.parseCommand(request);
+
+    request = "depart,1001;";
+    commandParser.parseCommand(request);
+
+    String expected = "depart,invalid-id;";
+    assertEquals("These are supposed to be the same.", expected, commandParser.MESSAGE);
+  }
+
+  @Test
+  public void bookStoreSearch(){
+    String request = "search,\"Hunger Games\",{*};";
+    commandParser.parseCommand(request);
+
+    String expected = "info,7\n"
+            + "1 - 9780545387200,The Hunger Games Trilogy,{Suzanne Collins},Scholastic Inc.,2011-05-01,1000\n"
+            + "2 - 9780545452373,The World of the Hunger Games,{Kate Egan},Scholastic Inc.,2012-03-23,192\n"
+            + "3 - 9780545227247,Catching Fire (The Second Book of the Hunger Games),{Suzanne Collins},Scholastic Inc.,2010-06-01,400\n" +
+            "4 - 9780545470070,The Hunger Games Tribute Guide,{Emily Seife},Scholastic Inc.,2012-02-07,128\n" +
+            "5 - 9781407139982,The Hunger Games Complete Trilogy,{Suzanne Collins},Scholastic UK,2013-10-03,1344\n" +
+            "6 - 9780545229937,The Hunger Games,{Suzanne Collins},Scholastic Inc.,2009-09-01,384\n" +
+            "7 - 9781118206027,The Hunger Games and Philosophy,{George A. Dunn, Nicolas Michaud},John Wiley & Sons,2012-01-26,272"
+
+            ;
+    assertEquals("these should match", expected, commandParser.MESSAGE);
+  }
+
+  @Test
+  public void bookStoreSearchAllTitles(){
+    String request = "search,\"*\",{Suzanne Collins};";
+
+    commandParser.parseCommand(request);
+
+    String expected = "info,4\n"
+            + "1 - 9780545387200,The Hunger Games Trilogy,{Suzanne Collins},Scholastic Inc.,2011-05-01,1000\n"
+            + "2 - 9780545227247,Catching Fire (The Second Book of the Hunger Games),{Suzanne Collins},Scholastic Inc.,2010-06-01,400\n"
+            + "3 - 9781407139982,The Hunger Games Complete Trilogy,{Suzanne Collins}," +
+            "Scholastic UK,2013-10-03,1344\n"
+            + "4 - 9780545229937,The Hunger Games,{Suzanne Collins},Scholastic Inc.," +
+            "2009-09-01,384";
+
+    assertEquals("these need to match", expected, commandParser.MESSAGE);
+  }
+
+  @Test
+  public void bookStoreSearchISBN(){
+    String request = "search,\"*\",{Suzanne Collins},9780545387200;";
+
+    commandParser.parseCommand(request);
+
+    String expected = "info,1\n"
+            + "1 - 9780545387200,The Hunger Games Trilogy,{Suzanne Collins},Scholastic Inc.,2011-05-01,1000";
+
+    assertEquals("these need to match", expected, commandParser.MESSAGE);
+  }
+
+  @Test
+  public void bookStoreSearchPublisher(){
+    String request = "search,\"*\",{Suzanne Collins},9780545387200,\"Scholastic Inc.\";";
+
+    commandParser.parseCommand(request);
+
+    String expected = "info,1\n"
+            + "1 - 9780545387200,The Hunger Games Trilogy,{Suzanne Collins},Scholastic Inc.,2011-05-01,1000";
+
+    assertEquals("these need to match", expected, commandParser.MESSAGE);
+  }
+
+  @Test
+  public void bookSearchSortOrderAlphabetical(){
+    String request = "search,\"*\",{Suzanne Collins},9780545387200,\"Scholastic Inc.\",Alphabetical;";
+
+    commandParser.parseCommand(request);
+
+    String expected = "info,1\n"
+            + "1 - 9780545387200,The Hunger Games Trilogy,{Suzanne Collins},Scholastic Inc.,2011-05-01,1000";
+
+    assertEquals("these need to match", expected, commandParser.MESSAGE);
+  }
+
+  @Test
+  public void buyBook(){
+    String request = "search,\"*\",{Suzanne Collins};";
+    commandParser.parseCommand(request);
+
+    request = "buy,1,1;";
+    commandParser.parseCommand(request);
+    String expected = "buy,success,1\n"
+            + "9780545387200,The Hunger Games Trilogy,{Suzanne Collins},Scholastic Inc.,2011-05-01,1";
+
+    assertEquals("these should be the same",expected,commandParser.MESSAGE);
+  }
 
 }

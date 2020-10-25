@@ -124,6 +124,7 @@ public class Library
      */
     public void purchaseBooks(Integer qty, List<Integer> ID)
     {
+        List<Book> booksToBuy = new ArrayList<>();
         for (Integer num : client.getSearchResult().keySet())
         {
             for (Integer id : ID)
@@ -132,6 +133,7 @@ public class Library
                 {
                     Book book = client.getSearchResult().get(num);
                     books.put(book, qty);
+                    booksToBuy.add(book);
                     Integer day = client.getEndTime().get(Calendar.DAY_OF_YEAR);
                     if (numPurchased.containsKey(day))
                     {
@@ -144,6 +146,11 @@ public class Library
                 }
             }
         }
+        String message = "buy,success," + qty;
+        for(Book book : booksToBuy){
+             message += "\n" + book.getIsbn() + "," + book.getTitle() + ",{" + book.getAuthor() + "}," + book.getPublishDate() + "," + qty ;
+        }
+        client.setMessage(message);
     }
 
 
@@ -300,75 +307,84 @@ public class Library
          libraryState.endVisit(visitorID);
      }
 
-     public void bookSearch(String title, ArrayList < String > authors, String isbn, String publisher, String sortOrd)
-     {
-         //gets rid of the \" in the front and end of the title
-         String titleSub = title.substring(1, title.length() - 1);
-         ArrayList<Book> searchResults = new ArrayList<>();
-         boolean sorted = false;
-         String message = "";
+    public List<Book> searchTitles(String title, List<Book> books){
+        List<Book> results = books;
+        results.removeIf(book -> (!book.getTitle().contains(title)));
+        return results;
+    }
 
-         //loops through all the books
-         for(Book book : books.keySet()){
-             int numAuthors = 0;
-             //all the titles
-             if(titleSub.equals("*")){
-                 if(!authors.get(0).equals("*")){
-                     //loops through the authors given by user
-                     for(String author : authors){
-                         //if author is an author of the book
-                         if(book.getAuthor().contains(author)){
-                             numAuthors++;
-                             if(!searchResults.contains(book)){
-                                 searchResults.add(book);
-                             }
-                         }
-                     }
-                 }
-                 else{
-                     for(String author : authors){
-                         if(!searchResults.contains(book)){
-                             searchResults.add(book);
-                         }
-                     }
-                 }
-             }
-             else{
-                 if(book.getTitle().contains(titleSub)){
+    public List<Book> searchAuthors(List<String> authors, List<Book> books){
+        List<Book> results = books;
+        for(String author : authors){
+            results.removeIf(book -> (!book.getAuthor().contains(author)));
+        }
+        return results;
+    }
 
-                     if(!authors.get(0).equals("*"))
-                     {
-                         for (String author : authors)
-                         {
-                             if (book.getAuthor().contains(author))
-                             {
-                                 if (!searchResults.contains(book))
-                                 {
-                                     searchResults.add(book);
-                                 }
-                             }
-                         }
-                     }
-                     else{
-                         if(book.getTitle().toLowerCase().contains(titleSub.toLowerCase())){
-                             if(!searchResults.contains(book)){
-                                 searchResults.add(book);
-                             }
-                         }
-                     }
-                 }
-             }
-         }
-         client.setSearchResult(searchResults);
-         message = "info," + searchResults.size();
-         for (Integer id : client.getSearchResult().keySet())
-         {
-             Book bookSearch = client.getSearchResult().get(id);
-             message += "\n";
-             message += id + " - " + bookSearch.getNumCopies() + "," + bookSearch.getIsbn() + "," + bookSearch.getTitle() + ",{" + bookSearch.getAuthor() + "}," + bookSearch.getPublisher() + "," + bookSearch.getPublishDate() + "," + bookSearch.getPageCount();
-         }
-         client.setMessage(message);
-     }
+    public List<Book> searchISBN(String isbn, List<Book> books){
+        List<Book> results = books;
+        results.removeIf(book -> (!book.getIsbn().equals(isbn)));
+        return results;
+    }
+
+    public List<Book> searchPublisher(String publisher, List<Book> books){
+        List<Book> results = books;
+        results.removeIf(book -> (!book.getPublisher().contains(publisher)));
+        return results;
+    }
+
+
+    public void bookSearch(String title, List<String> authors, String isbn, String publisher, String sortOrd)
+    {
+        String message = "";
+        String titleSub = title.substring(1, title.length() - 1);
+
+
+        List<Book> bookFits = (ArrayList)books.values();
+        boolean allAuthors = true;
+        boolean allTitles = true;
+        boolean allISBN = true;
+        boolean allPublisher = true;
+        boolean sorted = false;
+
+        if(!titleSub.equals("*"))
+            allTitles = false;
+        if(!authors.get(0).equals("*"))
+            allAuthors = false;
+        if(!isbn.equals("*"))
+            allISBN = false;
+        if(!publisher.equals("*"))
+            allPublisher = false;
+        if(!sortOrd.equals("*"))
+            sorted = true;
+
+
+        if(!allTitles)
+        {
+            searchTitles(titleSub, bookFits);
+        }
+
+        if(!allAuthors){
+            searchAuthors(authors, bookFits);
+        }
+
+        if(!allISBN){
+            searchISBN(isbn, bookFits);
+        }
+
+        if(!allPublisher){
+            searchPublisher(publisher, bookFits);
+        }
+        client.setSearchResult(bookFits);
+        message = "info," + bookFits.size();
+        for (Integer id : client.getSearchResult().keySet())
+        {
+            Book bookSearch = client.getSearchResult().get(id);
+            message += "\n";
+            message += id + " - " + bookSearch.getIsbn() + "," + bookSearch.getTitle() + ",{" + bookSearch.getAuthor() + "}," + bookSearch.getPublisher() + "," + bookSearch.getPublishDate() + "," + bookSearch.getPageCount();
+        }
+        client.setMessage(message);
+    }
 
      /**
       * When a visitor returns borrowed book(s)

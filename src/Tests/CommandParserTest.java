@@ -179,7 +179,7 @@ public class CommandParserTest
 
   @Test
   public void bookStoreSearchPublisher(){
-    String request = "search,\"*\",{Suzanne Collins},9780545387200,\"Scholastic Inc.\";";
+    String request = "search,\"*\",{Suzanne Collins},9780545387200,Scholastic Inc.;";
 
     commandParser.parseCommand(request);
 
@@ -191,7 +191,7 @@ public class CommandParserTest
 
   @Test
   public void bookSearchSortOrderAlphabetical(){
-    String request = "search,\"*\",{Suzanne Collins},9780545387200,\"Scholastic Inc.\",Alphabetical;";
+    String request = "search,\"*\",{Suzanne Collins},9780545387200,Scholastic Inc.,Alphabetical;";
 
     commandParser.parseCommand(request);
 
@@ -209,7 +209,7 @@ public class CommandParserTest
     request = "buy,1,1;";
     commandParser.parseCommand(request);
     String expected = "buy,success,1\n"
-            + "9780545387200,The Hunger Games Trilogy,{Suzanne Collins},Scholastic Inc.,2011-05-01,1";
+            + "9780545387200,The Hunger Games Trilogy,{Suzanne Collins},2011-05-01,1";
 
     assertEquals("these should be the same",expected,commandParser.MESSAGE);
   }

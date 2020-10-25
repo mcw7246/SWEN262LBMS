@@ -124,7 +124,6 @@ public class BookStore
     String message = "";
     String titleSub = title.substring(1, title.length() - 1);
 
-
     List<Book> bookFits = bookList;
     boolean allAuthors = true;
     boolean allTitles = true;

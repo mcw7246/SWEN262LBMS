@@ -214,4 +214,22 @@ public class CommandParserTest
     assertEquals("these should be the same",expected,commandParser.MESSAGE);
   }
 
+  @Test
+  public void borrowBookTest(){
+    String request = "info,\"*\",{Suzanne Collins};";
+    commandParser.parseCommand(request);
+
+    request = "buy,2,1,3;";
+    commandParser.parseCommand(request);
+
+    request = "register,mikayla,wishart,16chspk,321;";
+    commandParser.parseCommand(request);
+
+    request = "borrow,1000000001,1;";
+    commandParser.parseCommand(request);
+
+    String expected = "borrow,2020/11/8;";
+    assertEquals("these should be equal.",expected,client.getMessage());
+  }
+
 }

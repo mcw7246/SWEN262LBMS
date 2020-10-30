@@ -1,5 +1,7 @@
 package GUI;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
@@ -15,6 +17,14 @@ public class BookSearchGui
 
     updatedGridPane.getChildren().clear();
     Button backToHome = new Button("Back to Home");
+    backToHome.setOnAction(new EventHandler<ActionEvent>()
+    {
+      @Override
+      public void handle(ActionEvent actionEvent)
+      {
+
+      }
+    });
 
 
     //gets the book title
@@ -37,6 +47,16 @@ public class BookSearchGui
     Label sortOrderLabel = new Label("Sort Order: ");
     MenuButton sortOrder = new MenuButton("None");
     sortOrder.getItems().addAll(new MenuItem("Alphabetical"), new MenuItem("Publish date (newest - oldest)"), new MenuItem("Book Status"));
+
+    Button search = new Button("Search");
+    search.setOnAction(new EventHandler<ActionEvent>()
+    {
+      @Override
+      public void handle(ActionEvent actionEvent)
+      {
+
+      }
+    });
 
     updatedGridPane.add(backToHome, 0, 0);
 
@@ -64,9 +84,11 @@ public class BookSearchGui
     updatedGridPane.add(sortOrderLabel, 0,5);
     updatedGridPane.add(sortOrder, 1, 5);
 
-
+    updatedGridPane.add(search, 0, 6);
 
     updatedGridPane.setVgap(10);
+
+
 
     return updatedGridPane;
   }

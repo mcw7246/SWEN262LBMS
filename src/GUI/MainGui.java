@@ -6,25 +6,36 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class MainGui extends Application
 {
 
   @Override
-  public void start(Stage primaryStage){
+  public void start(Stage primaryStage)
+  {
 
     Group root = new Group();
 
-
     GridPane gridPane = new GridPane();
 
-    Label commandType = new Label("Choose which action you would like: " );
-    MenuButton commandTypes = new MenuButton();
+    Label title = new Label("Welcome to Library Book Management System!");
+
+    Label commandType = new Label("Choose which action you would like: ");
+    MenuButton commandTypes = new MenuButton("Actions");
 
     MenuItem advanceTime = new MenuItem("Advance Time");
+    advanceTime.setOnAction(new EventHandler<ActionEvent>()
+    {
+      @Override
+      public void handle(ActionEvent actionEvent)
+      {
+        AdvanceTimeGui advanceTimeGui = new AdvanceTimeGui(gridPane);
+        advanceTimeGui.advanceTimeGridPane();
+      }
+    });
     MenuItem beginVisit = new MenuItem("Begin Visit");
     MenuItem bookSearch = new MenuItem("Library Book Search");
     bookSearch.setOnAction(new EventHandler<ActionEvent>()
@@ -47,17 +58,20 @@ public class MainGui extends Application
     MenuItem returnBook = new MenuItem("Return Book");
     MenuItem storeSearch = new MenuItem("Store Search");
 
-    commandTypes.getItems().addAll(advanceTime, beginVisit, bookSearch, borrowBook, borrowedBooks, dateTime, endVisit, newVisitor, payFines, purchaseBook, report, returnBook, storeSearch);
+    commandTypes.getItems().addAll(advanceTime, beginVisit, bookSearch, borrowBook, borrowedBooks
+            , dateTime, endVisit, newVisitor, payFines, purchaseBook, report, returnBook,
+            storeSearch);
 
     commandTypes.show();
 
-    gridPane.add(commandType, 0, 0);
-    gridPane.add(commandTypes, 0,1);
+    gridPane.add(title, 1, 0);
+    gridPane.add(commandType, 1, 1);
+    gridPane.add(commandTypes, 1, 2);
 
 
     root.getChildren().add(gridPane);
 
-    Scene scene = new Scene(root,600,300);
+    Scene scene = new Scene(root, 600, 300);
 
 
     primaryStage.setTitle("Library Book Management System");
@@ -65,7 +79,14 @@ public class MainGui extends Application
     primaryStage.show();
   }
 
-  public static void main(String[] args){
+  public GridPane main(GridPane gridPane)
+  {
+
+    return gridPane;
+  }
+
+  public static void main(String[] args)
+  {
     launch(args);
   }
 }

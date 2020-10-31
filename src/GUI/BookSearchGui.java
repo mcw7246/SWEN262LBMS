@@ -1,13 +1,23 @@
 package GUI;
 
+import Client.Client;
+import State.Library;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BookSearchGui
 {
   GridPane gridPane;
+  String name;
+  String authors;
+  String isbn;
+  String publisher;
+  String sortOrd;
   public BookSearchGui(GridPane gridPane){
     this.gridPane = gridPane;
   }
@@ -22,26 +32,26 @@ public class BookSearchGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-
+        MainGui.mainPage(gridPane);
       }
     });
 
 
     //gets the book title
     Label titleLabel = new Label("Book Title: ");
-    TextArea bookName = new TextArea("Enter book title here.");
+    TextArea bookName = new TextArea("*");
 
     //gets the authors
-    Label authorLabel = new Label("Book Author(s): " );
-    TextArea bookAuthors = new TextArea("Enter book authors seperated by a comma.");
+    Label authorLabel = new Label("Book Author(s) Comma Separated: ");
+    TextArea bookAuthors = new TextArea("*");
 
     //gets isbn
     Label isbnLabel = new Label("Book ISBN: ");
-    TextArea bookISBN = new TextArea("Enter book ISBN.");
+    TextArea bookISBN = new TextArea("*");
 
     //gets publisher
     Label publisherLabel = new Label("Book Publisher: " );
-    TextArea bookPublisher = new TextArea("Enter book publisher");
+    TextArea bookPublisher = new TextArea("*");
 
     //gets sort order
     Label sortOrderLabel = new Label("Sort Order: ");
@@ -54,7 +64,12 @@ public class BookSearchGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-
+        name = bookName.getText();
+        isbn = bookISBN.getText();
+        publisher = bookPublisher.getText();
+        authors = bookAuthors.getText();
+        sortOrd = sortOrder.getText();
+        searchBookResults();
       }
     });
 
@@ -87,8 +102,6 @@ public class BookSearchGui
     updatedGridPane.add(search, 0, 6);
 
     updatedGridPane.setVgap(10);
-
-
 
     return updatedGridPane;
   }

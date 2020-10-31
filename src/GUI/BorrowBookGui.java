@@ -14,6 +14,7 @@ public class BorrowBookGui
 
     updated.getChildren().clear();
 
+
     return updated;
   }
 }

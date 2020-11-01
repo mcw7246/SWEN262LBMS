@@ -337,10 +337,10 @@ public class Library
     public void bookSearch(String title, List<String> authors, String isbn, String publisher, String sortOrd)
     {
         String message = "";
-        String titleSub = title.substring(1, title.length() - 1);
+        String titleSub = title;
 
 
-        List<Book> bookFits = (ArrayList)books.values();
+        List<Book> bookFits = new ArrayList<>(books.keySet());
         boolean allAuthors = true;
         boolean allTitles = true;
         boolean allISBN = true;
@@ -361,19 +361,19 @@ public class Library
 
         if(!allTitles)
         {
-            searchTitles(titleSub, bookFits);
+            bookFits = searchTitles(titleSub, bookFits);
         }
 
         if(!allAuthors){
-            searchAuthors(authors, bookFits);
+            bookFits = searchAuthors(authors, bookFits);
         }
 
         if(!allISBN){
-            searchISBN(isbn, bookFits);
+            bookFits = searchISBN(isbn, bookFits);
         }
 
         if(!allPublisher){
-            searchPublisher(publisher, bookFits);
+            bookFits = searchPublisher(publisher, bookFits);
         }
         client.setSearchResult(bookFits);
         message = "info," + bookFits.size();

@@ -11,9 +11,9 @@ public class BookSearch implements Command{
     Library library;
     String title;
     ArrayList<String> authors;
-    String isbn = null;
-    String publisher = null;
-    String sortOrder = null;
+    String isbn = "*";
+    String publisher = "*";
+    String sortOrder = "*";
 
     public BookSearch(Library library, String title, ArrayList<String> authors){
         this.library = library;

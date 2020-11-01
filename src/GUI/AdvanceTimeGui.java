@@ -24,7 +24,7 @@ public class AdvanceTimeGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        MainGui.mainPage(updatedGridPane);
+        MainGui.mainPage(gridPane);
       }
     });
 

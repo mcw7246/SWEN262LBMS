@@ -48,6 +48,7 @@ public class BorrowedBooksGui
     updated.add(idLabel, 1, 1);
     updated.add(id, 1, 2);
     updated.add(backToHome, 0, 0);
+    updated.add(submit, 1, 3);
 
     updated.setVgap(10);
     updated.setHgap(10);

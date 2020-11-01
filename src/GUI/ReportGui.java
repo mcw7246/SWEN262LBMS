@@ -49,8 +49,8 @@ public class ReportGui
 
     updated.add(backToHome, 0, 0);
     updated.add(numDays, 1, 1);
-    updated.add(numDaysTA, 1, 2);
-    updated.add(submit, 1, 3);
+    updated.add(numDaysTA, 2, 1);
+    updated.add(submit, 1, 2);
 
     return updated;
   }

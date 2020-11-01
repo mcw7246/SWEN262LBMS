@@ -52,6 +52,7 @@ public class AdvanceTimeGui
     updatedGridPane.add(numHours, 0, 2);
     updatedGridPane.add(numHoursTA, 1, 2);
 
+    updatedGridPane.add(submit, 1, 3);
     return updatedGridPane;
   }
 

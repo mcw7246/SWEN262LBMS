@@ -27,7 +27,7 @@ public class EndVisitGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-
+        MainGui.mainPage(updated);
       }
     });
 
@@ -35,9 +35,20 @@ public class EndVisitGui
     TextArea idTA = new TextArea();
     idTA.setPrefSize(200,20);
 
+    Button submit = new Button("Submit");
+    submit.setOnAction(new EventHandler<ActionEvent>()
+    {
+      @Override
+      public void handle(ActionEvent actionEvent)
+      {
+
+      }
+    });
+
     updated.add(backToHome, 0,0);
     updated.add(visitorIDLabel, 1, 1);
-    updated.add(idTA, 1, 2);
+    updated.add(idTA, 2, 1);
+    updated.add(submit, 1, 2);
 
     updated.setHgap(10);
     updated.setVgap(10);

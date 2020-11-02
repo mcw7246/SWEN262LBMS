@@ -46,11 +46,13 @@ public class AdvanceTimeGui
       }
     });
 
+    updatedGridPane.setHgap(10);
+    updatedGridPane.setVgap(10);
     updatedGridPane.add(backToHome, 0, 0);
-    updatedGridPane.add(numDays, 0, 1);
-    updatedGridPane.add(numDaysTA, 1, 1);
-    updatedGridPane.add(numHours, 0, 2);
-    updatedGridPane.add(numHoursTA, 1, 2);
+    updatedGridPane.add(numDays, 1, 1);
+    updatedGridPane.add(numDaysTA, 2, 1);
+    updatedGridPane.add(numHours, 1, 2);
+    updatedGridPane.add(numHoursTA, 2, 2);
 
     updatedGridPane.add(submit, 1, 3);
     return updatedGridPane;

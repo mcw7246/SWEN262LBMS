@@ -36,7 +36,7 @@ public class ReturnBookGui
 
     Label bookIDs = new Label("Book ID's: ");
     TextArea bookIdsTA = new TextArea();
-    bookIDs.setPrefSize(200,20);
+    bookIdsTA.setPrefSize(200,20);
 
     Button submit = new Button("Submit");
     submit.setOnAction(new EventHandler<ActionEvent>()

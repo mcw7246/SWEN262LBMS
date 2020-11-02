@@ -2,7 +2,6 @@ package GUI;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -33,6 +32,7 @@ public class BeginVisitGui
     });
     Label userID = new Label("Enter your Visitor ID: ");
     TextArea id = new TextArea("");
+    id.setPrefSize(200,20);
 
     Button submit = new Button("Begin Visit!");
     submit.setOnAction(new EventHandler<ActionEvent>()
@@ -46,11 +46,12 @@ public class BeginVisitGui
     });
 
     updatedGridPane.add(backToHome, 0, 0);
-    updatedGridPane.add(userID, 0, 1);
-    updatedGridPane.add(id, 0, 2);
-    updatedGridPane.add(submit, 0, 3);
+    updatedGridPane.add(userID, 1, 1);
+    updatedGridPane.add(id, 1, 2);
+    updatedGridPane.add(submit, 1, 3);
 
     updatedGridPane.setVgap(10);
+    updatedGridPane.setHgap(10);
 
     return updatedGridPane;
   }

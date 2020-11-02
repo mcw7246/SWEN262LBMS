@@ -31,7 +31,7 @@ public class BorrowBookGui
 
     Label visitorID = new Label("Visitor ID: ");
     TextArea visitorIDTA = new TextArea();
-    visitorID.setPrefSize(200, 20);
+    visitorIDTA.setPrefSize(200, 20);
 
     Label bookIDs = new Label("Book ID's: ");
     TextArea bookIDsTA = new TextArea();

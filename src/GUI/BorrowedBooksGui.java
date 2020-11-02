@@ -1,7 +1,5 @@
 package GUI;
 
-import Command.BorrowedBooks;
-import State.Library;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;

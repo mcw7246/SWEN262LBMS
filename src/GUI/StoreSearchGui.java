@@ -72,31 +72,32 @@ public class StoreSearchGui
 
     //adds title to the gridpane
     bookName.setPrefSize(200,20);
-    updated.add(titleLabel, 0,1);
-    updated.add(bookName, 1,1);
+    updated.add(titleLabel, 1,1);
+    updated.add(bookName, 2, 1);
 
     //adds authors to the gridpane
     bookAuthors.setPrefSize(200, 20);
-    updated.add(authorLabel, 0, 2);
-    updated.add(bookAuthors, 1, 2);
+    updated.add(authorLabel, 1, 2);
+    updated.add(bookAuthors, 2, 2);
 
     //adds isbn to the gridpane
     bookISBN.setPrefSize(200, 20);
-    updated.add(isbnLabel,0,3);
-    updated.add(bookISBN, 1, 3);
+    updated.add(isbnLabel,1,3);
+    updated.add(bookISBN, 2, 3);
 
     //adds publisher to gridpane
     bookPublisher.setPrefSize(200,20);
-    updated.add(publisherLabel, 0,4);
-    updated.add(bookPublisher, 1, 4);
+    updated.add(publisherLabel, 1,4);
+    updated.add(bookPublisher, 2, 4);
 
     //adds sortorder to gridpane
-    updated.add(sortOrderLabel, 0,5);
-    updated.add(sortOrder, 1, 5);
+    updated.add(sortOrderLabel, 1,5);
+    updated.add(sortOrder, 2, 5);
 
-    updated.add(search, 0, 6);
+    updated.add(search, 1, 6);
 
     updated.setVgap(10);
+    updated.setHgap(10);
     return updated;
   }
 }

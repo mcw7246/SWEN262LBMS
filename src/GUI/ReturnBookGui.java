@@ -20,7 +20,7 @@ public class ReturnBookGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        MainGui.mainPage(updated);
+        MainGui.getMainPane();
       }
     });
 

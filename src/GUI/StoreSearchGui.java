@@ -24,7 +24,7 @@ public class StoreSearchGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        MainGui.mainPage(updated);
+        MainGui.getMainPane();
       }
     });
     //gets the book title

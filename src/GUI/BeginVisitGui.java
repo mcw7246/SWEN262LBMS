@@ -10,7 +10,6 @@ import javafx.scene.layout.GridPane;
 
 public class BeginVisitGui
 {
-  static GridPane gridPane;
   static String visitorID;
 
   public static GridPane beginVisit(){
@@ -24,7 +23,7 @@ public class BeginVisitGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        MainGui.mainPage(gridPane);
+        MainGui.getMainPane();
       }
     });
     Label userID = new Label("Enter your Visitor ID: ");

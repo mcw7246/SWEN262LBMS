@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 
 public class EndVisitGui
 {
-  public GridPane endVisit()
+  public static GridPane endVisit()
   {
     GridPane updated = new GridPane();
 
@@ -21,7 +21,7 @@ public class EndVisitGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        MainGui.mainPage(updated);
+        MainGui.getMainPane();
       }
     });
 

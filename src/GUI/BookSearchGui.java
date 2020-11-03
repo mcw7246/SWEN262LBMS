@@ -15,16 +15,15 @@ public class BookSearchGui
   static String sortOrd;
 
   public static GridPane bookSearch(){
-    GridPane updatedGridPane = gridPane;
+    GridPane updatedGridPane = new GridPane();
 
-    updatedGridPane.getChildren().clear();
     Button backToHome = new Button("Back to Home");
     backToHome.setOnAction(new EventHandler<ActionEvent>()
     {
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        MainGui.mainPage(gridPane);
+        MainGui.getMainPane();
       }
     });
 

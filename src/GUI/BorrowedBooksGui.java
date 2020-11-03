@@ -21,7 +21,7 @@ public class BorrowedBooksGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        MainGui.mainPage(updated);
+        MainGui.getMainPane();
       }
     });
 

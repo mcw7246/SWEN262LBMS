@@ -43,7 +43,7 @@ public class NewVisitorGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        MainGui.mainPage(updated);
+        MainGui.getMainPane();
       }
     });
     Button submit = new Button("Submit");

@@ -4,6 +4,7 @@ import Books.Book;
 import Books.CheckOut;
 
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,10 @@ import Command.*;
 
 import Books.BookStore;
 import Client.Client;
+import Visitors.Visit;
 import Visitors.Visitor;
+
+import javax.swing.*;
 
 /**
  * @author Yug Patel - ydp4388
@@ -158,43 +162,13 @@ public class Library
     {
         return numPurchased;
 
-
     }
-    /**
-     * Method used by employees to borrow books.
-     * @param qty quantity of books
-     * @param ID book id for search results
-     */
-    public void borrowBooks (Integer qty, List < Integer > ID)
+
+
+    //ToDo
+    public void findBorrowedBooks (Integer visitorID, List < Integer > bookId)
     {
-        for (Integer num : client.getSearchResult().keySet())
-        {
-            for (Integer id : ID)
-            {
-                if (id == num)
-                {
-                    books.put(client.getSearchResult().get(num), qty);
-                }
-            }
-        }
-    }
-
-
-    public void checkOutBooks (List<Book> books, Calendar checkInDate, Calendar
-            checkOutDate, int visitorID){
-        if (this.invalidID(visitorID)){
-            client.setMessage(visitorID + "is invalid.");
-        }
-        else{
-            CheckOut CO = new CheckOut(books, checkInDate, checkOutDate, visitorID);
-            checkOuts.add(CO);
-            for(CheckOut c: checkOuts){
-                Calendar borrowDate = c.getCheckOutDate();
-                String date = c.getVisitorID()+ borrowDate.get(Calendar.YEAR) + "/" + borrowDate.get(Calendar.MONTH) + "/" +
-                        borrowDate.get(Calendar.DAY_OF_MONTH);
-                client.setMessage(c.getBooks() + date);
-            }
-        }
+        visitors.get(visitorID);
     }
 
     /**
@@ -386,31 +360,93 @@ public class Library
         client.setMessage(message);
     }
 
+    public void checkOutBooks (List<Integer> books, int visitorID){
+        if (this.invalidID(visitorID)){
+            client.setMessage("borrow,invalid-visitor-id;");
+        }
+        else if(getVisitors().get(visitorID).isMaxCheckOut(books.size())){
+            client.setMessage("borrow,book-limit-exceeded;");
+        }
+        else{
+            Visitor visitor = visitors.get(visitorID);
+            Calendar checkOutDate = client.getDateObj();
+            checkOutDate.set(Calendar.DAY_OF_YEAR, checkOutDate.get(Calendar.DAY_OF_YEAR) + 7);
+            Calendar checkInDate = client.getDateObj();
+            boolean checkout = true;
+            ArrayList<Integer> invalidNum = new ArrayList<>();
+            List<CheckOut> currentCheckOut = new ArrayList<>();
+            HashMap<Integer, Book> searchResults = client.getSearchResult();
+            for(Integer num:books) {
+                if(client.getSearchResult().containsKey(num)) {
+                    CheckOut CO = new CheckOut(searchResults.get(num), checkInDate, checkOutDate, visitorID);
+                    currentCheckOut.add(CO);
+                }
+                else{
+                    checkout = false;
+                    invalidNum.add(num);
+                }
+            }
+            if(checkout){
+                checkOuts.addAll(currentCheckOut);
+                visitor.setCheckOuts(currentCheckOut);
+                String date = new SimpleDateFormat("yyyy/MM/dd").format(checkOutDate.getTime());
+                client.setMessage("borrow," + date + ";");
+            }
+            else{
+                currentCheckOut.clear();
+                client.setMessage("borrow,invalid-book-id," + invalidNum.toString() + ";");
+            }
+        }
+    }
+
      /**
       * When a visitor returns borrowed book(s)
       * @param visitorID - the visitoryID of the visitor returning books
       */
-     public void returnBooks ( int visitorID)
+     public void returnBooks (int visitorID, List<Integer> bookId)
      {
-         ArrayList<Book> books = new ArrayList<>();
-         for (Book book : this.searchResult.values())
-         {
-             books.add(book);
-         }
-
-         Visitor visitor = this.visitors.get(visitorID);
-
-         double fines = visitor.returnBooks(books, this.client.getDateObj());
-
-         if (fines > 0)
-         {
-             //update client with amount due
-             this.client.setMessage("Late fees accrued: $" + fines);
+         if(this.invalidID(visitorID)){
+             client.setMessage("borrow,invalid-visitor-id;");
          }
          else {
-             //update client with success message
-             this.client.setMessage("Successfully returned books!");
+             Visitor visitor = visitors.get(visitorID);
+             boolean returnBooks = true;
+             List<Integer> invalidNum = new ArrayList<>();
+             List<Integer> booksToReturn = new ArrayList<>();
+             HashMap<Integer, Book> searchResults = client.getSearchResult();
+             for (Integer num : bookId) {
+                 if (searchResults.containsKey(num)) {
+                     booksToReturn.add(num);
+                 } else {
+                     returnBooks = false;
+                     invalidNum.add(num);
+                 }
+             }
+             if (returnBooks) {
+                 double totalFine = 0.0;
+                 boolean allowReturn = true;
+                 List<Integer> overdueId = new ArrayList<>();
+                 for (Integer book : booksToReturn) {
+                    double fine = visitor.returnBooks(searchResults.get(book));
+                    if(fine > 0){
+                        allowReturn = false;
+                        totalFine += fine;
+                        overdueId.add(book);
+                    }
+                 }
+                 if(allowReturn) {
+                     client.setMessage("return,success;");
+                 }
+                 else {
+                    client.setMessage("return,overdue,$" + totalFine + overdueId.toString() + ";");
+                 }
+             }
+             else{
+                 booksToReturn.clear();
+                 client.setMessage("return,invalid-book-id," + invalidNum.toString() + ";");
+             }
          }
+
      }
 
      /**

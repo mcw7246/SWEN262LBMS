@@ -1,32 +1,27 @@
 package Command;
 
-import java.util.List;
-
-
+import Books.Book;
 import State.Library;
+
+import java.util.List;
 import java.util.Calendar;
+import Books.CheckOut;
 
-
-public class BorrowBook implements Command{
-
-    private List<Integer> bookId;
-    private Integer visitorID;
-    private Library library;
-    private int qty;
+public class BorrowBook implements Command
+{
+    private int visitorID;
     private List<Integer> bookIDs;
-    private Calendar timeBorrow; //the time borrowed the book
+    private Library library;
 
-
-    public BorrowBook(Integer visitorID, List<Integer> bookId, Library library, Calendar timeBorrow){
+    public BorrowBook(int visitorID, List<Integer> bookIDs, Library library){
         this.visitorID = visitorID;
-        this.bookId = bookId;
+        this.bookIDs = bookIDs;
         this.library = library;
-        this.timeBorrow = timeBorrow;
-
     }
 
+
     @Override
-    public void execute() {
-        library.borrowBooks(qty, bookIDs);
+    public void execute(){
+        library.checkOutBooks(bookIDs, visitorID);
     }
 }

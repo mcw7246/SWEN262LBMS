@@ -5,11 +5,11 @@ import State.Library;
 
 public class ReturnBook implements Command{
 
-    private List<String> bookId;
+    private List<Integer> bookId;
     private Integer id;
     private Library library;
 
-    public ReturnBook(Library library, Integer visitorId, List<String> bookId){
+    public ReturnBook(Library library, Integer visitorId, List<Integer> bookId){
         this.library = library;
         this.id = visitorId;
         this.bookId = bookId;
@@ -17,6 +17,6 @@ public class ReturnBook implements Command{
 
     @Override
     public void execute() {
-        library.returnBooks(id);
+        library.returnBooks(id, bookId);
     }
 }

@@ -10,20 +10,20 @@ import java.util.Calendar;
  */
 public class CheckOut {
     
-    private List<Book> books;
+    private Book book;
     private Calendar checkInDate;
     private Calendar checkOutDate;
     private int visitorID;
 
-    public CheckOut(List<Book> books, Calendar checkInDate, Calendar checkOutDate, int visitorID){
-        this.books = books;
+    public CheckOut(Book book, Calendar checkInDate, Calendar checkOutDate, int visitorID){
+        this.book = book;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.visitorID = visitorID;
     }
 
-    public List<Book> getBooks(){
-        return books;
+    public Book getBook(){
+        return book;
     }
 
     public Calendar getCheckInDate(){
@@ -36,16 +36,5 @@ public class CheckOut {
 
     public int getVisitorID(){
         return visitorID;
-    }
-
-    /**
-     * Sets the check out date date of the checkout.
-     * @return true if there are still books checkedout
-     */
-    public boolean returnBook(Calendar checkOutDate, Book book)
-    {
-        this.checkOutDate = checkOutDate;
-        books.remove(book);
-        return books.size() == 0;
     }
 }

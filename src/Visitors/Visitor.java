@@ -2,9 +2,11 @@ package Visitors;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import Books.Book;
 import Books.CheckOut;
+import com.sun.javafx.scene.CameraHelper;
 
 /**
  * @author Mikayla Wishart - mcw7246
@@ -111,20 +113,13 @@ public class Visitor
     return inVisit;
   }
 
-    /**
-     * Gets a list of currently checked out books.
-     *
-     * @return An ArrayList of currently checked out books.
-     */
-    public ArrayList<Book> getCheckedOutBooks()
-    {
-        ArrayList<Book> books = new ArrayList<>();
 
-        for (CheckOut checkout: this.checkOuts)
-        {
-            books.addAll(checkout.getBooks());
-        }
-        return books;
+  public List<Book> getCheckedOutBooks() {
+      List<Book> books = new ArrayList<>();
+      for(CheckOut checkOut: checkOuts){
+          books.add(checkOut.getBook());
+      }
+      return books;
   }
 
   /**
@@ -137,68 +132,26 @@ public class Visitor
             + this.phoneNum + "\nID: " + this.id + "\nIs In Library: " + this.inVisit;
   }
 
+
+  public void setCheckOuts(List<CheckOut> checkOuts){
+      this.checkOuts.addAll(checkOuts);
+  }
+
   /**
    * Visitor returning books
    * @return a string that contains visitor's information
    */
-  public double returnBooks(ArrayList<Book> books, Calendar dateReturned)
-    {
-        double totalFines = 0.0;
-
-        for (Book book: books)
-        {
-            // get all checked out books for this visitor
-            ArrayList<Book> checkedOut = this.getCheckedOutBooks();
-
-            // Confirm visitor has checked out book
-            if (!checkedOut.contains(book))
-            {
-                continue;
+  public double returnBooks(Book book) {
+        double Fines = 0.0;
+        for(CheckOut checkOut: checkOuts){
+            if(checkOut.getBook() == book){
+                Fines = calculateFine(checkOut);
+                checkOuts.remove(checkOut);
+                break;
             }
-
-            CheckOut checkout = findCheckOut(book);
-            boolean booksLeft = checkout.returnBook(dateReturned, book);
-            if(booksLeft)
-            {
-              // Remove the checkout
-              this.checkOuts.remove(checkout);
-            }
-
-            // Calculate any fines applied to this book.
-            int fineAmount = calculateFine(checkout);
-
-            // Create fine object if necessary
-            if (fineAmount > 0)
-            {
-                this.unpaidFines.add(new UnpaidFine(fineAmount, dateReturned));
-                this.balance += fineAmount;
-
-                // Add to total fines applied
-                totalFines += fineAmount;
-            }
-
-            // Put the copy back in the library
-            book.returnCopies(1);
         }
-
-        return totalFines;
-    }
-
-    /**
-     * Finds checkout associated with specific book
-     * 
-     * @param book - book that is being checked out
-     * @return check out object that contains the book
-     */
-    private CheckOut findCheckOut(Book book){
-
-      for(CheckOut checkOut: this.checkOuts)
-      {
-        if(checkOut.getBooks().contains(book))
-          return checkOut;
-      }
-      return null;
-    }
+        return Fines;
+  }
 
 
     /**
@@ -243,5 +196,9 @@ public class Visitor
     public int getBalance()
     {
         return this.balance;
+    }
+
+    public boolean isMaxCheckOut(Integer num){
+        return num + checkOuts.size() <= 5;
     }
 }

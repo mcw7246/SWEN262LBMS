@@ -5,10 +5,7 @@ import Books.BookStore;
 import Client.Client;
 import State.Library;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Calendar;
+import java.util.*;
 
 /**
  * Parses through the commands that are given
@@ -23,7 +20,6 @@ public class CommandParser
   private Calendar checkInDate;
   private Calendar checkOutDate;
   private Calendar calendar;
-  private Calendar timeBorrow;
 
   public String MESSAGE;
 
@@ -209,7 +205,7 @@ public class CommandParser
           int visitorID = Integer.parseInt(params.get(0));
           ArrayList<Integer> bookIDs = new ArrayList<>(Arrays.asList(Integer.parseInt(params.get(1))));
 
-          command = new BorrowBook(visitorID, bookIDs, library, timeBorrow);
+          command = new BorrowBook(visitorID, bookIDs,  library);
           allCommands.add(command);
         }
       case "borrowed":
@@ -229,14 +225,14 @@ public class CommandParser
             }
           }
 
-          command = new BorrowedBooks(visitorID, books, library, checkInDate, checkOutDate);
+          command = new FindBorrowedBooks(visitorID, bookIDs, library);
           allCommands.add(command);
         }
         break;
       case "return":
         if(params.size() == 2){
           int id = Integer.parseInt(params.get(0));
-          List<String> bookIds = Arrays.asList(params.get(1).split(","));
+          ArrayList<Integer> bookIds = new ArrayList<>(Collections.singletonList(Integer.parseInt(params.get(1))));
 
           command = new ReturnBook(library, id, bookIds);
         }
@@ -289,7 +285,7 @@ public class CommandParser
       case "buy":
         if(params.size() == 2){
           int quantity = Integer.parseInt(params.get(0));
-          ArrayList<Integer> bookIDs = new ArrayList<>(Arrays.asList(Integer.parseInt(params.get(1))));
+          ArrayList<Integer> bookIDs = new ArrayList<>(Collections.singletonList(Integer.parseInt(params.get(1))));
 
           command = new PurchaseBook(quantity, bookIDs, library);
           allCommands.add(command);

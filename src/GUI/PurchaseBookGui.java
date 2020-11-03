@@ -12,14 +12,8 @@ import javax.xml.stream.util.XMLEventAllocator;
 
 public class PurchaseBookGui
 {
-  GridPane gridPane;
-
-  public PurchaseBookGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
-
-  public GridPane purchaseBookGrid(){
-    GridPane updated = gridPane;
+  public static GridPane purchaseBook(){
+    GridPane updated = new GridPane();
 
     updated.getChildren().clear();
 

@@ -9,14 +9,8 @@ import javafx.scene.layout.GridPane;
 
 public class ReturnBookGui
 {
-  GridPane gridPane;
-
-  public ReturnBookGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
-
-  public GridPane returnBookGrid(){
-    GridPane updated = gridPane;
+  public static GridPane returnBook(){
+    GridPane updated = new GridPane();
 
     updated.getChildren().clear();
 

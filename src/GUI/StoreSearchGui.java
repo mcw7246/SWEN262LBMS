@@ -7,19 +7,14 @@ import javafx.scene.layout.GridPane;
 
 public class StoreSearchGui
 {
-  GridPane gridPane;
-  String name;
-  String authors;
-  String isbn;
-  String publisher;
-  String sortOrd;
+  static String name;
+  static String authors;
+  static String isbn;
+  static String publisher;
+  static String sortOrd;
 
-  public StoreSearchGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
-
-  public GridPane storeSearchGrid(){
-    GridPane updated = gridPane;
+  public static GridPane storeSearch(){
+    GridPane updated = new GridPane();
 
     updated.getChildren().clear();
 

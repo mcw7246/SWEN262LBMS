@@ -8,14 +8,9 @@ import javafx.scene.layout.GridPane;
 
 public class DateTimeGui
 {
-  GridPane gridPane;
 
-  public DateTimeGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
-
-  public GridPane dateTimeGrid(){
-    GridPane updated = gridPane;
+  public static GridPane dateTime(){
+    GridPane updated = new GridPane();
 
     updated.getChildren().clear();
 

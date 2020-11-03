@@ -9,13 +9,10 @@ import javafx.scene.layout.GridPane;
 
 public class BorrowBookGui
 {
-  GridPane gridPane;
-  public BorrowBookGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
 
-  public GridPane borrowBookGridPane(){
-    GridPane updated = gridPane;
+
+  public static GridPane borrow(){
+    GridPane updated = new GridPane();
 
     updated.getChildren().clear();
 

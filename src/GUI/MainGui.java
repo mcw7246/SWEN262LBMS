@@ -3,184 +3,123 @@ package GUI;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+
+
 
 public class MainGui extends Application
 {
 
+
   @Override
   public void start(Stage primaryStage)
   {
-    Group root = new Group();
+    BorderPane borderPane = new BorderPane();
 
-    GridPane gridPane = new GridPane();
+    Label title = new Label("Welcome to the Library Book Management System");
+    title.setFont(new Font("Lucida Sans Unicode", 26));
+    borderPane.setTop(title);
 
-    mainPage(gridPane);
+    Label release = new Label("Release 2 LBMS: Mikayla Wishart, Yug Patel, Ryan Tytka, Bryan Wang");
+    release.setFont(new Font("Lucida Sans Unicode", 15));
+    borderPane.setBottom(release);
 
-    root.getChildren().add(gridPane);
-    Scene scene = new Scene(root, 600, 300);
 
-    primaryStage.setTitle("Library Book Management System");
+    borderPane.setCenter(getMainPane());
+
+    BorderPane.setAlignment(borderPane.getBottom(), Pos.CENTER);
+    BorderPane.setAlignment(borderPane.getTop(), Pos.CENTER);
+    BorderPane.setAlignment(borderPane.getCenter(), Pos.CENTER);
+
+    Scene scene = new Scene(borderPane, 700, 450);
     primaryStage.setScene(scene);
+    primaryStage.setTitle("Library Book Management System");
     primaryStage.show();
   }
 
-  public static GridPane mainPage(GridPane gridPane)
-  {
-    gridPane.getChildren().clear();
-    Label title = new Label("Welcome to Library Book Management System!");
+  public static FlowPane getMainPane(){
+    FlowPane flowPane = new FlowPane();
 
-    Label commandType = new Label("Choose which action you would like: ");
-    MenuButton commandTypes = new MenuButton("Actions");
-
-    MenuItem advanceTime = new MenuItem("Advance Time");
-    advanceTime.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        AdvanceTimeGui advanceTimeGui = new AdvanceTimeGui(gridPane);
-        advanceTimeGui.advanceTimeGridPane();
-      }
-    });
-    MenuItem beginVisit = new MenuItem("Begin Visit");
-    beginVisit.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        BeginVisitGui beginVisitGui = new BeginVisitGui(gridPane);
-        beginVisitGui.beginVisitGridPane();
-
-      }
-    });
-    MenuItem bookSearch = new MenuItem("Library Book Search");
-    bookSearch.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        BookSearchGui bookSearchGui = new BookSearchGui(gridPane);
-        bookSearchGui.searchGridPane();
-      }
-    });
-    MenuItem borrowBook = new MenuItem("Borrow Book");
-    borrowBook.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        BorrowBookGui borrowBookGui = new BorrowBookGui(gridPane);
-        borrowBookGui.borrowBookGridPane();
-      }
-    });
-    MenuItem borrowedBooks = new MenuItem("Borrowed Books");
-    borrowedBooks.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        BorrowedBooksGui borrowedBooksGui = new BorrowedBooksGui(gridPane);
-        borrowedBooksGui.borrowedBooksGridPane();
-      }
-    });
-    MenuItem dateTime = new MenuItem("Date Time");
-    dateTime.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        DateTimeGui dateTimeGui = new DateTimeGui(gridPane);
-        dateTimeGui.dateTimeGrid();
-      }
-    });
-    MenuItem endVisit = new MenuItem("End Visit");
-    endVisit.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        EndVisitGui endVisitGui = new EndVisitGui(gridPane);
-        endVisitGui.endVisitGrid();
-      }
-    });
-    MenuItem newVisitor = new MenuItem("Register Visitor");
-    newVisitor.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        NewVisitorGui newVisitorGui = new NewVisitorGui(gridPane);
-        newVisitorGui.newVisitorGrid();
-      }
-    });
-    MenuItem payFines = new MenuItem("Pay Fins");
-    payFines.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        PayFinesGui payFinesGui = new PayFinesGui(gridPane);
-        payFinesGui.payFinesGrid();
-      }
-    });
-    MenuItem purchaseBook = new MenuItem("Purchase Book");
-    purchaseBook.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        PurchaseBookGui purchaseBookGui = new PurchaseBookGui(gridPane);
-        purchaseBookGui.purchaseBookGrid();
-      }
-    });
-    MenuItem report = new MenuItem("Generate Report");
-    report.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        ReportGui reportGui = new ReportGui(gridPane);
-        reportGui.reportGrid();
-      }
-    });
-    MenuItem returnBook = new MenuItem("Return Book");
-    returnBook.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        ReturnBookGui returnBookGui = new ReturnBookGui(gridPane);
-        returnBookGui.returnBookGrid();
-      }
-    });
-    MenuItem storeSearch = new MenuItem("Store Search");
-    storeSearch.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        StoreSearchGui storeSearchGui = new StoreSearchGui(gridPane);
-        storeSearchGui.storeSearchGrid();
-      }
-    });
-
-    commandTypes.getItems().addAll(advanceTime, beginVisit, bookSearch, borrowBook, borrowedBooks
-            , dateTime, endVisit, newVisitor, payFines, purchaseBook, report, returnBook,
-            storeSearch);
-
-    commandTypes.show();
-
-    gridPane.add(title, 1, 0);
-    gridPane.add(commandType, 1, 1);
-    gridPane.add(commandTypes, 1, 2);
+    List<String> commandTypes = Arrays.asList("Advance Time", "Begin Visit", "Book Search", "Borrow Book", "Borrowed Books", "Date Time", "End Visit", "New Visitor", "Pay Fines", "Purchase Book", "Report", "Return Book", "Store Search");
 
 
-    return gridPane;
+
+
+    ImageView pages[] = new ImageView[13];
+    try
+    {
+      for (int i = 0; i < 13; i++)
+      {
+        int objectNum = i;
+        int num = i + 1;
+        Image image = new Image(new FileInputStream("src/Images/" + Integer.toString(num) + ".png"));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(50);
+        imageView.setFitWidth(50);
+        pages[i] = imageView;
+
+        String methodName = commandTypes.get(i).replace(" ", "");
+        final String methodNameFinal = methodName.substring(0,1).toLowerCase() + methodName.substring(1, methodName.length());
+        String objectName = commandTypes.get(i).replace(" ", "");
+        final String objectNameFinal = objectName + "Gui.java";
+
+
+        Button button = new Button(commandTypes.get(i));
+        button.setGraphic(pages[i]);
+        button.setContentDisplay(ContentDisplay.TOP);
+        button.setPrefSize(100, 100);
+        button.setOnAction(new EventHandler<ActionEvent>()
+        {
+          @Override
+          public void handle(ActionEvent actionEvent)
+          {
+            try{
+              Class c = Class.forName(objectNameFinal);
+
+              Object objects = c.getDeclaredConstructor().newInstance();
+
+              Method method = c.getDeclaredMethod(methodNameFinal, null);
+              method.setAccessible(true);
+              method.invoke(objects, null);
+            }catch(Exception e){
+              e.printStackTrace();
+            }
+
+
+          }
+        });
+        flowPane.getChildren().add(button);
+      }
+    }
+    catch(FileNotFoundException e){
+      System.out.println(e.getMessage());
+    }
+
+    flowPane.setHgap(10);
+    flowPane.setVgap(10);
+    flowPane.setPadding(new Insets(20));
+    return flowPane;
+  }
+
+  public static GridPane mainPage(GridPane gridPane){
+
+
+    return null;
   }
 
   public static void main(String[] args)

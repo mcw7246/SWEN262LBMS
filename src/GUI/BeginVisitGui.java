@@ -10,14 +10,11 @@ import javafx.scene.layout.GridPane;
 
 public class BeginVisitGui
 {
-  GridPane gridPane;
-  String visitorID;
-  public BeginVisitGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
+  static GridPane gridPane;
+  static String visitorID;
 
-  public GridPane beginVisitGridPane(){
-    GridPane updatedGridPane = gridPane;
+  public static GridPane beginVisit(){
+    GridPane updatedGridPane = new GridPane();
 
     updatedGridPane.getChildren().clear();
 
@@ -56,7 +53,7 @@ public class BeginVisitGui
     return updatedGridPane;
   }
 
-  public void beginVisitAction(){
+  public static void beginVisitAction(){
 
   }
 

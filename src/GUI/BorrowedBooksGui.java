@@ -9,13 +9,9 @@ import javafx.scene.layout.GridPane;
 
 public class BorrowedBooksGui
 {
-  GridPane gridPane;
-  public BorrowedBooksGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
 
-  public GridPane borrowedBooksGridPane(){
-    GridPane updated = gridPane;
+  public static GridPane borrowedBooks(){
+    GridPane updated = new GridPane();
 
     updated.getChildren().clear();
 
@@ -25,7 +21,7 @@ public class BorrowedBooksGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        MainGui.mainPage(gridPane);
+        MainGui.mainPage(updated);
       }
     });
 

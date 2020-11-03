@@ -9,14 +9,9 @@ import javafx.scene.layout.GridPane;
 
 public class AdvanceTimeGui
 {
-  GridPane gridPane;
-  public AdvanceTimeGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
 
-  public GridPane advanceTimeGridPane(){
-    GridPane updatedGridPane = gridPane;
-    gridPane.getChildren().clear();
+  public static GridPane advanceTime(){
+    GridPane updatedGridPane = new GridPane();
 
     Button backToHome = new Button("Back to home");
     backToHome.setOnAction(new EventHandler<ActionEvent>()
@@ -24,7 +19,7 @@ public class AdvanceTimeGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        MainGui.mainPage(gridPane);
+        MainGui.getMainPane();
       }
     });
 

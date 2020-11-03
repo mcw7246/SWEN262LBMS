@@ -10,14 +10,8 @@ import javafx.scene.layout.GridPane;
 
 public class ReportGui
 {
-  GridPane gridPane;
-
-  public ReportGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
-
-  public GridPane reportGrid(){
-    GridPane updated = gridPane;
+  public static GridPane report(){
+    GridPane updated = new GridPane();
 
     updated.getChildren().clear();
 

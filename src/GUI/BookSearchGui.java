@@ -7,17 +7,14 @@ import javafx.scene.layout.GridPane;
 
 public class BookSearchGui
 {
-  GridPane gridPane;
-  String name;
-  String authors;
-  String isbn;
-  String publisher;
-  String sortOrd;
-  public BookSearchGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
+  static GridPane gridPane;
+  static String name;
+  static String authors;
+  static String isbn;
+  static String publisher;
+  static String sortOrd;
 
-  public GridPane searchGridPane(){
+  public static GridPane bookSearch(){
     GridPane updatedGridPane = gridPane;
 
     updatedGridPane.getChildren().clear();
@@ -102,7 +99,7 @@ public class BookSearchGui
     return updatedGridPane;
   }
 
-  public void searchBookResults(){
+  public static void searchBookResults(){
 
   }
 }

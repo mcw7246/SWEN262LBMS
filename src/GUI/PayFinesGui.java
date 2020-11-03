@@ -9,14 +9,9 @@ import javafx.scene.layout.GridPane;
 
 public class PayFinesGui
 {
-  GridPane gridPane;
 
-  public PayFinesGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
-
-  public GridPane payFinesGrid(){
-    GridPane updated = gridPane;
+  public static GridPane payFines(){
+    GridPane updated = new GridPane();
 
     updated.getChildren().clear();
 

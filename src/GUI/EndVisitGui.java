@@ -9,15 +9,9 @@ import javafx.scene.layout.GridPane;
 
 public class EndVisitGui
 {
-  GridPane gridPane;
-
-  public EndVisitGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
-
-  public GridPane endVisitGrid()
+  public GridPane endVisit()
   {
-    GridPane updated = gridPane;
+    GridPane updated = new GridPane();
 
     updated.getChildren().clear();
 

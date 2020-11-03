@@ -9,18 +9,12 @@ import javafx.scene.layout.GridPane;
 
 public class NewVisitorGui
 {
-  GridPane gridPane;
-
-  String fname;
-  String lname;
-  String pNumber;
-  String address;
-  public NewVisitorGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
-
-  public GridPane newVisitorGrid(){
-    GridPane updated = gridPane;
+  static String fname;
+  static String lname;
+  static String pNumber;
+  static String address;
+  public static GridPane newVisitor(){
+    GridPane updated = new GridPane();
 
     updated.getChildren().clear();
 
@@ -49,7 +43,7 @@ public class NewVisitorGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        MainGui.mainPage(gridPane);
+        MainGui.mainPage(updated);
       }
     });
     Button submit = new Button("Submit");
@@ -81,7 +75,7 @@ public class NewVisitorGui
     return updated;
   }
 
-  public void handleNewVisitor(){
+  public static void handleNewVisitor(){
 
   }
 }

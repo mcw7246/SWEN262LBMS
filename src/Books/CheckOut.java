@@ -1,5 +1,6 @@
 package Books;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Calendar;
 
@@ -11,13 +12,13 @@ import java.util.Calendar;
 public class CheckOut {
     
     private Book book;
-    private Calendar checkInDate;
-    private Calendar checkOutDate;
+    private Date dueDate;
+    private Date checkOutDate;
     private int visitorID;
 
-    public CheckOut(Book book, Calendar checkInDate, Calendar checkOutDate, int visitorID){
+    public CheckOut(Book book, Date checkInDate, Date checkOutDate, int visitorID){
         this.book = book;
-        this.checkInDate = checkInDate;
+        this.dueDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.visitorID = visitorID;
     }
@@ -26,11 +27,11 @@ public class CheckOut {
         return book;
     }
 
-    public Calendar getCheckInDate(){
-        return checkInDate;
+    public Date getDueDate(){
+        return dueDate;
     }
 
-    public Calendar getCheckOutDate(){
+    public Date getCheckOutDate(){
         return checkOutDate;
     }
 

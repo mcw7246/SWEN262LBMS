@@ -4,6 +4,7 @@ import Books.Book;
 import Books.BookStore;
 import Command.CommandParser;
 import State.Library;
+import Visitors.PaidFine;
 import Visitors.Visit;
 
 import java.io.FileNotFoundException;
@@ -24,7 +25,7 @@ public class Client {
     //Response to the user.
     private List<String> message;
 
-    private Calendar startDateTime;
+    private Date startDateTime;
     //Simulation time of the library.
     private Calendar cal;
     private DateFormat dateFormat;
@@ -41,7 +42,7 @@ public class Client {
         commandParser = new CommandParser(library, this, bookStore);
         this.cal = Calendar.getInstance();
         this.dateFormat = new SimpleDateFormat("yyyy/MM/dd,HH:mm:ss");
-        startDateTime = cal;
+        startDateTime = cal.getTime();
         this.allVisits = new ArrayList<>();
         cal.set(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE),8,0,0);
     }
@@ -209,7 +210,7 @@ public class Client {
         int numBooks = library.getBooks().size();
         Integer numVisitors = library.getTotalRegistered();
         List<Visit> visitList = new ArrayList<>();
-        //Avg Visit Length.
+        //Number of previous days.
         int numDay;
         if(days == 0){
             numDay = 0;
@@ -220,7 +221,7 @@ public class Client {
         if(numDay > 0) {
             //Adding all visits in past "day" days.
             for (Visit visit : allVisits) {
-                if(visit.getVisitDay() > numDay){
+                if(visit.getVisitDay() >= numDay){
                     visitList.add(visit);
                 }
             }
@@ -234,16 +235,25 @@ public class Client {
         //Number of Books Purchased.
         Integer booksPurchased = 0;
         for(Integer num: library.getNumPurchased().keySet()){
-            if(num > numDay){
+            if(num >= numDay){
                 booksPurchased += library.getNumPurchased().get(num);
             }
         }
+        //Fines Collected
+        double finesCollected = 0.0;
+        for(PaidFine paidFine: library.getAllPaidFines()){
+            if(paidFine.getDatePaid() >= numDay){
+                finesCollected += paidFine.getAmount();
+            }
+        }
+        //total outstanding amount.
+        double outstanding = library.getLibraryBalance();
         this.setMessage("report," + getDate() +
                 ",\n Number of Books:" + numBooks +
                 "\n Number of Visitors:" + numVisitors +
-                "\n Average Length of Visit:"+ visitLength +
+                "\n Average Length of Visit:"+ numAvgVisit +
                 "\n Number of Books Purchased:" + booksPurchased +
-                "\n Fines Collected: fines" +
-                "\n Fines Outstanding: outstanding;");
+                "\n Fines Collected:" + finesCollected +
+                "\n Fines Outstanding:" + outstanding);
     }
 }

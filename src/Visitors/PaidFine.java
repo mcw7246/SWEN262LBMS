@@ -10,14 +10,14 @@ import java.util.Calendar;
 public class PaidFine
 {
     private double amount;
-    private Calendar datePaid;
+    private Integer datePaid;
 
     /**
      * Default constructor. Date is initialized to current date.
      *
      * @param amount - The amount charged due to the fine.
      */
-    public PaidFine(double amount, Calendar datePaid)
+    public PaidFine(double amount, Integer datePaid)
     {
         this.amount = amount;
         this.datePaid = datePaid;
@@ -28,7 +28,7 @@ public class PaidFine
      *
      * @return The fine's paid date.
      */
-    public Calendar getDatePaid()
+    public Integer getDatePaid()
     {
         return this.datePaid;
     }

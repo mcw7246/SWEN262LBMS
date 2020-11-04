@@ -1,12 +1,12 @@
 package Visitors;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import Books.Book;
 import Books.CheckOut;
-import com.sun.javafx.scene.CameraHelper;
 
 /**
  * @author Mikayla Wishart - mcw7246
@@ -141,16 +141,22 @@ public class Visitor
    * Visitor returning books
    * @return a string that contains visitor's information
    */
-  public double returnBooks(Book book) {
+  public UnpaidFine returnBooks(Book book, Date currentDate) {
         double Fines = 0.0;
         for(CheckOut checkOut: checkOuts){
             if(checkOut.getBook() == book){
-                Fines = calculateFine(checkOut);
+                Fines = calculateFine(checkOut, currentDate);
                 checkOuts.remove(checkOut);
                 break;
             }
         }
-        return Fines;
+        if(Fines > 0){
+            UnpaidFine unpaidFine = new UnpaidFine(Fines, currentDate);
+            this.unpaidFines.add(unpaidFine);
+            balance += Fines;
+            return unpaidFine;
+        }
+        return null;
   }
 
 
@@ -161,17 +167,18 @@ public class Visitor
      * @param checkout - A Checkout object used to calculate fines.
      * @return An integer representing the amount charged to the visitor.
      */
-    private int calculateFine(CheckOut checkout)
+    private int calculateFine(CheckOut checkout, Date currentDate)
     {
         int fineAmount = 0;
-        int returnDate = checkout.getCheckInDate().get(Calendar.DAY_OF_YEAR);
-        int dueDate = checkout.getCheckOutDate().get(Calendar.DAY_OF_YEAR);
 
-        int days = returnDate - dueDate;
+        Date checkoutDate = checkout.getDueDate();
+
+        long diffInMillies =  currentDate.getTime() - checkoutDate.getTime();
+        long days = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
         if (days >= 1)
         {
-            fineAmount = Integer.min(10 + (2 * (days / 7)), 30);
+            fineAmount = Integer.min((int) (10 + (2 * (days / 7))), 30);
         }
 
         return fineAmount;
@@ -182,10 +189,12 @@ public class Visitor
      *
      * @param amount - The amount to pay toward fines.
      */
-    public void payFine(double amount, Calendar datePaid)
+    public PaidFine payFine(double amount, Integer datePaid)
     {
         this.balance -= amount;
-        this.paidFines.add(new PaidFine(amount, datePaid));
+        PaidFine paidFine = new PaidFine(amount, datePaid);
+        this.paidFines.add(paidFine);
+        return paidFine;
     }
 
       /**
@@ -199,6 +208,6 @@ public class Visitor
     }
 
     public boolean isMaxCheckOut(Integer num){
-        return num + checkOuts.size() <= 5;
+        return num + checkOuts.size() >= 5;
     }
 }

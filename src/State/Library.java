@@ -4,16 +4,16 @@ import Books.Book;
 import Books.CheckOut;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.GenericArrayType;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 import Command.*;
 
 import Books.BookStore;
 import Client.Client;
+import Visitors.PaidFine;
+import Visitors.UnpaidFine;
 import Visitors.Visit;
 import Visitors.Visitor;
 
@@ -31,6 +31,10 @@ public class Library
     LibraryState libraryState;
 
     List<CheckOut> checkOuts;
+
+    private List<UnpaidFine> allUnpaidFines;
+    private List<PaidFine> allPaidFines;
+    private Double libraryBalance;
 
     private HashMap<Integer, Book> searchResult;
     private int visitorID;
@@ -60,6 +64,10 @@ public class Library
         closed = new Closed(this);
         libraryState = open;
         this.numPurchased = new HashMap<>();
+        this.checkOuts = new ArrayList<>();
+        this.libraryBalance = 0.0;
+        this.allPaidFines = new ArrayList<>();
+        this.allUnpaidFines = new ArrayList<>();
     }
 
     /**
@@ -165,10 +173,18 @@ public class Library
     }
 
 
-    //ToDo
-    public void findBorrowedBooks (Integer visitorID, List < Integer > bookId)
+    public void findBorrowedBooks (Integer visitorID)
     {
-        visitors.get(visitorID);
+        Visitor visitor = visitors.get(visitorID);
+        client.setSearchResult(visitor.getCheckedOutBooks());
+        String message = "";
+        message += "borrowed," + client.getSearchResult().size();
+        for (Integer id : client.getSearchResult().keySet()) {
+            Book bookSearch = client.getSearchResult().get(id);
+            message += "\n";
+            message += id + " - " + bookSearch.getIsbn() + "," + bookSearch.getTitle() + ",{" + bookSearch.getAuthor() + "}," + bookSearch.getPublisher() + "," + bookSearch.getPublishDate() + "," + bookSearch.getPageCount();
+        }
+        client.setMessage(message);
     }
 
     /**
@@ -369,9 +385,10 @@ public class Library
         }
         else{
             Visitor visitor = visitors.get(visitorID);
-            Calendar checkOutDate = client.getDateObj();
-            checkOutDate.set(Calendar.DAY_OF_YEAR, checkOutDate.get(Calendar.DAY_OF_YEAR) + 7);
-            Calendar checkInDate = client.getDateObj();
+            Date checkOutDate = client.getDateObj().getTime();
+            client.getDateObj().add(Calendar.DATE, 7);
+            Date checkInDate = client.getDateObj().getTime();
+            client.getDateObj().add(Calendar.DATE, -7);
             boolean checkout = true;
             ArrayList<Integer> invalidNum = new ArrayList<>();
             List<CheckOut> currentCheckOut = new ArrayList<>();
@@ -424,21 +441,26 @@ public class Library
              }
              if (returnBooks) {
                  double totalFine = 0.0;
-                 boolean allowReturn = true;
+                 boolean overdue = true;
                  List<Integer> overdueId = new ArrayList<>();
                  for (Integer book : booksToReturn) {
-                    double fine = visitor.returnBooks(searchResults.get(book));
-                    if(fine > 0){
-                        allowReturn = false;
+                     double fine = 0;
+                     Date currentDate = client.getDateObj().getTime();
+                     UnpaidFine unpaidFine = visitor.returnBooks(searchResults.get(book), currentDate);
+                     if(unpaidFine != null){
+                         fine = unpaidFine.getAmount();
+                         allUnpaidFines.add(unpaidFine);
+                         libraryBalance += fine;
+                     }
+                     if(fine > 0){
+                        overdue = false;
                         totalFine += fine;
                         overdueId.add(book);
-                    }
+                     }
                  }
-                 if(allowReturn) {
-                     client.setMessage("return,success;");
-                 }
-                 else {
-                    client.setMessage("return,overdue,$" + totalFine + overdueId.toString() + ";");
+                 client.setMessage("return,success;");
+                 if (!overdue) {
+                     client.setMessage("return,overdue,$" + totalFine + overdueId.toString() + ";");
                  }
              }
              else{
@@ -457,22 +479,31 @@ public class Library
       */
      public void payFine ( int visitorID, double amount)
      {
-         Visitor visitor = this.visitors.get(visitorID);
-
-         // Check for invalid visitor ID
-         if (visitor == null)
-         {
-             return;
+         if(this.invalidID(visitorID)) {
+             client.setMessage("pay,invalid-visitor-id;");
          }
+         else {
+             Visitor visitor = this.visitors.get(visitorID);
 
-         // Check for invalid amount
-         if (amount < 0 || amount > visitor.getBalance())
-         {
-             return;
+             // Check for invalid amount
+             if (amount < 0 || amount > visitor.getBalance()) {
+                 client.setMessage("pay,invalid-amount," + amount + "," + visitor.getBalance() + ";");
+             }
+             else {
+                 PaidFine paidFine = visitor.payFine(amount, this.client.getDateObj().get(Calendar.DAY_OF_YEAR));
+                 this.allPaidFines.add(paidFine);
+                 libraryBalance -= amount;
+                 this.client.setMessage("pay,success," + visitor.getBalance() + ";");
+             }
          }
-
-         visitor.payFine(amount, this.client.getDateObj());
-         this.client.setMessage("Remaining balance: " + visitor.getBalance());
      }
+
+    public List<PaidFine> getAllPaidFines() {
+        return allPaidFines;
+    }
+
+    public Double getLibraryBalance(){
+         return libraryBalance;
+    }
 }
 

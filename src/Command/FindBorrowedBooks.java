@@ -9,19 +9,17 @@ import java.util.Calendar;
 
 public class FindBorrowedBooks implements Command{
 
-    private List<Integer> bookId;
     private Integer visitorID;
     private Library library;
 
 
-    public FindBorrowedBooks(Integer visitorID, List<Integer> bookId, Library library){
+    public FindBorrowedBooks(Integer visitorID, Library library){
         this.visitorID = visitorID;
-        this.bookId = bookId;
         this.library = library;
     }
 
     @Override
     public void execute() {
-        library.findBorrowedBooks(visitorID, bookId);
+        library.findBorrowedBooks(visitorID);
     }
 }

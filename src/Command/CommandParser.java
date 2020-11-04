@@ -209,23 +209,10 @@ public class CommandParser
           allCommands.add(command);
         }
       case "borrowed":
-        if(params.size() == 2){
-          int visitorID = Integer.parseInt(params.get(0));
-          ArrayList<Integer> bookIDs = new ArrayList<>(Arrays.asList(Integer.parseInt(params.get(1))));
+        if(params.size() == 1){
+          int id = Integer.parseInt(params.get(0));
 
-          ArrayList<Book> books = new ArrayList<>();
-
-          for(Integer bookId : bookIDs){
-            if(library.getBooks().values().contains(bookId)){
-              for(Book book : library.getBooks().keySet()){
-                if(library.getBooks().get(book).equals(bookId)){
-                  books.add(book);
-                }
-              }
-            }
-          }
-
-          command = new FindBorrowedBooks(visitorID, bookIDs, library);
+          command = new FindBorrowedBooks(id, library);
           allCommands.add(command);
         }
         break;
@@ -235,6 +222,7 @@ public class CommandParser
           ArrayList<Integer> bookIds = new ArrayList<>(Collections.singletonList(Integer.parseInt(params.get(1))));
 
           command = new ReturnBook(library, id, bookIds);
+          allCommands.add(command);
         }
         break;
       case "pay":
@@ -243,6 +231,7 @@ public class CommandParser
           double amount = Double.parseDouble(params.get(1));
 
           command = new PayFine(library, visitorID, amount);
+          allCommands.add(command);
         }
         break;
       case "search":

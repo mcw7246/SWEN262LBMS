@@ -1,6 +1,7 @@
 package Visitors;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Provides a structure for persisting fines accumulated by library visitors.
@@ -9,15 +10,15 @@ import java.util.Calendar;
  */
 public class UnpaidFine
 {
-    private int amount;
-    private Calendar dateAccumulated;
+    private double amount;
+    private Date dateAccumulated;
 
     /**
      * Default constructor. Date is initialized to current date.
      *
      * @param amount - The amount charged due to the fine.
      */
-    public UnpaidFine(int amount, Calendar dateAccumulated)
+    public UnpaidFine(double amount, Date dateAccumulated)
     {
         this.amount = amount;
         this.dateAccumulated = dateAccumulated;
@@ -28,7 +29,7 @@ public class UnpaidFine
      *
      * @return The fine's paid date.
      */
-    public Calendar getDateAccumulated()
+    public Date getDateAccumulated()
     {
         return this.dateAccumulated;
     }
@@ -38,7 +39,7 @@ public class UnpaidFine
      *
      * @return The fine's amount.
      */
-    public int getAmount()
+    public double getAmount()
     {
         return this.amount;
     }

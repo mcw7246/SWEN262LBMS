@@ -20,16 +20,21 @@ public class Closed implements LibraryState{
 
     @Override
     public void startVisit(Integer visitorId) {
-        client.setMessage("Library is currently closed!");
+        client.setMessage("The Library is currently closed!");
     }
 
     @Override
     public void endVisit(Integer visitorId) {
-        client.setMessage("Library is currently closed!");
+        client.setMessage("The Library is currently closed!");
     }
 
     @Override
-    public void borrowBook(Integer id, List<Integer> bookId) {
+    public void borrowBook(List<Integer> books, int visitorID) {
+        client.setMessage("The Library is currently closed!");
+    }
 
+    @Override
+    public void returnBooks(int visitorID, List<Integer> bookId) {
+        client.setMessage("The Library is currently closed!");
     }
 }

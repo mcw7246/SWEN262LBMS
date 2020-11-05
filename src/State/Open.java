@@ -1,11 +1,14 @@
 package State;
 
+import Books.Book;
+import Books.CheckOut;
 import Client.Client;
+import Visitors.UnpaidFine;
 import Visitors.Visit;
 import Visitors.Visitor;
 
-import java.util.HashMap;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Open implements LibraryState{
 
@@ -47,7 +50,96 @@ public class Open implements LibraryState{
     }
 
     @Override
-    public void borrowBook(Integer id, List<Integer> bookId) {
+    public void borrowBook(List<Integer> books, int visitorID) {
+        if (library.invalidID(visitorID)){
+            client.setMessage("borrow,invalid-visitor-id;");
+        }
+        if(library.getVisitors().get(visitorID).isMaxCheckOut(books.size())){
+            client.setMessage("borrow,book-limit-exceeded;");
+        }
+        else if(library.getVisitors().get(visitorID).getBalance() != 0){
+            client.setMessage("borrow,outstanding-fine," + library.getVisitors().get(visitorID).getBalance() + ";");
+        }
+        else{
+            Visitor visitor = visitors.get(visitorID);
+            Date checkOutDate = client.getDateObj().getTime();
+            client.getDateObj().add(Calendar.DATE, 7);
+            Date checkInDate = client.getDateObj().getTime();
+            client.getDateObj().add(Calendar.DATE, -7);
+            boolean checkout = true;
+            ArrayList<Integer> invalidNum = new ArrayList<>();
+            List<CheckOut> currentCheckOut = new ArrayList<>();
+            HashMap<Integer, Book> searchResults = client.getSearchResult();
+            for(Integer num:books) {
+                if(client.getSearchResult().containsKey(num)) {
+                    CheckOut CO = new CheckOut(searchResults.get(num), checkInDate, checkOutDate, visitorID);
+                    currentCheckOut.add(CO);
+                }
+                else{
+                    checkout = false;
+                    invalidNum.add(num);
+                }
+            }
+            if(checkout){
+                library.checkOuts.addAll(currentCheckOut);
+                visitor.setCheckOuts(currentCheckOut);
+                String date = new SimpleDateFormat("yyyy/MM/dd").format(checkOutDate.getTime());
+                client.setMessage("borrow," + date + ";");
+            }
+            else{
+                currentCheckOut.clear();
+                client.setMessage("borrow,invalid-book-id," + invalidNum.toString() + ";");
+            }
+        }
+    }
 
+    @Override
+    public void returnBooks(int visitorID, List<Integer> bookId) {
+        if(library.invalidID(visitorID)){
+            client.setMessage("borrow,invalid-visitor-id;");
+        }
+        else {
+            Visitor visitor = visitors.get(visitorID);
+            boolean returnBooks = true;
+            List<Integer> invalidNum = new ArrayList<>();
+            List<Integer> booksToReturn = new ArrayList<>();
+            HashMap<Integer, Book> searchResults = client.getSearchResult();
+            for (Integer num : bookId) {
+                if (searchResults.containsKey(num)) {
+                    booksToReturn.add(num);
+                } else {
+                    returnBooks = false;
+                    invalidNum.add(num);
+                }
+            }
+            if (returnBooks) {
+                double totalFine = 0.0;
+                boolean overdue = true;
+                List<Integer> overdueId = new ArrayList<>();
+                for (Integer book : booksToReturn) {
+                    double fine = 0;
+                    Date currentDate = client.getDateObj().getTime();
+                    UnpaidFine unpaidFine = visitor.returnBooks(searchResults.get(book), currentDate);
+                    if(unpaidFine != null){
+                        fine = unpaidFine.getAmount();
+                        library.allUnpaidFines.add(unpaidFine);
+                        library.libraryBalance += fine;
+                    }
+                    if(fine > 0){
+                        overdue = false;
+                        totalFine += fine;
+                        overdueId.add(book);
+                    }
+                }
+                client.setMessage("return,success;");
+                if (!overdue) {
+                    client.setMessage("return,overdue,$" + totalFine + overdueId.toString() + ";");
+                }
+            }
+            else{
+                booksToReturn.clear();
+                client.setMessage("return,invalid-book-id," + invalidNum.toString() + ";");
+            }
+        }
     }
 }

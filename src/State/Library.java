@@ -28,13 +28,13 @@ public class Library
     LibraryState open;
     LibraryState closed;
 
-    LibraryState libraryState;
+    protected LibraryState libraryState;
 
-    List<CheckOut> checkOuts;
+    protected List<CheckOut> checkOuts;
 
-    private List<UnpaidFine> allUnpaidFines;
-    private List<PaidFine> allPaidFines;
-    private Double libraryBalance;
+    protected List<UnpaidFine> allUnpaidFines;
+    protected List<PaidFine> allPaidFines;
+    protected Double libraryBalance;
 
     private HashMap<Integer, Book> searchResult;
     private int visitorID;
@@ -377,43 +377,7 @@ public class Library
     }
 
     public void checkOutBooks (List<Integer> books, int visitorID){
-        if (this.invalidID(visitorID)){
-            client.setMessage("borrow,invalid-visitor-id;");
-        }
-        else if(getVisitors().get(visitorID).isMaxCheckOut(books.size())){
-            client.setMessage("borrow,book-limit-exceeded;");
-        }
-        else{
-            Visitor visitor = visitors.get(visitorID);
-            Date checkOutDate = client.getDateObj().getTime();
-            client.getDateObj().add(Calendar.DATE, 7);
-            Date checkInDate = client.getDateObj().getTime();
-            client.getDateObj().add(Calendar.DATE, -7);
-            boolean checkout = true;
-            ArrayList<Integer> invalidNum = new ArrayList<>();
-            List<CheckOut> currentCheckOut = new ArrayList<>();
-            HashMap<Integer, Book> searchResults = client.getSearchResult();
-            for(Integer num:books) {
-                if(client.getSearchResult().containsKey(num)) {
-                    CheckOut CO = new CheckOut(searchResults.get(num), checkInDate, checkOutDate, visitorID);
-                    currentCheckOut.add(CO);
-                }
-                else{
-                    checkout = false;
-                    invalidNum.add(num);
-                }
-            }
-            if(checkout){
-                checkOuts.addAll(currentCheckOut);
-                visitor.setCheckOuts(currentCheckOut);
-                String date = new SimpleDateFormat("yyyy/MM/dd").format(checkOutDate.getTime());
-                client.setMessage("borrow," + date + ";");
-            }
-            else{
-                currentCheckOut.clear();
-                client.setMessage("borrow,invalid-book-id," + invalidNum.toString() + ";");
-            }
-        }
+        libraryState.borrowBook(books, visitorID);
     }
 
      /**
@@ -422,52 +386,6 @@ public class Library
       */
      public void returnBooks (int visitorID, List<Integer> bookId)
      {
-         if(this.invalidID(visitorID)){
-             client.setMessage("borrow,invalid-visitor-id;");
-         }
-         else {
-             Visitor visitor = visitors.get(visitorID);
-             boolean returnBooks = true;
-             List<Integer> invalidNum = new ArrayList<>();
-             List<Integer> booksToReturn = new ArrayList<>();
-             HashMap<Integer, Book> searchResults = client.getSearchResult();
-             for (Integer num : bookId) {
-                 if (searchResults.containsKey(num)) {
-                     booksToReturn.add(num);
-                 } else {
-                     returnBooks = false;
-                     invalidNum.add(num);
-                 }
-             }
-             if (returnBooks) {
-                 double totalFine = 0.0;
-                 boolean overdue = true;
-                 List<Integer> overdueId = new ArrayList<>();
-                 for (Integer book : booksToReturn) {
-                     double fine = 0;
-                     Date currentDate = client.getDateObj().getTime();
-                     UnpaidFine unpaidFine = visitor.returnBooks(searchResults.get(book), currentDate);
-                     if(unpaidFine != null){
-                         fine = unpaidFine.getAmount();
-                         allUnpaidFines.add(unpaidFine);
-                         libraryBalance += fine;
-                     }
-                     if(fine > 0){
-                        overdue = false;
-                        totalFine += fine;
-                        overdueId.add(book);
-                     }
-                 }
-                 client.setMessage("return,success;");
-                 if (!overdue) {
-                     client.setMessage("return,overdue,$" + totalFine + overdueId.toString() + ";");
-                 }
-             }
-             else{
-                 booksToReturn.clear();
-                 client.setMessage("return,invalid-book-id," + invalidNum.toString() + ";");
-             }
-         }
 
      }
 

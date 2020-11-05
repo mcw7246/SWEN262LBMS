@@ -8,12 +8,13 @@ public interface LibraryState {
      * Method to start the Visit.
      * @param visitorId - visitor id.
      */
-    public void startVisit(Integer visitorId);
+    void startVisit(Integer visitorId);
 
     /**
      * Method to end the Visit.
      * @param visitorId - visitor id.
      */
-    public void endVisit(Integer visitorId);
-    public void borrowBook(Integer visitorId, List<Integer> bookId);
+    void endVisit(Integer visitorId);
+    void borrowBook(List<Integer> books, int visitorID);
+    void returnBooks (int visitorID, List<Integer> bookId);
 }

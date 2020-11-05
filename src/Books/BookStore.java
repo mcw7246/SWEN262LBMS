@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class BookStore
 {
 
-  private List<Book> bookList;
+  List<Book> bookList;
   private Client client;
 
   public BookStore(Client client) throws FileNotFoundException
@@ -160,7 +160,7 @@ public class BookStore
       searchPublisher(publisher, bookFits);
     }
     client.setSearchResult(bookFits);
-    message = "info," + bookFits.size();
+    message = "search," + bookFits.size();
     for (Integer id : client.getSearchResult().keySet())
     {
       Book bookSearch = client.getSearchResult().get(id);

@@ -352,5 +352,9 @@ public class CommandParser
     }
   }
 
+  public String getMessage(){
+    return MESSAGE;
+  }
+
 
 }

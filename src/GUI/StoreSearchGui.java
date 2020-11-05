@@ -1,9 +1,15 @@
 package GUI;
 
+import Books.Book;
+import Books.BookStore;
+import Command.CommandParser;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+
+import java.util.Collection;
 
 public class StoreSearchGui
 {
@@ -12,9 +18,9 @@ public class StoreSearchGui
   static String isbn;
   static String publisher;
   static String sortOrd;
-
+  static GridPane updated = new GridPane();
   public static GridPane storeSearch(){
-    GridPane updated = new GridPane();
+
 
     updated.getChildren().clear();
 
@@ -51,6 +57,7 @@ public class StoreSearchGui
         authors = bookAuthors.getText();
         sortOrd = sortOrder.getText();
 
+        MainGui.borderPane.setCenter(searchResults());
       }
     });
     //adds title to the gridpane
@@ -81,6 +88,49 @@ public class StoreSearchGui
 
     updated.setVgap(10);
     updated.setHgap(10);
+    return updated;
+  }
+
+  public static GridPane searchResults(){
+    String cmd = "search,\"" + name + "\",{" + authors + "}," + isbn + "," + publisher + "," + sortOrd + ";";
+    MainGui.commandParser.parseCommand(cmd);
+
+    updated.getChildren().clear();
+
+    TableView<Book> table = new TableView<>();
+
+    String wholeMessage = MainGui.commandParser.getMessage();
+
+    TableColumn idNum = new TableColumn<>("ID Number");
+    TableColumn isbn = new TableColumn<>("ISBN");
+    TableColumn title = new TableColumn<>("Book Title");
+    TableColumn authors = new TableColumn<>("Authors");
+    TableColumn publisher = new TableColumn<>("Book Title");
+    TableColumn publishDate = new TableColumn<>("Book Title");
+
+    table.getColumns().addAll(idNum, isbn, title, authors, publisher, publishDate);
+    String[] message = wholeMessage.split("\n");
+
+    for(int x = 1; x < message.length; x++)
+    {
+      String[] args = message[x].split(" - ");
+      String id = args[0];
+      String[] restArgs = args[1].split(",");
+
+      String isbnArg = restArgs[0];
+      String titleArg = restArgs[1];
+      String authorArgs = restArgs[2];
+      String publisherArgs = restArgs[3];
+      String pubDateArgs = restArgs[4];
+
+      MainGui.bookStore.getBookList().get(MainGui.bookStore.getBookList().indexOf(MainGui.bookStore.searchISBN(isbnArg, MainGui.bookStore.getBookList()).get(0)));
+
+    }
+
+    Label label = new Label(MainGui.commandParser.getMessage());
+    updated.getChildren().add(table);
+    updated.getChildren().add(label);
+
     return updated;
   }
 }

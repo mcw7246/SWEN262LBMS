@@ -1,8 +1,12 @@
 package GUI;
 
+import Books.BookStore;
+import Client.Client;
 import Command.AdvanceTime;
+import Command.CommandParser;
 import Command.NewVisitor;
 import Command.StoreSearch;
+import State.Library;
 import com.sun.javafx.fxml.builder.JavaFXSceneBuilder;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -30,10 +34,24 @@ public class MainGui extends Application
 {
   static Label title;
   static BorderPane borderPane;
+  static CommandParser commandParser;
+  static Library library;
+  static Client client;
+  static BookStore bookStore;
   final static List<String> commandTypes = Arrays.asList("Advance Time", "Begin Visit", "Book Search", "Borrowed Books", "Date Time", "End Visit", "New Visitor", "Pay Fines", "Report", "Store Search");
   @Override
   public void start(Stage primaryStage)
   {
+
+    try{
+      client = new Client();
+      library = new Library(client);
+      bookStore = new BookStore(client);
+    }catch(FileNotFoundException e){
+      System.out.println(e.getStackTrace());
+    }
+
+    commandParser = new CommandParser(library, client, bookStore);
     title = new Label();
     //creates the BorderPane for the giu
     borderPane = new BorderPane();

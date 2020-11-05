@@ -15,16 +15,6 @@ public class PayFinesGui
 
     updated.getChildren().clear();
 
-    Button backToHome = new Button("Back to Home");
-    backToHome.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        MainGui.getMainPane();
-      }
-    });
-
     Label visitorID = new Label("Visitor ID: ");
     TextArea visitorIdTA = new TextArea();
     visitorIdTA.setPrefSize(200, 20);
@@ -46,7 +36,6 @@ public class PayFinesGui
     updated.setVgap(10);
     updated.setHgap(10);
 
-    updated.add(backToHome,0,0);
     updated.add(visitorID, 1, 1);
     updated.add(visitorIdTA, 2, 1);
     updated.add(amount, 1, 2);

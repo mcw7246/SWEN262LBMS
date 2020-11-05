@@ -15,15 +15,6 @@ public class ReportGui
 
     updated.getChildren().clear();
 
-    Button backToHome = new Button("Back to home");
-    backToHome.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        MainGui.getMainPane();
-      }
-    });
     Label numDays = new Label("Number of days: ");
     TextArea numDaysTA = new TextArea();
     numDaysTA.setPrefSize(200,20);
@@ -41,7 +32,6 @@ public class ReportGui
     updated.setVgap(10);
     updated.setHgap(10);
 
-    updated.add(backToHome, 0, 0);
     updated.add(numDays, 1, 1);
     updated.add(numDaysTA, 2, 1);
     updated.add(submit, 1, 2);

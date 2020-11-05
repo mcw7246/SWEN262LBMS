@@ -15,16 +15,6 @@ public class EndVisitGui
 
     updated.getChildren().clear();
 
-    Button backToHome = new Button("Back to Home");
-    backToHome.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        MainGui.getMainPane();
-      }
-    });
-
     Label visitorIDLabel= new Label("Visitor ID: ");
     TextArea idTA = new TextArea();
     idTA.setPrefSize(200,20);
@@ -39,7 +29,6 @@ public class EndVisitGui
       }
     });
 
-    updated.add(backToHome, 0,0);
     updated.add(visitorIDLabel, 1, 1);
     updated.add(idTA, 2, 1);
     updated.add(submit, 1, 2);

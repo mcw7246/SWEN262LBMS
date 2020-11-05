@@ -37,15 +37,6 @@ public class NewVisitorGui
     updated.setVgap(10);
     updated.setHgap(10);
 
-    Button backToHome = new Button("Back to Home");
-    backToHome.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        MainGui.getMainPane();
-      }
-    });
     Button submit = new Button("Submit");
     submit.setOnAction(new EventHandler<ActionEvent>()
     {
@@ -55,8 +46,6 @@ public class NewVisitorGui
         handleNewVisitor();
       }
     });
-
-    updated.add(backToHome, 0, 0);
 
     updated.add(fNameLabel, 1, 1);
     updated.add(fNameTA, 2, 1);

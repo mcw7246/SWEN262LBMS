@@ -231,7 +231,13 @@ public class Client {
         for(Visit visit: visitList){
             visitLength += visit.getVisitLength();
         }
-        Float numAvgVisit = (float) visitLength/days;
+        Float numAvgVisit;
+        if(days != 0) {
+            numAvgVisit = (float) visitLength / days;
+        }
+        else{
+            numAvgVisit = (float) visitLength;
+        }
         //Number of Books Purchased.
         Integer booksPurchased = 0;
         for(Integer num: library.getNumPurchased().keySet()){

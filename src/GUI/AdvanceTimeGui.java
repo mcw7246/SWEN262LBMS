@@ -13,15 +13,6 @@ public class AdvanceTimeGui
   public static GridPane advanceTime(){
     GridPane updatedGridPane = new GridPane();
 
-    Button backToHome = new Button("Back to home");
-    backToHome.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        MainGui.getMainPane();
-      }
-    });
 
     Label numDays = new Label("Number of days: ");
     TextArea numDaysTA = new TextArea();
@@ -43,7 +34,7 @@ public class AdvanceTimeGui
 
     updatedGridPane.setHgap(10);
     updatedGridPane.setVgap(10);
-    updatedGridPane.add(backToHome, 0, 0);
+
     updatedGridPane.add(numDays, 1, 1);
     updatedGridPane.add(numDaysTA, 2, 1);
     updatedGridPane.add(numHours, 1, 2);

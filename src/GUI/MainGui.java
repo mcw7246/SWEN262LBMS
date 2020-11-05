@@ -1,16 +1,18 @@
 package GUI;
 
+import Command.AdvanceTime;
 import Command.NewVisitor;
 import Command.StoreSearch;
+import com.sun.javafx.fxml.builder.JavaFXSceneBuilder;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -28,6 +30,7 @@ public class MainGui extends Application
 {
   static Label title;
   static BorderPane borderPane;
+  final static List<String> commandTypes = Arrays.asList("Advance Time", "Begin Visit", "Book Search", "Borrowed Books", "Date Time", "End Visit", "New Visitor", "Pay Fines", "Report", "Store Search");
   @Override
   public void start(Stage primaryStage)
   {
@@ -68,14 +71,14 @@ public class MainGui extends Application
     title.setText("Welcome to the Library Book Management System");
 
     //creates the list of all commands
-    List<String> commandTypes = Arrays.asList("Advance Time", "Begin Visit", "Book Search", "Borrow Book", "Borrowed Books", "Date Time", "End Visit", "New Visitor", "Pay Fines", "Purchase Book", "Report", "Return Book", "Store Search");
+    //List<String> commandTypes = Arrays.asList("Advance Time", "Begin Visit", "Book Search", "Borrow Book", "Borrowed Books", "Date Time", "End Visit", "New Visitor", "Pay Fines", "Purchase Book", "Report", "Return Book", "Store Search");
 
     //creates list of ImageView for all the command types
     ImageView[] pages = new ImageView[13];
     try
     {
       //loops through all the command types
-      for (int i = 0; i < 13; i++)
+      for (int i = 0; i < commandTypes.size(); i++)
       {
         int num = i + 1;
         //gets the image, puts it in an ImageView, sets the height and width and inserts it into pages
@@ -85,9 +88,6 @@ public class MainGui extends Application
         imageView.setFitWidth(50);
         pages[i] = imageView;
 
-        //creates the method name and class names
-        String methodName = commandTypes.get(i).replace(" ", "");
-        final String methodNameFinal = methodName.substring(0,1).toLowerCase() + methodName.substring(1);
         String className = commandTypes.get(i).replace(" ", "");
         final String classNameFinal = className + "Gui";
 
@@ -96,13 +96,15 @@ public class MainGui extends Application
         Button button = new Button(commandTypes.get(i));
         button.setGraphic(pages[i]);
         button.setContentDisplay(ContentDisplay.TOP);
-        button.setPrefSize(100, 100);
+        button.setPrefSize(120, 120);
         button.setOnAction(new EventHandler<ActionEvent>()
         {
           @Override
           public void handle(ActionEvent actionEvent)
           {
             flowPane.getChildren().clear();
+            borderPane.setLeft(getTabs());
+            borderPane.getLeft().maxWidth(50);
             borderPane.setCenter(buttonEvent(classNameFinal));
           }
 
@@ -124,6 +126,7 @@ public class MainGui extends Application
   }
 
   public static GridPane buttonEvent(String buttonName){
+    borderPane.setCenter(null);
     switch (buttonName){
       case "AdvanceTimeGui":
         title.setText("Advance Time");
@@ -137,10 +140,6 @@ public class MainGui extends Application
         title.setText(("Library Book Search"));
         borderPane.setTop(title);
         return BookSearchGui.bookSearch();
-      case "BorrowBookGui":
-        title.setText("Borrow Book");
-        borderPane.setTop(title);
-        return BorrowBookGui.borrow();
       case "BorrowedBooksGui":
         title.setText("Borrowed Books");
         borderPane.setTop(title);
@@ -161,24 +160,53 @@ public class MainGui extends Application
         title.setText("Pay Fines");
         borderPane.setTop(title);
         return PayFinesGui.payFines();
-      case "PurchaseBookGui":
-        title.setText("Purchase Book");
-        borderPane.setTop(title);
-        return PurchaseBookGui.purchaseBook();
       case "ReportGui":
         title.setText("Generate Report");
         borderPane.setTop(title);
         return ReportGui.report();
-      case "ReturnBookGui":
-        title.setText("Return Book");
-        borderPane.setTop(title);
-        return ReturnBookGui.returnBook();
       case "StoreSearchGui":
         title.setText("Book Store Search");
         borderPane.setTop(title);
         return StoreSearchGui.storeSearch();
     }
     return null;
+  }
+
+  public static VBox getTabs(){
+    VBox box = new VBox();
+
+
+    Button backToHome = new Button("Back to Home");
+    backToHome.setOnAction(new EventHandler<ActionEvent>()
+    {
+      @Override
+      public void handle(ActionEvent actionEvent)
+      {
+        box.getChildren().clear();
+        getMainPane();
+      }
+    });
+
+    backToHome.setPrefSize(150,50);
+    box.getChildren().add(backToHome);
+    for(int x = 0; x < commandTypes.size(); x++){
+      Button button = new Button(commandTypes.get(x));
+
+      button.setPrefSize(150, 50);
+
+      String className = commandTypes.get(x).replace(" ", "") + "Gui";
+
+      button.setOnAction(new EventHandler<ActionEvent>()
+      {
+        @Override
+        public void handle(ActionEvent actionEvent)
+        {
+          borderPane.setCenter(buttonEvent(className));
+        }
+      });
+      box.getChildren().add(button);
+    }
+    return box;
   }
 
   public static void main(String[] args)

@@ -15,16 +15,6 @@ public class BorrowedBooksGui
 
     updated.getChildren().clear();
 
-    Button backToHome = new Button("Back to home");
-    backToHome.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        MainGui.getMainPane();
-      }
-    });
-
     Label idLabel = new Label("Visitor ID: ");
     TextArea id = new TextArea();
     id.setPrefSize(200,20);
@@ -41,7 +31,7 @@ public class BorrowedBooksGui
 
     updated.add(idLabel, 1, 1);
     updated.add(id, 1, 2);
-    updated.add(backToHome, 0, 0);
+
     updated.add(submit, 1, 3);
 
     updated.setVgap(10);

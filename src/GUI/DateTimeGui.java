@@ -14,17 +14,6 @@ public class DateTimeGui
 
     updated.getChildren().clear();
 
-    Button backToHome = new Button("Back to Home");
-    backToHome.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        MainGui.getMainPane();
-      }
-    });
-
-    updated.add(backToHome, 0, 0);
 
     updated.setVgap(10);
     updated.setHgap(10);

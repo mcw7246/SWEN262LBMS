@@ -17,16 +17,6 @@ public class PurchaseBookGui
 
     updated.getChildren().clear();
 
-    Button backToHome = new Button("Back to Home");
-    backToHome.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        MainGui.getMainPane();
-      }
-    });
-
     Label quantity = new Label("Book quantity: ");
     TextArea quantityTA = new TextArea();
     quantityTA.setPrefSize(200,20);
@@ -44,10 +34,6 @@ public class PurchaseBookGui
 
       }
     });
-
-
-
-    updated.add(backToHome, 0, 0);
     updated.add(quantity, 1, 1);
     updated.add(quantityTA, 2, 1);
     updated.add(id, 1, 2);

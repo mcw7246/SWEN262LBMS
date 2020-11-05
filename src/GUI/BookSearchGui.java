@@ -17,17 +17,6 @@ public class BookSearchGui
   public static GridPane bookSearch(){
     GridPane updatedGridPane = new GridPane();
 
-    Button backToHome = new Button("Back to Home");
-    backToHome.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        MainGui.getMainPane();
-      }
-    });
-
-
     //gets the book title
     Label titleLabel = new Label("Book Title: ");
     TextArea bookName = new TextArea("*");
@@ -63,9 +52,6 @@ public class BookSearchGui
         searchBookResults();
       }
     });
-
-    updatedGridPane.add(backToHome, 0, 0);
-
     //adds title to the gridpane
     bookName.setPrefSize(200,20);
     updatedGridPane.add(titleLabel, 1,1);

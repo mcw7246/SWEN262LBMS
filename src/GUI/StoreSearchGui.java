@@ -18,15 +18,6 @@ public class StoreSearchGui
 
     updated.getChildren().clear();
 
-    Button backToHome = new Button("Back to Home");
-    backToHome.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        MainGui.getMainPane();
-      }
-    });
     //gets the book title
     Label titleLabel = new Label("Book Title: ");
     TextArea bookName = new TextArea("*");
@@ -62,9 +53,6 @@ public class StoreSearchGui
 
       }
     });
-
-    updated.add(backToHome, 0, 0);
-
     //adds title to the gridpane
     bookName.setPrefSize(200,20);
     updated.add(titleLabel, 1,1);

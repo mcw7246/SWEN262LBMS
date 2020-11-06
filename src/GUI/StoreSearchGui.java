@@ -3,12 +3,22 @@ package GUI;
 import Books.Book;
 import Books.BookStore;
 import Command.CommandParser;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
+import java.awt.*;
 import java.util.Collection;
 
 public class StoreSearchGui
@@ -97,18 +107,46 @@ public class StoreSearchGui
 
     updated.getChildren().clear();
 
+    ObservableList<Book> books = FXCollections.observableArrayList();
     TableView<Book> table = new TableView<>();
 
     String wholeMessage = MainGui.commandParser.getMessage();
 
-    TableColumn idNum = new TableColumn<>("ID Number");
-    TableColumn isbn = new TableColumn<>("ISBN");
-    TableColumn title = new TableColumn<>("Book Title");
-    TableColumn authors = new TableColumn<>("Authors");
-    TableColumn publisher = new TableColumn<>("Book Title");
-    TableColumn publishDate = new TableColumn<>("Book Title");
 
-    table.getColumns().addAll(idNum, isbn, title, authors, publisher, publishDate);
+    TableColumn<Book, Boolean> checkBox = new TableColumn<>("");
+    checkBox.setPrefWidth(25);
+    checkBox.setEditable(true);
+
+    TableColumn<Book, Integer> qty = new TableColumn<>("Qty");
+    qty.setPrefWidth(50);
+
+
+
+    TableColumn<Book,Integer> idNum = new TableColumn<>("ID Number");
+    idNum.setCellValueFactory(new PropertyValueFactory<>("idNum"));
+    idNum.setPrefWidth(50);
+
+    TableColumn<Book, String> isbn = new TableColumn<>("ISBN");
+    isbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+    isbn.setPrefWidth(100);
+
+    TableColumn<Book, String> title = new TableColumn<>("Book Title");
+    title.setCellValueFactory(new PropertyValueFactory<>("title"));
+    title.setPrefWidth(100);
+
+    TableColumn<Book, String> authors = new TableColumn<>("Authors");
+    authors.setCellValueFactory(new PropertyValueFactory<>("author"));
+    authors.setPrefWidth(100);
+
+    TableColumn<Book, String> publisher = new TableColumn<>("Publisher");
+    publisher.setCellValueFactory(new PropertyValueFactory<>("publisher"));
+    publisher.setPrefWidth(100);
+
+    TableColumn<Book, String> publishDate = new TableColumn<>("Publish Date");
+    publishDate.setCellValueFactory(new PropertyValueFactory<>("publishDate"));
+    publishDate.setPrefWidth(100);
+
+    table.getColumns().addAll(checkBox, qty, idNum, isbn, title, authors, publisher, publishDate);
     String[] message = wholeMessage.split("\n");
 
     for(int x = 1; x < message.length; x++)
@@ -117,19 +155,26 @@ public class StoreSearchGui
       String id = args[0];
       String[] restArgs = args[1].split(",");
 
+      ComboBox<Integer> num = new ComboBox<>();
+
       String isbnArg = restArgs[0];
       String titleArg = restArgs[1];
       String authorArgs = restArgs[2];
       String publisherArgs = restArgs[3];
       String pubDateArgs = restArgs[4];
 
-      MainGui.bookStore.getBookList().get(MainGui.bookStore.getBookList().indexOf(MainGui.bookStore.searchISBN(isbnArg, MainGui.bookStore.getBookList()).get(0)));
+      Book currentBook = new Book(Integer.parseInt(id), isbnArg, titleArg, authorArgs, publisherArgs, pubDateArgs);
+      books.add(currentBook);
 
+      checkBox.setCellFactory(CheckBoxTableCell.forTableColumn(checkBox));
     }
 
-    Label label = new Label(MainGui.commandParser.getMessage());
+
+
+    table.setItems(books);
+
     updated.getChildren().add(table);
-    updated.getChildren().add(label);
+
 
     return updated;
   }

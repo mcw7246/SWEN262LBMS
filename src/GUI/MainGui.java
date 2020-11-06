@@ -205,12 +205,12 @@ public class MainGui extends Application
       }
     });
 
-    backToHome.setPrefSize(150,50);
+    backToHome.setPrefSize(130,50);
     box.getChildren().add(backToHome);
     for(int x = 0; x < commandTypes.size(); x++){
       Button button = new Button(commandTypes.get(x));
 
-      button.setPrefSize(150, 50);
+      button.setPrefSize(130, 50);
 
       String className = commandTypes.get(x).replace(" ", "") + "Gui";
 

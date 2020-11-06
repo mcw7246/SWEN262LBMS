@@ -9,21 +9,22 @@ import Client.Client;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class BookStore
 {
 
   List<Book> bookList;
   private Client client;
+  public static Map<Book, Integer> availableBooks;
+  public static Map<String, Book> bookByIsbn;
 
   public BookStore(Client client) throws FileNotFoundException
   {
     this.client = client;
     bookList = new ArrayList<>();
+    availableBooks = new HashMap<>();
+    bookByIsbn = new HashMap<>();
     File books = new File("src/Books/books.txt");
     Scanner scanner = new Scanner(books);
 
@@ -82,6 +83,8 @@ public class BookStore
         }
       }
       Book newBook = new Book(bookInfo.get(0), bookInfo.get(1), bookInfo.get(2), bookInfo.get(3), bookInfo.get(4), bookInfo.get(5));
+      availableBooks.put(newBook, newBook.getNumCopiesAvailable());
+      bookByIsbn.put(newBook.getIsbn(), newBook);
       bookList.add(newBook);
     }
   }

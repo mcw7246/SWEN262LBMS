@@ -45,7 +45,7 @@ public class Library
     //Visitors in the library database: Id -> Visitor.
     private HashMap<Integer, Visitor> visitors;
     //Books purchased by the library: Book -> Quantity.
-    private HashMap<Book, Integer> books;
+    protected HashMap<Book, Integer> books;
     //List of current visitors: Id -> Visit start time.
     private HashMap<Integer, Integer> currentVisitors;
     //Number of purchased books with date: Day_Of_Year -> Number of Books.
@@ -386,7 +386,7 @@ public class Library
       */
      public void returnBooks (int visitorID, List<Integer> bookId)
      {
-
+        libraryState.returnBooks(visitorID,bookId);
      }
 
      /**

@@ -1,19 +1,25 @@
 package GUI;
 
+import Command.Command;
+import Command.*;
+import State.Library;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 public class NewVisitorGui
 {
-  static String fname;
-  static String lname;
+  static String fName;
+  static String lName;
   static String pNumber;
   static String address;
-  public static GridPane newVisitor(){
+  protected Library library;
+  public static GridPane newVisitor(Library library){
     GridPane updated = new GridPane();
 
     updated.getChildren().clear();
@@ -43,7 +49,11 @@ public class NewVisitorGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        handleNewVisitor();
+        fName = fNameTA.getText();
+        lName = lNameTA.getText();
+        address = addressTA.getText();
+        pNumber = phoneNumTA.getText();
+        updated.add(handleNewVisitor(), 2, 7);
       }
     });
 
@@ -64,7 +74,22 @@ public class NewVisitorGui
     return updated;
   }
 
-  public static void handleNewVisitor(){
-
+  public static TextField handleNewVisitor(){
+    String result = "";
+    if(!fName.equals("") && !lName.equals("") && !address.equals("") && !pNumber.equals("")){
+      String cmd = "register," + fName + "," + lName + "," + address + "," + pNumber + ";";
+      MainGui.commandParser.parseCommand(cmd);
+      for(String str: MainGui.commandParser.getMessage()){
+        result += str + "\n";
+      }
+      MainGui.commandParser.getMessage().clear();
+    }
+    else {
+      result += "Invalid Field/s";
+    }
+    TextField ans = new TextField(result);
+    ans.setEditable(false);
+    ans.setPrefWidth(ans.getText().length() * 7);
+    return ans;
   }
 }

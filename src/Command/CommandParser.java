@@ -1,10 +1,10 @@
 package Command;
 
-import Books.Book;
 import Books.BookStore;
 import Client.Client;
 import State.Library;
 
+import java.lang.reflect.Member;
 import java.util.*;
 
 /**
@@ -21,7 +21,7 @@ public class CommandParser
   private Calendar checkOutDate;
   private Calendar calendar;
 
-  public String MESSAGE;
+  public List<String> MESSAGE;
 
   /**
    * constructor for the CommandParser class
@@ -32,7 +32,7 @@ public class CommandParser
     this.bookStore = bookStore;
     this.client = client;
     this.allCommands = new ArrayList<>();
-
+    MESSAGE = new ArrayList<>();
   }
 
   /**
@@ -93,7 +93,7 @@ public class CommandParser
     //loop through all response.
     for(String message: client.getMessage()) {
       System.out.println(message);
-      MESSAGE = message;
+      MESSAGE.add(message);
     }
     //empty all messages.
 
@@ -352,7 +352,7 @@ public class CommandParser
     }
   }
 
-  public String getMessage(){
+  public List<String> getMessage(){
     return MESSAGE;
   }
 

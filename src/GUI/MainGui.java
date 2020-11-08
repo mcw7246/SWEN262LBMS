@@ -48,7 +48,7 @@ public class MainGui extends Application
       library = new Library(client);
       bookStore = new BookStore(client);
     }catch(FileNotFoundException e){
-      System.out.println(e.getStackTrace());
+      System.out.println(Arrays.toString(e.getStackTrace()));
     }
 
     commandParser = new CommandParser(library, client, bookStore);
@@ -173,7 +173,7 @@ public class MainGui extends Application
       case "NewVisitorGui":
         title.setText("New Visitor");
         borderPane.setTop(title);
-        return NewVisitorGui.newVisitor();
+        return NewVisitorGui.newVisitor(library);
       case "PayFinesGui":
         title.setText("Pay Fines");
         borderPane.setTop(title);

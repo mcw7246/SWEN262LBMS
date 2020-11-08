@@ -110,7 +110,9 @@ public class StoreSearchGui
     ObservableList<Book> books = FXCollections.observableArrayList();
     TableView<Book> table = new TableView<>();
 
-    String wholeMessage = MainGui.commandParser.getMessage();
+    String wholeMessage = MainGui.commandParser.getMessage().get(0);
+    //remove message after each access.
+    MainGui.commandParser.getMessage().clear();
 
 
     TableColumn<Book, Boolean> checkBox = new TableColumn<>("");

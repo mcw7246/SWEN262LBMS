@@ -81,6 +81,11 @@ public class Open implements LibraryState{
                 }
             }
             if(checkout){
+                for(CheckOut checkOut: currentCheckOut){
+                    Book book = checkOut.getBook();
+                    //change book quantity.
+                    library.books.replace(book,library.books.get(book) - 1);
+                }
                 library.checkOuts.addAll(currentCheckOut);
                 visitor.setCheckOuts(currentCheckOut);
                 String date = new SimpleDateFormat("yyyy/MM/dd").format(checkOutDate.getTime());
@@ -117,9 +122,11 @@ public class Open implements LibraryState{
                 boolean overdue = true;
                 List<Integer> overdueId = new ArrayList<>();
                 for (Integer book : booksToReturn) {
+                    Book currentBook = searchResults.get(book);
                     double fine = 0;
                     Date currentDate = client.getDateObj().getTime();
-                    UnpaidFine unpaidFine = visitor.returnBooks(searchResults.get(book), currentDate);
+                    UnpaidFine unpaidFine = visitor.returnBooks(currentBook, currentDate);
+                    library.books.replace(currentBook,library.books.get(currentBook) + 1);
                     if(unpaidFine != null){
                         fine = unpaidFine.getAmount();
                         library.allUnpaidFines.add(unpaidFine);

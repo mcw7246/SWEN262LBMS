@@ -74,22 +74,30 @@ public class NewVisitorGui
     return updated;
   }
 
-  public static TextField handleNewVisitor(){
+  public static TextArea handleNewVisitor(){
     String result = "";
     if(!fName.equals("") && !lName.equals("") && !address.equals("") && !pNumber.equals("")){
       String cmd = "register," + fName + "," + lName + "," + address + "," + pNumber + ";";
       MainGui.commandParser.parseCommand(cmd);
       for(String str: MainGui.commandParser.getMessage()){
-        result += str + "\n";
+        if(result != ""){
+          result += "\n";
+        }
+        result += str;
       }
       MainGui.commandParser.getMessage().clear();
     }
     else {
       result += "Invalid Field/s";
     }
-    TextField ans = new TextField(result);
+    String[] lines = result.split("\r\n|\r|\n");
+    TextArea ans = new TextArea(result);
     ans.setEditable(false);
-    ans.setPrefWidth(ans.getText().length() * 7);
+    ans.setStyle("-fx-font-size: 1.2em;");
+    ans.setMaxWidth(400);
+    ans.setPrefSize(300, 40 * lines.length);
+    GridPane.setColumnSpan(ans, 2);
+    GridPane.setRowSpan(ans, 2);
     return ans;
   }
 }

@@ -1,5 +1,6 @@
 package GUI;
 
+import Command.AdvanceTime;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -9,6 +10,8 @@ import javafx.scene.layout.GridPane;
 
 public class AdvanceTimeGui
 {
+  static String days;
+  static String hours;
 
   public static GridPane advanceTime(){
     GridPane updatedGridPane = new GridPane();
@@ -28,7 +31,15 @@ public class AdvanceTimeGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-
+        days = numDaysTA.getText();
+        hours = numHoursTA.getText();
+        if(days == ""){
+          days = "0";
+        }
+        if (hours == "") {
+          hours = "0";
+        }
+        updatedGridPane.add(AdvanceTime(), 1, 5);
       }
     });
 
@@ -44,7 +55,25 @@ public class AdvanceTimeGui
     return updatedGridPane;
   }
 
-  public void handleAdvanceTime(){
-
+  public static TextArea AdvanceTime(){
+    String result = "";
+    String cmd = "advance," + days + "," + hours + ";";
+    MainGui.commandParser.parseCommand(cmd);
+    for(String str: MainGui.commandParser.getMessage()){
+      if(result != ""){
+        result += "\n";
+      }
+      result += str;
+    }
+    MainGui.commandParser.getMessage().clear();
+    String[] lines = result.split("\r\n|\r|\n");
+    TextArea ans = new TextArea(result);
+    ans.setEditable(false);
+    ans.setStyle("-fx-font-size: 1.2em;");
+    ans.setMaxWidth(400);
+    ans.setPrefSize(300, 40 * lines.length);
+    GridPane.setColumnSpan(ans, 2);
+    GridPane.setRowSpan(ans, 2);
+    return ans;
   }
 }

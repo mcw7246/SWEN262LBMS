@@ -51,7 +51,7 @@ public class MainGui extends Application
       System.out.println(Arrays.toString(e.getStackTrace()));
     }
 
-    commandParser = new CommandParser(library, client, bookStore);
+    commandParser = client.getCommandParser();
     title = new Label();
     //creates the BorderPane for the giu
     borderPane = new BorderPane();

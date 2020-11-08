@@ -9,6 +9,8 @@ import javafx.scene.layout.GridPane;
 
 public class EndVisitGui
 {
+  static String visitorID;
+
   public static GridPane endVisit()
   {
     GridPane updated = new GridPane();
@@ -25,7 +27,8 @@ public class EndVisitGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-
+        visitorID = idTA.getText();
+        updated.add(endVisitAction(), 1, 4);
       }
     });
 
@@ -37,5 +40,27 @@ public class EndVisitGui
     updated.setVgap(10);
 
     return updated;
+  }
+
+  public static TextArea endVisitAction(){
+    String result = "";
+    String cmd = "depart," + visitorID + ";";
+    MainGui.commandParser.parseCommand(cmd);
+    for(String str: MainGui.commandParser.getMessage()){
+      if(result != ""){
+        result += "\n";
+      }
+      result += str;
+    }
+    MainGui.commandParser.getMessage().clear();
+    String[] lines = result.split("\r\n|\r|\n");
+    TextArea ans = new TextArea(result);
+    ans.setEditable(false);
+    ans.setStyle("-fx-font-size: 1.2em;");
+    ans.setMaxWidth(400);
+    ans.setPrefSize(300, 40 * lines.length);
+    GridPane.setColumnSpan(ans, 2);
+    GridPane.setRowSpan(ans, 2);
+    return ans;
   }
 }

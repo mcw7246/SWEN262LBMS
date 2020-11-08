@@ -1,5 +1,6 @@
 package GUI;
 
+import Visitors.PaidFine;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -9,6 +10,8 @@ import javafx.scene.layout.GridPane;
 
 public class PayFinesGui
 {
+  static String dollars;
+  static String id;
 
   public static GridPane payFines(){
     GridPane updated = new GridPane();
@@ -29,7 +32,9 @@ public class PayFinesGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-
+        id = visitorIdTA.getText();
+        dollars = amountTA.getText();
+        updated.add(PayFine(), 1, 4);
       }
     });
 
@@ -43,5 +48,27 @@ public class PayFinesGui
     updated.add(submit, 1, 3);
 
     return updated;
+  }
+
+  public static TextArea PayFine(){
+    String result = "";
+    String cmd = "pay," + id + "," + dollars + ";";
+    MainGui.commandParser.parseCommand(cmd);
+    for(String str: MainGui.commandParser.getMessage()){
+      if(result != ""){
+        result += "\n";
+      }
+      result += str;
+    }
+    MainGui.commandParser.getMessage().clear();
+    String[] lines = result.split("\r\n|\r|\n");
+    TextArea ans = new TextArea(result);
+    ans.setEditable(false);
+    ans.setStyle("-fx-font-size: 1.2em;");
+    ans.setMaxWidth(400);
+    ans.setPrefSize(300, 40 * lines.length);
+    GridPane.setColumnSpan(ans, 2);
+    GridPane.setRowSpan(ans, 2);
+    return ans;
   }
 }

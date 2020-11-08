@@ -10,6 +10,8 @@ import javafx.scene.layout.GridPane;
 
 public class ReportGui
 {
+  static String days;
+
   public static GridPane report(){
     GridPane updated = new GridPane();
 
@@ -25,7 +27,11 @@ public class ReportGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-
+        days = numDaysTA.getText();
+        if(days == ""){
+          days = "0";
+        }
+        updated.add(Report(), 1 , 4);
       }
     });
 
@@ -37,5 +43,27 @@ public class ReportGui
     updated.add(submit, 1, 2);
 
     return updated;
+  }
+
+  public static TextArea Report(){
+    String result = "";
+    String cmd = "report," + days + ";";
+    MainGui.commandParser.parseCommand(cmd);
+    for(String str: MainGui.commandParser.getMessage()){
+      if(result != ""){
+        result += "\n";
+      }
+      result += str;
+    }
+    MainGui.commandParser.getMessage().clear();
+    String[] lines = result.split("\r\n|\r|\n");
+    TextArea ans = new TextArea(result);
+    ans.setEditable(false);
+    ans.setStyle("-fx-font-size: 1.2em;");
+    ans.setMaxWidth(400);
+    ans.setPrefSize(300, 40 * lines.length);
+    GridPane.setColumnSpan(ans, 2);
+    GridPane.setRowSpan(ans, 2);
+    return ans;
   }
 }

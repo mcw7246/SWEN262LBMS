@@ -1,9 +1,6 @@
 package GUI;
 
 import Books.Book;
-import Books.BookStore;
-import Command.CommandParser;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,11 +12,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
-
-import java.awt.*;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StoreSearchGui
 {
@@ -113,16 +107,19 @@ public class StoreSearchGui
     String wholeMessage = MainGui.commandParser.getMessage().get(0);
     //remove message after each access.
     MainGui.commandParser.getMessage().clear();
-
+    table.setEditable(true);
 
     TableColumn<Book, Boolean> checkBox = new TableColumn<>("");
     checkBox.setPrefWidth(25);
+    checkBox.setCellFactory(CheckBoxTableCell.forTableColumn(checkBox));
     checkBox.setEditable(true);
 
     TableColumn<Book, Integer> qty = new TableColumn<>("Qty");
     qty.setPrefWidth(50);
-
-
+    ObservableList<Integer> options = FXCollections.observableList(new ArrayList<>());
+    options.addAll(1,2,3,4,5,6);
+    ComboBox<Integer> comboBox = new ComboBox<>(options);
+    comboBox.setEditable(true);
 
     TableColumn<Book,Integer> idNum = new TableColumn<>("ID Number");
     idNum.setCellValueFactory(new PropertyValueFactory<>("idNum"));
@@ -158,26 +155,42 @@ public class StoreSearchGui
       String[] restArgs = args[1].split(",");
 
       ComboBox<Integer> num = new ComboBox<>();
+      List<Integer> numCopies = new ArrayList<>();
+      for(int y = 0; y < 4; y++){
+        numCopies.add(y + 1);
+      }
+      num.setItems(FXCollections.observableList(numCopies));
 
       String isbnArg = restArgs[0];
-      String titleArg = restArgs[1];
-      String authorArgs = restArgs[2];
-      String publisherArgs = restArgs[3];
-      String pubDateArgs = restArgs[4];
 
-      Book currentBook = new Book(Integer.parseInt(id), isbnArg, titleArg, authorArgs, publisherArgs, pubDateArgs);
-      books.add(currentBook);
+      Book existingBook = MainGui.bookStore.bookByIsbn.get(isbnArg);
+      existingBook.setIdNum(Integer.parseInt(id));
 
-      checkBox.setCellFactory(CheckBoxTableCell.forTableColumn(checkBox));
+
+      qty.setCellFactory(ComboBoxTableCell.forTableColumn(options));
+
+      books.add(existingBook);
     }
-
-
-
     table.setItems(books);
-
     updated.getChildren().add(table);
 
 
+    Button purchaseButton = new Button("Purchase Books");
+    purchaseButton.setOnAction(new EventHandler<ActionEvent>()
+    {
+      @Override
+      public void handle(ActionEvent actionEvent)
+      {
+        List<TablePosition> tablePositions = table.getSelectionModel().getSelectedCells();
+        List<Integer> rowsSelected = new ArrayList<>();
+        for(int x = 0; x < tablePositions.size(); x++){
+          rowsSelected.add(tablePositions.get(x).getRow());
+        }
+        List<Integer> tPos = table.getSelectionModel().getSelectedIndices();
+        System.out.println(tPos);
+      }
+    });
+    updated.add(purchaseButton, 0, 1);
     return updated;
   }
 }

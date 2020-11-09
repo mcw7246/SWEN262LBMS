@@ -1,10 +1,14 @@
 package GUI;
 
 import Books.Book;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,22 +16,30 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.GridPane;
-import java.util.ArrayList;
-import java.util.List;
+import javafx.util.Callback;
 
+import java.util.*;
+
+/**
+ * GUI for the StoreSearch and incorporates the GUI for PurchaseBook
+ *
+ * @author Mikayla Wishart
+ */
 public class StoreSearchGui
 {
   static String name;
+  static Label resultsLabel;
   static String authors;
   static String isbn;
   static String publisher;
+  static String purchaseNum;
   static String sortOrd;
   static GridPane updated = new GridPane();
+
   public static GridPane storeSearch(){
-
-
     updated.getChildren().clear();
 
+    resultsLabel = new Label();
     //gets the book title
     Label titleLabel = new Label("Book Title: ");
     TextArea bookName = new TextArea("*");
@@ -60,10 +72,12 @@ public class StoreSearchGui
         publisher = bookPublisher.getText();
         authors = bookAuthors.getText();
         sortOrd = sortOrder.getText();
+        purchaseNum = "0";
 
         MainGui.borderPane.setCenter(searchResults());
       }
     });
+
     //adds title to the gridpane
     bookName.setPrefSize(200,20);
     updated.add(titleLabel, 1,1);
@@ -96,24 +110,40 @@ public class StoreSearchGui
   }
 
   public static GridPane searchResults(){
+    //creates the command and puts it through the command parser
     String cmd = "search,\"" + name + "\",{" + authors + "}," + isbn + "," + publisher + "," + sortOrd + ";";
     MainGui.commandParser.parseCommand(cmd);
 
+    //clears the gui so that it is a fresh one for the results of the search
     updated.getChildren().clear();
 
+    //creates the list of books that are the results of the search
     ObservableList<Book> books = FXCollections.observableArrayList();
     TableView<Book> table = new TableView<>();
 
+    //gets the response from the commandParser
     String wholeMessage = MainGui.commandParser.getMessage().get(0);
+
     //remove message after each access.
     MainGui.commandParser.getMessage().clear();
     table.setEditable(true);
 
+    //creates the checkboxes that allows you to select what books you would like to purchase
     TableColumn<Book, Boolean> checkBox = new TableColumn<>("");
     checkBox.setPrefWidth(25);
-    checkBox.setCellFactory(CheckBoxTableCell.forTableColumn(checkBox));
+    checkBox.setCellValueFactory(new PropertyValueFactory<Book, Boolean>("checked"));
+    checkBox.setCellFactory(new Callback<TableColumn<Book, Boolean>, TableCell<Book, Boolean>>()
+    {
+      @Override
+      public TableCell<Book, Boolean> call(TableColumn<Book, Boolean> bookBooleanTableColumn)
+      {
+        return new CheckBoxTableCell<Book, Boolean>();
+      }
+
+    });
     checkBox.setEditable(true);
 
+    //creates the dropdown menus that allow you to select how many of the selected books you would like to purchase
     TableColumn<Book, Integer> qty = new TableColumn<>("Qty");
     qty.setPrefWidth(50);
     ObservableList<Integer> options = FXCollections.observableList(new ArrayList<>());
@@ -121,59 +151,61 @@ public class StoreSearchGui
     ComboBox<Integer> comboBox = new ComboBox<>(options);
     comboBox.setEditable(true);
 
+    //displays the ID number for the books
     TableColumn<Book,Integer> idNum = new TableColumn<>("ID Number");
     idNum.setCellValueFactory(new PropertyValueFactory<>("idNum"));
     idNum.setPrefWidth(50);
 
+    //displays the isbn of the books
     TableColumn<Book, String> isbn = new TableColumn<>("ISBN");
     isbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
     isbn.setPrefWidth(100);
 
+    //displays the title of the books
     TableColumn<Book, String> title = new TableColumn<>("Book Title");
     title.setCellValueFactory(new PropertyValueFactory<>("title"));
     title.setPrefWidth(100);
 
+    //displays the author(s) of the books
     TableColumn<Book, String> authors = new TableColumn<>("Authors");
     authors.setCellValueFactory(new PropertyValueFactory<>("author"));
     authors.setPrefWidth(100);
 
+    //displays the publisher of the book
     TableColumn<Book, String> publisher = new TableColumn<>("Publisher");
     publisher.setCellValueFactory(new PropertyValueFactory<>("publisher"));
     publisher.setPrefWidth(100);
 
+    //displays the publish date of the book
     TableColumn<Book, String> publishDate = new TableColumn<>("Publish Date");
     publishDate.setCellValueFactory(new PropertyValueFactory<>("publishDate"));
     publishDate.setPrefWidth(100);
 
+    //inserts all the columns into the TableView
     table.getColumns().addAll(checkBox, qty, idNum, isbn, title, authors, publisher, publishDate);
     String[] message = wholeMessage.split("\n");
 
+    //loops through and inserts every book that is part of search results
+    //to the table
     for(int x = 1; x < message.length; x++)
     {
       String[] args = message[x].split(" - ");
       String id = args[0];
       String[] restArgs = args[1].split(",");
 
-      ComboBox<Integer> num = new ComboBox<>();
-      List<Integer> numCopies = new ArrayList<>();
-      for(int y = 0; y < 4; y++){
-        numCopies.add(y + 1);
-      }
-      num.setItems(FXCollections.observableList(numCopies));
-
       String isbnArg = restArgs[0];
 
       Book existingBook = MainGui.bookStore.bookByIsbn.get(isbnArg);
       existingBook.setIdNum(Integer.parseInt(id));
-
 
       qty.setCellFactory(ComboBoxTableCell.forTableColumn(options));
 
       books.add(existingBook);
     }
     table.setItems(books);
-    updated.getChildren().add(table);
 
+    table.setPrefSize(700, 225);
+    updated.getChildren().add(table);
 
     Button purchaseButton = new Button("Purchase Books");
     purchaseButton.setOnAction(new EventHandler<ActionEvent>()
@@ -181,16 +213,80 @@ public class StoreSearchGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
-        List<TablePosition> tablePositions = table.getSelectionModel().getSelectedCells();
-        List<Integer> rowsSelected = new ArrayList<>();
-        for(int x = 0; x < tablePositions.size(); x++){
-          rowsSelected.add(tablePositions.get(x).getRow());
+        Book currentBook = null;
+        int totalBooks = 0;
+        resultsLabel.setText("");
+        ObservableList<TableColumn<Book, ?>>cols = table.getColumns();
+
+        Map<Book, Integer> purchaseBooks = new HashMap<>();
+        //loops through each column
+        for(TableColumn<Book,?> col : cols){
+          //loops through each row
+          for(int i = 0; i < books.size(); i++){
+            if(cols.get(0).equals(col)){
+              if(checkBox.getCellData(i)){
+                currentBook = books.get(i);
+                purchaseBooks.put(currentBook, 1);
+              }
+            }
+          }
         }
-        List<Integer> tPos = table.getSelectionModel().getSelectedIndices();
-        System.out.println(tPos);
+
+        booksPurchase(purchaseBooks);
       }
     });
-    updated.add(purchaseButton, 0, 1);
+    resultsLabel.setPadding(new Insets(5));
+    updated.add(resultsLabel, 0, 1);
+
+    purchaseButton.setPadding(new Insets(5));
+    updated.add(purchaseButton, 0,2);
     return updated;
+  }
+
+  public static class CheckBoxTableCell<S,T> extends TableCell<S,T>{
+    private final CheckBox checkBox;
+    private ObservableValue<T> value;
+
+    public CheckBoxTableCell(){
+      this.checkBox = new CheckBox();
+      this.checkBox.setAlignment(Pos.CENTER);
+
+      setAlignment(Pos.CENTER);
+      setGraphic(checkBox);
+    }
+
+    @Override
+    public void updateItem(T item, boolean empty){
+      super.updateItem(item, empty);
+      if(empty){
+        setText(null);
+        setGraphic(null);
+      }else{
+        setGraphic(checkBox);
+        if(value instanceof BooleanProperty){
+          checkBox.selectedProperty().unbindBidirectional((BooleanProperty)value);
+        }
+        value = getTableColumn().getCellObservableValue(getIndex());
+        if(value instanceof BooleanProperty){
+          checkBox.selectedProperty().bindBidirectional((BooleanProperty)value);
+        }
+      }
+    }
+  }
+
+  public static void booksPurchase(Map<Book, Integer> booksToPurchase){
+    for(Book book : booksToPurchase.keySet()){
+      String command = "buy," + booksToPurchase.get(book) + "," + Integer.toString(book.getIdNum()) + ";";
+      MainGui.commandParser.parseCommand(command);
+    }
+
+    String results = "";
+    for(String str : MainGui.commandParser.getMessage()){
+      results += str + "\n";
+    }
+    resultsLabel.setText(results);
+    resultsLabel.setPadding(new Insets(5));
+    MainGui.commandParser.getMessage().clear();
+
   }
 }

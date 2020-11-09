@@ -1,11 +1,6 @@
 package Books;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
 
 /**
  * Creates object of a single book in the library
@@ -14,7 +9,9 @@ import javafx.scene.control.ComboBox;
  */
 public class Book implements Product
 {
-  public boolean selected = false;
+  private SimpleBooleanProperty checked = new SimpleBooleanProperty(false);
+  private Integer numToBuy;
+
   private Integer idNum;
   private String isbn;
   private String title;
@@ -58,11 +55,12 @@ public class Book implements Product
 
   public Integer getIdNum(){return idNum;}
 
-  public void setSelected(boolean selected){
-    this.selected = selected;
-  }
-  public boolean getSelected(){
-    return selected;
+  public SimpleBooleanProperty checkedProperty(){return this.checked;}
+
+  public java.lang.Boolean getChecked(){return this.checkedProperty().get();}
+
+  public void setChecked(final Boolean checked){
+    this.checkedProperty().set(checked);
   }
   /**
    *
@@ -124,6 +122,8 @@ public class Book implements Product
     numCopies = value;
   }
   public void setIdNum(int num){idNum = num; }
+  public void setNumToBuy(int num){numToBuy = num;}
+  public Integer getNumToBuy(){return numToBuy;}
 
     /**
    *  Adds to the number of copies of available when a visitor returns books

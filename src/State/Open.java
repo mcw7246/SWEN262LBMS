@@ -54,7 +54,7 @@ public class Open implements LibraryState{
         if (library.invalidID(visitorID)){
             client.setMessage("borrow,invalid-visitor-id;");
         }
-        if(library.getVisitors().get(visitorID).isMaxCheckOut(books.size())){
+        else if(library.getVisitors().get(visitorID).isMaxCheckOut(books.size())){
             client.setMessage("borrow,book-limit-exceeded;");
         }
         else if(library.getVisitors().get(visitorID).getBalance() != 0){

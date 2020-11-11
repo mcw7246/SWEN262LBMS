@@ -205,6 +205,7 @@ public class StoreSearchGui
     numQty.setMaxWidth(100);
     GridPane.setMargin(numQty, new Insets(5,0,0,30));
 
+    //Restrict to only number input
     numQty.textProperty().addListener(new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable, String oldValue,

@@ -327,7 +327,7 @@ public class Library
     public void bookSearch(String title, List<String> authors, String isbn, String publisher, String sortOrd)
     {
         String message = "";
-        String titleSub = title;
+        String titleSub = title.substring(1, title.length() - 1);
 
 
         List<Book> bookFits = new ArrayList<>(books.keySet());

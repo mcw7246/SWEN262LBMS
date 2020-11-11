@@ -1,7 +1,9 @@
 package GUI;
 
 import Books.Book;
+import Books.BookStore;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -143,14 +145,6 @@ public class StoreSearchGui
     });
     checkBox.setEditable(true);
 
-    //creates the dropdown menus that allow you to select how many of the selected books you would like to purchase
-    TableColumn<Book, Integer> qty = new TableColumn<>("Qty");
-    qty.setPrefWidth(50);
-    ObservableList<Integer> options = FXCollections.observableList(new ArrayList<>());
-    options.addAll(1,2,3,4,5,6);
-    ComboBox<Integer> comboBox = new ComboBox<>(options);
-    comboBox.setEditable(true);
-
     //displays the ID number for the books
     TableColumn<Book,Integer> idNum = new TableColumn<>("ID Number");
     idNum.setCellValueFactory(new PropertyValueFactory<>("idNum"));
@@ -182,7 +176,7 @@ public class StoreSearchGui
     publishDate.setPrefWidth(100);
 
     //inserts all the columns into the TableView
-    table.getColumns().addAll(checkBox, qty, idNum, isbn, title, authors, publisher, publishDate);
+    table.getColumns().addAll(checkBox, idNum, isbn, title, authors, publisher, publishDate);
     String[] message = wholeMessage.split("\n");
 
     //loops through and inserts every book that is part of search results
@@ -195,10 +189,8 @@ public class StoreSearchGui
 
       String isbnArg = restArgs[0];
 
-      Book existingBook = MainGui.bookStore.bookByIsbn.get(isbnArg);
+      Book existingBook = BookStore.bookByIsbn.get(isbnArg);
       existingBook.setIdNum(Integer.parseInt(id));
-
-      qty.setCellFactory(ComboBoxTableCell.forTableColumn(options));
 
       books.add(existingBook);
     }
@@ -206,6 +198,29 @@ public class StoreSearchGui
 
     table.setPrefSize(700, 225);
     updated.getChildren().add(table);
+
+    TextField numQty = new TextField();
+    numQty.setEditable(true);
+    numQty.setPrefSize(100, 20);
+    numQty.setMaxWidth(100);
+    GridPane.setMargin(numQty, new Insets(5,0,0,30));
+
+    numQty.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observable, String oldValue,
+                          String newValue) {
+        if (!newValue.matches("\\d*")) {
+          numQty.setText(newValue.replaceAll("[^\\d]", ""));
+        }
+      }
+    });
+
+    Label qtyLabel = new Label("Qty:");
+    qtyLabel.setPrefSize(100, 20);
+    qtyLabel.setMaxWidth(100);
+
+    updated.add(qtyLabel, 0, 1);
+    updated.add(numQty, 0, 1);
 
     Button purchaseButton = new Button("Purchase Books");
     purchaseButton.setOnAction(new EventHandler<ActionEvent>()
@@ -226,7 +241,7 @@ public class StoreSearchGui
             if(cols.get(0).equals(col)){
               if(checkBox.getCellData(i)){
                 currentBook = books.get(i);
-                purchaseBooks.put(currentBook, 1);
+                purchaseBooks.put(currentBook, Integer.parseInt(numQty.getText()));
               }
             }
           }
@@ -236,10 +251,10 @@ public class StoreSearchGui
       }
     });
     resultsLabel.setPadding(new Insets(5));
-    updated.add(resultsLabel, 0, 1);
+    updated.add(resultsLabel, 0, 2);
 
     purchaseButton.setPadding(new Insets(5));
-    updated.add(purchaseButton, 0,2);
+    updated.add(purchaseButton, 0,3);
     return updated;
   }
 

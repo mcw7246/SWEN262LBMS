@@ -181,8 +181,11 @@ public class Library
         message += "borrowed," + client.getSearchResult().size();
         for (Integer id : client.getSearchResult().keySet()) {
             Book bookSearch = client.getSearchResult().get(id);
-            message += "\n";
-            message += id + " - " + bookSearch.getIsbn() + "," + bookSearch.getTitle() + ",{" + bookSearch.getAuthor() + "}," + bookSearch.getPublisher() + "," + bookSearch.getPublishDate() + "," + bookSearch.getPageCount();
+            CheckOut checkOut = visitor.getCheckOut(bookSearch);
+            if(checkOut != null) {
+                message += "\n";
+                message += id + " - " + bookSearch.getIsbn() + "," + bookSearch.getTitle() + "," + checkOut.getCheckOutDate() + ";";
+            }
         }
         client.setMessage(message);
     }

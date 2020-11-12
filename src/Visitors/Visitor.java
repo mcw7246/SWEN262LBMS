@@ -114,7 +114,16 @@ public class Visitor
   }
 
 
-  public List<Book> getCheckedOutBooks() {
+    public CheckOut getCheckOut(Book book) {
+        for (CheckOut checkOut: checkOuts){
+            if(book == checkOut.getBook()){
+                return checkOut;
+            }
+        }
+        return null;
+    }
+
+    public List<Book> getCheckedOutBooks() {
       List<Book> books = new ArrayList<>();
       for(CheckOut checkOut: checkOuts){
           books.add(checkOut.getBook());

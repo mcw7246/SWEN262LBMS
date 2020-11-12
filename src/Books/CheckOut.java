@@ -1,5 +1,6 @@
 package Books;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Calendar;
@@ -31,8 +32,8 @@ public class CheckOut {
         return dueDate;
     }
 
-    public Date getCheckOutDate(){
-        return checkOutDate;
+    public String  getCheckOutDate(){
+        return new SimpleDateFormat("yyyy/MM/dd").format(checkOutDate.getTime());
     }
 
     public int getVisitorID(){

@@ -1,8 +1,7 @@
 package GUI;
 
-import Books.Book;
 import Books.CheckOut;
-import com.sun.tools.javac.Main;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,7 +9,9 @@ import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class BorrowedBooksGui
 
   public static String userID;
   public static GridPane updated;
+  public static ObservableList<CheckOut> checkOuts;
   public static GridPane borrowedBooks(){
     updated = new GridPane();
 
@@ -59,8 +61,17 @@ public class BorrowedBooksGui
 
     TableView<CheckOut> table = new TableView<>();
 
+    checkOuts = FXCollections.observableArrayList(MainGui.library.checkOutsByUserID.get(userID));
+
+    int id = 1;
+    for(CheckOut checkOut : checkOuts){
+      checkOut.setIdNum(Integer.toString(id));
+      id++;
+    }
+
     TableColumn<CheckOut, String> idCol = new TableColumn<>("ID");
-    idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+    idCol.setCellValueFactory(new PropertyValueFactory<>("idNum"));
+
 
     TableColumn<CheckOut, String> titleCol = new TableColumn<>("Title");
     titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -68,11 +79,51 @@ public class BorrowedBooksGui
     TableColumn<CheckOut, Date> borrowDateCol = new TableColumn<>("Date Borrowed");
     borrowDateCol.setCellValueFactory(new PropertyValueFactory<>("checkOutDate"));
 
-    ObservableList<CheckOut> checkOuts = FXCollections.observableArrayList(MainGui.library.checkOutsByUserID.get(userID));
+    TableColumn<CheckOut, Void> colBtn = new TableColumn("Button Column");
 
-    table.getColumns().addAll( idCol, titleCol, borrowDateCol);
+    Callback<TableColumn<CheckOut, Void>, TableCell<CheckOut, Void>> cellFactory = new Callback<TableColumn<CheckOut, Void>, TableCell<CheckOut, Void>>() {
+      @Override
+      public TableCell<CheckOut, Void> call(final TableColumn<CheckOut, Void> param) {
+        final TableCell<CheckOut, Void> cell = new TableCell<CheckOut, Void>() {
+
+          private final Button btn = new Button("Return Book");
+
+          {
+            btn.setOnAction((ActionEvent event) -> {
+              handleReturn(this.getTableRow().getItem());
+            });
+          }
+
+          @Override
+          public void updateItem(Void item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+              setGraphic(null);
+            } else {
+              setGraphic(btn);
+            }
+          }
+        };
+        return cell;
+      }
+    };
+    colBtn.setCellFactory(cellFactory);
+    table.getColumns().addAll(idCol, titleCol, borrowDateCol, colBtn);
     table.setItems(checkOuts);
 
     updated.getChildren().add(table);
+  }
+
+  public static void handleReturn(CheckOut checkOut){
+    String cmd = "return," + userID + "," + checkOut.getIdNum() + ";";
+    MainGui.commandParser.parseCommand(cmd);
+    int size = MainGui.commandParser.getMessage().size();
+    if(MainGui.commandParser.getMessage().get(size - 1).equals("return,success;")){
+      checkOuts.remove(checkOut);
+    }
+    else{
+      System.out.println(MainGui.commandParser.getMessage());
+    }
+
   }
 }

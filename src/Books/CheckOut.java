@@ -1,5 +1,8 @@
 package Books;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +15,7 @@ import java.util.Calendar;
  */
 public class CheckOut {
 
-    private String id;
+    private String idNum;
     private String title;
     private Book book;
     private Date dueDate;
@@ -23,12 +26,13 @@ public class CheckOut {
         this.book = book;
         this.dueDate = checkInDate;
         this.checkOutDate = checkOutDate;
-        this.visitorID = visitorID;
-        id = Integer.toString(book.getIdNum());
+        this.visitorID = visitorID;;
         title = book.getTitle();
+        idNum = "";
     }
 
-    public String getID(){return id;}
+    public String getIdNum(){return idNum;}
+    public void setIdNum(String num){idNum = num;}
     public String getTitle(){
         return title;
     }

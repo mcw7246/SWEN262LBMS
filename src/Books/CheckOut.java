@@ -11,7 +11,9 @@ import java.util.Calendar;
  * @author Ryan Tytka - rdt7867
  */
 public class CheckOut {
-    
+
+    private String id;
+    private String title;
     private Book book;
     private Date dueDate;
     private Date checkOutDate;
@@ -22,6 +24,13 @@ public class CheckOut {
         this.dueDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.visitorID = visitorID;
+        id = Integer.toString(book.getIdNum());
+        title = book.getTitle();
+    }
+
+    public String getID(){return id;}
+    public String getTitle(){
+        return title;
     }
 
     public Book getBook(){

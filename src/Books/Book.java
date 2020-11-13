@@ -12,7 +12,7 @@ public class Book implements Product
   private SimpleBooleanProperty checked = new SimpleBooleanProperty(false);
   private Integer numToBuy;
 
-  private Integer idNum;
+  private Integer idNum = 0;
   private String isbn;
   private String title;
   private String author;

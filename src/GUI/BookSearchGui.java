@@ -19,7 +19,6 @@ import java.util.Map;
 
 public class BookSearchGui
 {
-  static GridPane gridPane;
   static String name;
   static String authors;
   static String isbn;
@@ -29,7 +28,7 @@ public class BookSearchGui
   static Label resultsLabel;
 
   public static GridPane bookSearch(){
-
+    updated.getChildren().clear();
     resultsLabel = new Label();
 
     //gets the book title

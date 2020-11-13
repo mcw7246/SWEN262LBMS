@@ -87,6 +87,7 @@ public class Open implements LibraryState{
                     library.books.replace(book,library.books.get(book) - 1);
                 }
                 library.checkOuts.addAll(currentCheckOut);
+                library.checkOutsByUserID.put(Integer.toString(visitorID), currentCheckOut);
                 visitor.setCheckOuts(currentCheckOut);
                 String date = new SimpleDateFormat("yyyy/MM/dd").format(checkOutDate.getTime());
                 client.setMessage("borrow," + date + ";");

@@ -42,6 +42,7 @@ public class Library
     private BookStore bookStore;
     private Client client;
 
+    public static Map<String, List<CheckOut>> checkOutsByUserID;
     //Visitors in the library database: Id -> Visitor.
     private HashMap<Integer, Visitor> visitors;
     //Books purchased by the library: Book -> Quantity.
@@ -68,6 +69,7 @@ public class Library
         this.libraryBalance = 0.0;
         this.allPaidFines = new ArrayList<>();
         this.allUnpaidFines = new ArrayList<>();
+        checkOutsByUserID = new HashMap<>();
     }
 
     /**

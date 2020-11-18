@@ -8,11 +8,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 
+/**
+ * gui for Advance Time
+ * @author Mikayla Wishart - mcw7246
+ * @author Yug Patel - ydp4388
+ */
 public class AdvanceTimeGui
 {
   static String days;
   static String hours;
 
+  /**
+   * creates the gridpane specific for advance time
+   * @return gridpane for advance time
+   */
   public static GridPane advanceTime(){
     GridPane updatedGridPane = new GridPane();
 
@@ -55,6 +64,10 @@ public class AdvanceTimeGui
     return updatedGridPane;
   }
 
+  /**
+   * handles the advance time results gui
+   * @return textarea that holds the results
+   */
   public static TextArea AdvanceTime(){
     String result = "";
     String cmd = "advance," + days + "," + hours + ";";

@@ -8,11 +8,19 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
-
+/**
+ * the gui specific for the begin visit command
+ * @author Yug Patel - ydp4388
+ * @author Mikayla Wishart - mcw7246
+ */
 public class BeginVisitGui
 {
   static String visitorID;
 
+  /**
+   * the main gui that will be put in the middle of the application for the begin visit
+   * @return gridpane specifically for begin visit
+   */
   public static GridPane beginVisit(){
     GridPane updatedGridPane = new GridPane();
 
@@ -43,6 +51,10 @@ public class BeginVisitGui
     return updatedGridPane;
   }
 
+  /**
+   * TextArea for the results of the begin visit
+   * @return text area for the results
+   */
   public static TextArea beginVisitAction(){
     String result = "";
     String cmd = "arrive," + visitorID + ";";

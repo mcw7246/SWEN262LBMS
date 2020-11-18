@@ -32,6 +32,10 @@ public class BookSearchGui
   static GridPane updated = new GridPane();
   static Label resultsLabel;
 
+  /**
+   * gridpane for the search of books
+   * @return gridpane specifically for the beginning of the search
+   */
   public static GridPane bookSearch(){
     updated.getChildren().clear();
     resultsLabel = new Label();

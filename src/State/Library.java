@@ -17,6 +17,7 @@ import Visitors.Visitor;
 
 /**
  * @author Yug Patel - ydp4388
+ * @author Ryan Tytka - rdt7867
  */
 public class Library
 {

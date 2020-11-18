@@ -9,6 +9,8 @@ import javafx.beans.property.SimpleBooleanProperty;
  */
 public class Book implements Product
 {
+  private SimpleBooleanProperty checked = new SimpleBooleanProperty(false);
+
   private Integer idNum;
   private String isbn;
   private String title;
@@ -49,6 +51,8 @@ public class Book implements Product
     numCopies = 0;
     numCopiesAvailable = 0;
   }
+  public SimpleBooleanProperty checkedProperty(){return this.checked;}
+  public java.lang.Boolean getChecked(){return this.checkedProperty().get();}
 
   public Integer getIdNum(){return idNum;}
 

@@ -17,6 +17,11 @@ import javafx.util.Callback;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * GUI for the BookSearch command
+ *
+ * @author Mikayla Wishart - mcw7246
+ */
 public class BookSearchGui
 {
   static String name;
@@ -58,6 +63,7 @@ public class BookSearchGui
       @Override
       public void handle(ActionEvent actionEvent)
       {
+        //sets the variables to what the user has inputed
         name = bookName.getText();
         isbn = bookISBN.getText();
         publisher = bookPublisher.getText();
@@ -99,6 +105,10 @@ public class BookSearchGui
     return updated;
   }
 
+  /**
+   * creates the new GridPane for the results of the search
+   * @return GridPane for the results
+   */
   public static GridPane searchResults(){
     //creates the command and puts it through the command parser
     String cmd = "info,\"" + name + "\",{" + authors + "}," + isbn + "," + publisher + "," + sortOrd + ";";
@@ -247,6 +257,10 @@ public class BookSearchGui
     return updated;
   }
 
+  /**
+   *
+   * @param booksToPurchase - a map of the books that are to be purchased
+   */
   public static void booksBorrowed(Map<Book, Integer> booksToPurchase){
     for(Book book : booksToPurchase.keySet()){
       String command = "borrow," + booksToPurchase.get(book) + "," + book.getIdNum() + ";";

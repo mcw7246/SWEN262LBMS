@@ -20,7 +20,9 @@ import Visitors.Visitor;
 import javax.swing.*;
 
 /**
+ * creates the library class
  * @author Yug Patel - ydp4388
+ * @author Mikayla Wishart - mcw7246
  */
 public class Library
 {
@@ -53,6 +55,11 @@ public class Library
     private HashMap<Integer, Integer> numPurchased;
 
 
+    /**
+     * constructor
+     * @param client client
+     * @throws FileNotFoundException if the bookstore is unable to be initialized
+     */
     public Library(Client client) throws FileNotFoundException
     {
         this.visitors = new HashMap<>();
@@ -168,6 +175,10 @@ public class Library
     }
 
 
+    /**
+     *
+     * @return map of the books purchased
+     */
     public HashMap<Integer, Integer> getNumPurchased()
     {
         return numPurchased;
@@ -175,6 +186,10 @@ public class Library
     }
 
 
+    /**
+     * sets the client message
+     * @param visitorID visitor id of who you are looking for
+     */
     public void findBorrowedBooks (Integer visitorID)
     {
         Visitor visitor = visitors.get(visitorID);
@@ -302,12 +317,24 @@ public class Library
          libraryState.endVisit(visitorID);
      }
 
+    /**
+     * searches title
+     * @param title title of book
+     * @param books books to search through
+     * @return list of results
+     */
     public List<Book> searchTitles(String title, List<Book> books){
         List<Book> results = books;
         results.removeIf(book -> (!book.getTitle().contains(title)));
         return results;
     }
 
+    /**
+     * searches authors
+     * @param authors authors
+     * @param books books to search through
+     * @return list of results
+     */
     public List<Book> searchAuthors(List<String> authors, List<Book> books){
         List<Book> results = books;
         for(String author : authors){
@@ -316,12 +343,24 @@ public class Library
         return results;
     }
 
+    /**
+     * searches isbn
+     * @param isbn isbn
+     * @param books books to search through
+     * @return results
+     */
     public List<Book> searchISBN(String isbn, List<Book> books){
         List<Book> results = books;
         results.removeIf(book -> (!book.getIsbn().equals(isbn)));
         return results;
     }
 
+    /**
+     * searches publisher
+     * @param publisher publisher
+     * @param books books to search through
+     * @return results
+     */
     public List<Book> searchPublisher(String publisher, List<Book> books){
         List<Book> results = books;
         results.removeIf(book -> (!book.getPublisher().contains(publisher)));
@@ -329,6 +368,14 @@ public class Library
     }
 
 
+    /**
+     * searches through the books
+     * @param title title of the book
+     * @param authors authors of the book
+     * @param isbn isbn of the book
+     * @param publisher publisher o the book
+     * @param sortOrd sort order
+     */
     public void bookSearch(String title, List<String> authors, String isbn, String publisher, String sortOrd)
     {
         String message = "";
@@ -381,6 +428,11 @@ public class Library
         client.setMessage(message);
     }
 
+    /**
+     * check out the books
+     * @param books books to check out
+     * @param visitorID visitor id of the user checking out the books
+     */
     public void checkOutBooks (List<Integer> books, int visitorID){
         libraryState.borrowBook(books, visitorID);
     }
@@ -421,10 +473,18 @@ public class Library
          }
      }
 
+    /**
+     *
+     * @return all fines list
+     */
     public List<PaidFine> getAllPaidFines() {
         return allPaidFines;
     }
 
+    /**
+     *
+     * @return total library balance
+     */
     public Double getLibraryBalance(){
          return libraryBalance;
     }

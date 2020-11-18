@@ -10,18 +10,29 @@ import Visitors.Visitor;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * implements the LibraryState interface to indicate the state of open for the library
+ */
 public class Open implements LibraryState{
 
     private final Library library;
     private HashMap<Integer, Visitor> visitors;
     private Client client;
 
+    /**
+     * constructor
+     * @param library the library that the state is effecting
+     */
     public Open(Library library){
         this.library = library;
         visitors = library.getVisitors();
         client = library.getClient();
     }
 
+    /**
+     * beginning a visit based on the visitorID
+     * @param visitorId - visitor id.
+     */
     @Override
     public void startVisit(Integer visitorId) {
         if(visitors.get(visitorId).isVisit()){
@@ -34,6 +45,10 @@ public class Open implements LibraryState{
         }
     }
 
+    /**
+     * ending a visit based on visitorID
+     * @param visitorId - visitor id.
+     */
     @Override
     public void endVisit(Integer visitorId) {
         if(!visitors.get(visitorId).isVisit()){
@@ -49,6 +64,11 @@ public class Open implements LibraryState{
         }
     }
 
+    /**
+     * borrow books based on visitorID
+     * @param books list of book id's to borrow
+     * @param visitorID visitor id
+     */
     @Override
     public void borrowBook(List<Integer> books, int visitorID) {
         if (library.invalidID(visitorID)){
@@ -99,6 +119,11 @@ public class Open implements LibraryState{
         }
     }
 
+    /**
+     * returns book to library based on visitor ID
+     * @param visitorID visitor id
+     * @param bookId list of book ids to return
+     */
     @Override
     public void returnBooks(int visitorID, List<Integer> bookId) {
         if(library.invalidID(visitorID)){

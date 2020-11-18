@@ -35,6 +35,10 @@ public class Client {
 
     private HashMap<Integer, Book> searchResult;
 
+    /**
+     * Constructor for the Client class
+     * @throws FileNotFoundException if the books file from the bookStore object is not found
+     */
     public Client() throws FileNotFoundException {
         this.message = new ArrayList<>();
         library = new Library(this);

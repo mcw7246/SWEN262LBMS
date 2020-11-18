@@ -28,7 +28,12 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * The GUI that is the home screen; Shows the options for each command that is allowed that is not
+ * part of another command
+ *
+ * @author Mikayla Wishart - mcw7246
+ */
 
 public class MainGui extends Application
 {
@@ -42,7 +47,6 @@ public class MainGui extends Application
   @Override
   public void start(Stage primaryStage)
   {
-
     try{
       client = new Client();
       library = new Library(client);
@@ -88,9 +92,6 @@ public class MainGui extends Application
     FlowPane flowPane = new FlowPane();
     title.setText("Welcome to the Library Book Management System");
 
-    //creates the list of all commands
-    //List<String> commandTypes = Arrays.asList("Advance Time", "Begin Visit", "Book Search", "Borrow Book", "Borrowed Books", "Date Time", "End Visit", "New Visitor", "Pay Fines", "Purchase Book", "Report", "Return Book", "Store Search");
-
     //creates list of ImageView for all the command types
     ImageView[] pages = new ImageView[13];
     try
@@ -120,9 +121,12 @@ public class MainGui extends Application
           @Override
           public void handle(ActionEvent actionEvent)
           {
+            //clears the flowPane
             flowPane.getChildren().clear();
+            //creates the side panel menu
             borderPane.setLeft(getTabs());
             borderPane.getLeft().maxWidth(50);
+            //calls the class that is associated with the button
             borderPane.setCenter(buttonEvent(classNameFinal));
           }
 
@@ -143,6 +147,13 @@ public class MainGui extends Application
     //return flowPane;
   }
 
+  /**
+   * Calls the class that is associated with the button. Sets the top to
+   * the associated class name
+   *
+   * @param buttonName - determines what type of command is being called
+   * @return the GridPane for the specified command type
+   */
   public static GridPane buttonEvent(String buttonName){
     borderPane.setCenter(null);
     switch (buttonName){
@@ -190,10 +201,15 @@ public class MainGui extends Application
     return null;
   }
 
+  /**
+   * creates the side panel menu that is inserted into the GUI when you are not in the home screen
+   *
+   * @return the VBox that contains all the buttons that contain the commands
+   */
   public static VBox getTabs(){
     VBox box = new VBox();
 
-
+    //creates the home button that brings you back to the home screen
     Button backToHome = new Button("Back to Home");
     backToHome.setOnAction(new EventHandler<ActionEvent>()
     {
@@ -207,6 +223,8 @@ public class MainGui extends Application
 
     backToHome.setPrefSize(130,50);
     box.getChildren().add(backToHome);
+
+    //loops through each command type and creates a button for the side pannel. inserts it into the panel
     for(int x = 0; x < commandTypes.size(); x++){
       Button button = new Button(commandTypes.get(x));
 
@@ -219,6 +237,7 @@ public class MainGui extends Application
         @Override
         public void handle(ActionEvent actionEvent)
         {
+          //creates the action for the button that is chosen
           borderPane.setCenter(buttonEvent(className));
         }
       });

@@ -30,12 +30,16 @@ public class Visit
 
   /**
    * Method to get the visit duration in hours(24 hr).
-   * @return
+   * @return the length of the visit
    */
   public Integer getVisitLength() {
     return visitLength;
   }
 
+  /**
+   *
+   * @return the day that the visit occurred on
+   */
   public Integer getVisitDay(){
     return endDateTime.get(Calendar.DAY_OF_YEAR);
   }

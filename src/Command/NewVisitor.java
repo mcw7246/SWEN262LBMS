@@ -3,6 +3,9 @@ package Command;
 import State.Library;
 import Visitors.Visitor;
 
+/**
+ * implements Command interface for the register command
+ */
 public class NewVisitor implements Command{
 
     private Library library;
@@ -11,6 +14,14 @@ public class NewVisitor implements Command{
     private String address;
     private String  pNumber;
 
+    /**
+     * constructor
+     * @param firstName first name of the user that is being registered
+     * @param lastName last name of the user that is being registered
+     * @param address address of the user that is being registered
+     * @param pNumber phone number of the user that is being registered
+     * @param library library where the user is registering
+     */
     public NewVisitor(String firstName, String lastName, String address, String pNumber, Library library){
         this.fName = firstName;
         this.lName = lastName;
@@ -19,6 +30,9 @@ public class NewVisitor implements Command{
         this.library = library;
     }
 
+    /**
+     * executes the register command through the library class
+     */
     @Override
     public void execute() {
         library.registerVisitor(fName,lName,address,pNumber);

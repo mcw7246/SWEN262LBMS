@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
  * Creates object of a single book in the library
  *
  * @author Mikayla Wishart - mcw7246
+ * @author Yug Patel - ydp4388
  */
 public class Book implements Product
 {

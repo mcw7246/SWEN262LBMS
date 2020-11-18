@@ -8,6 +8,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 
+/**
+ * GUI for the PayFine command
+ *
+ * @author Yug Patel - ydp4388
+ */
 public class PayFinesGui
 {
   static String dollars;

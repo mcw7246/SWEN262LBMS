@@ -8,6 +8,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 
 
+/**
+ * GUI for the Report command
+ *
+ * @author Yug Patel - ydp4388
+ */
 public class ReportGui
 {
   static String days;

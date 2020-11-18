@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * GUI for BorrowBook command
+ *
+ *
+ */
 public class BorrowedBooksGui
 {
 

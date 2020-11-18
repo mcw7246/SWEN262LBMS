@@ -8,6 +8,8 @@ import java.util.List;
 
 /**
  * implements the command interface for the storesearch command
+ *
+ * @author Mikayla Wishart - mcw7246
  */
 public class StoreSearch implements Command
 {

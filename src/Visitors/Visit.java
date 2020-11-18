@@ -3,7 +3,10 @@ package Visitors;
 import java.util.Calendar;
 
 /**
+ * Class to hold the data for a Visit
+ *
  * @author Mikayla Wishart - mcw7246
+ * @author Yug Patel - ydp4388
  */
 public class Visit
 {

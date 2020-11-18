@@ -4,6 +4,8 @@ import State.Library;
 
 /**
  * implements the Command interface for the pay fine command
+ *
+ * @author Yug Patel - ydp4388
  */
 public class PayFine implements Command
 {

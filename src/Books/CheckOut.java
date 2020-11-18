@@ -12,6 +12,7 @@ import java.util.Calendar;
  * Creates object of a checked out book
  *
  * @author Ryan Tytka - rdt7867
+ * @author Yug Patel - ydp4388
  */
 public class CheckOut {
 

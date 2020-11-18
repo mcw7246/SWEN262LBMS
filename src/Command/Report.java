@@ -5,6 +5,7 @@ import Client.Client;
 /**
  * implements the command that runs the report command
  * @author Mikayla Wishart - mcw7246
+ * @author Yug Patel - ydp4388
  */
 public class Report implements Command
 {

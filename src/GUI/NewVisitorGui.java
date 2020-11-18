@@ -12,6 +12,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
+
+/**
+ * GUI for the NewVisitor command
+ *
+ * @author Yug Patel - ydp4388
+ */
 public class NewVisitorGui
 {
   static String fName;

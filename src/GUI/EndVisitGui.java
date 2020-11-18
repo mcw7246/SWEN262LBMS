@@ -7,6 +7,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 
+/**
+ * GUI for the EndVisit command
+ *
+ * @author Yug Patel - ydp4388
+ */
 public class EndVisitGui
 {
   static String visitorID;

@@ -13,6 +13,8 @@ public class main
   /**
    * Main method for the application. Takes in input from user
    * @param args
+   *
+   * @author Mikayla Wishart - mcw7246
    */
   public static void main(String[] args) throws FileNotFoundException {
 

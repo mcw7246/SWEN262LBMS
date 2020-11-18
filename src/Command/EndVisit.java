@@ -4,6 +4,8 @@ import State.Library;
 
 /**
  * implements Command interface for the depart command
+ *
+ * @author Yug Patel - ydp4388
  */
 public class EndVisit implements Command{
 

@@ -16,6 +16,7 @@ import java.util.*;
  * Handles requests and responses
  *
  * @author Mikayla Wishart - mcw7246
+ * @author Yug Patel - ydp4388
  */
 public class Client {
 

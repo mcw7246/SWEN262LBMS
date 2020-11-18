@@ -12,6 +12,8 @@ import java.util.*;
 
 /**
  * implements the LibraryState interface to indicate the state of open for the library
+ *
+ * @author Yug Patel - ydp4388
  */
 public class Open implements LibraryState{
 

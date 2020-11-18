@@ -26,6 +26,7 @@ import java.util.*;
  * GUI for the StoreSearch and incorporates the GUI for PurchaseBook
  *
  * @author Mikayla Wishart
+ * @author Yug Patel - ydp4388
  */
 public class StoreSearchGui
 {

@@ -5,6 +5,8 @@ import Visitors.Visitor;
 
 /**
  * implements Command interface for the register command
+ *
+ * @author Yug Patel - ydp4388
  */
 public class NewVisitor implements Command{
 

@@ -2,6 +2,11 @@ package State;
 
 import java.util.List;
 
+/**
+ * Interface for the Library State
+ *
+ * @author Yug Patel - ydp4388
+ */
 public interface LibraryState {
 
     /**

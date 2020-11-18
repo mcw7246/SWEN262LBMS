@@ -5,6 +5,7 @@ import Client.Client;
 /**
  * AdvanceTime command that implements the Command class
  * @author Mikayla Wishart - mcw7246
+ * @author Yug Patel - ydp4388
  */
 public class AdvanceTime implements Command
 {

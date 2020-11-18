@@ -11,6 +11,7 @@ import java.util.*;
  * Parses through the commands that are given
  *
  * @author Mikayla Wishart - mcw7246
+ * @author Yug Patel - ydp4388
  */
 public class CommandParser
 {
@@ -373,6 +374,9 @@ public class CommandParser
           command = new Report(client);
           allCommands.add(command);
         }
+        break;
+      default:
+        System.out.println("Invalid Command");
         break;
     }
   }

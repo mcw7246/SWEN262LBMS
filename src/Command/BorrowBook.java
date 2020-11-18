@@ -10,6 +10,7 @@ import Books.CheckOut;
 /**
  * implements the Command interface for the borrow command
  * @author Mikayla Wishart - mcw724
+ * @author Yug Patel - ydp4388
  */
 public class BorrowBook implements Command
 {

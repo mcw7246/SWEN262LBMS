@@ -9,7 +9,10 @@ import Books.Book;
 import Books.CheckOut;
 
 /**
+ * Class to represent a Visitor
+ *
  * @author Mikayla Wishart - mcw7246
+ * @author Yug Patel - ydp4388
  */
 public class Visitor
 {

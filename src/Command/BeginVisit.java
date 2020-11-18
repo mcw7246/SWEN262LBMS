@@ -5,6 +5,7 @@ import State.Library;
 /**
  * Implements the Command interface
  * @author Mikayla Wishart - mcw7246
+ * @author Yug Patel - ydp4388
  */
 public class BeginVisit implements Command{
 

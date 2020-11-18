@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * implements the closed state of the library and implements the interface LibraryState
- * @author
+ * @author Yug Patel - ydp4388
  */
 public class Closed implements LibraryState{
 

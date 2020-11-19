@@ -1,5 +1,10 @@
 package Books;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Calendar;
 
@@ -7,45 +12,72 @@ import java.util.Calendar;
  * Creates object of a checked out book
  *
  * @author Ryan Tytka - rdt7867
+ * @author Yug Patel - ydp4388
  */
 public class CheckOut {
-    
-    private List<Book> books;
-    private Calendar checkInDate;
-    private Calendar checkOutDate;
+
+    private String idNum;
+    private String title;
+    private Book book;
+    private Date dueDate;
+    private Date checkOutDate;
     private int visitorID;
 
-    public CheckOut(List<Book> books, Calendar checkInDate, Calendar checkOutDate, int visitorID){
-        this.books = books;
-        this.checkInDate = checkInDate;
+    /**
+     * constructor for the CheckOut class
+     * @param book the book that is being checked out
+     * @param checkInDate the date that it is due
+     * @param checkOutDate the date that it is checked out on
+     * @param visitorID the visitor that is checking out the book
+     */
+    public CheckOut(Book book, Date checkInDate, Date checkOutDate, int visitorID){
+        this.book = book;
+        this.dueDate = checkInDate;
         this.checkOutDate = checkOutDate;
-        this.visitorID = visitorID;
-    }
-
-    public List<Book> getBooks(){
-        return books;
-    }
-
-    public Calendar getCheckInDate(){
-        return checkInDate;
-    }
-
-    public Calendar getCheckOutDate(){
-        return checkOutDate;
-    }
-
-    public int getVisitorID(){
-        return visitorID;
+        this.visitorID = visitorID;;
+        title = book.getTitle();
+        idNum = "";
     }
 
     /**
-     * Sets the check out date date of the checkout.
-     * @return true if there are still books checkedout
+     *
+     * @return the ID number for the book
      */
-    public boolean returnBook(Calendar checkOutDate, Book book)
-    {
-        this.checkOutDate = checkOutDate;
-        books.remove(book);
-        return books.size() == 0;
+    public String getIdNum(){return idNum;}
+    public void setIdNum(String num){idNum = num;}
+    public String getTitle(){
+        return title;
+    }
+
+    /**
+     *
+     * @return the book that is connected to the CheckOut object
+     */
+    public Book getBook(){
+        return book;
+    }
+
+    /**
+     *
+     * @return the due date that is connected to
+     */
+    public Date getDueDate(){
+        return dueDate;
+    }
+
+    /**
+     *
+     * @return the date that is connected to the CheckOut object that the book was taken out of the library
+     */
+    public String  getCheckOutDate(){
+        return new SimpleDateFormat("yyyy/MM/dd").format(checkOutDate.getTime());
+    }
+
+    /**
+     *
+     * @return the user ID of the user that checked out the book
+     */
+    public int getVisitorID(){
+        return visitorID;
     }
 }

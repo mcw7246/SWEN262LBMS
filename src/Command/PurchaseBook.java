@@ -3,6 +3,11 @@ package Command;
 import java.util.List;
 import State.Library;
 
+/**
+ * implements the command interface for the buy command
+ * @author Mikayla Wishart - mcw7246
+ * @author Bryan Wang - jw3513
+ */
 public class PurchaseBook implements Command
 {
   private int quantity;
@@ -10,11 +15,13 @@ public class PurchaseBook implements Command
   private List<Integer> bookIDs;
   private Library library;
 
-  /*public PurchaseBook(Integer quantity, int visitorID){
-    this.quantity = quantity;
-    this.visitorID = visitorID;
-  }*/
 
+  /**
+   * Constructor
+   * @param quantity quantity of the amount of books to buy
+   * @param bookIDs what books to buy
+   * @param library where the books will be going
+   */
   public PurchaseBook(int quantity,List<Integer> bookIDs, Library library){
     this.quantity = quantity;
     this.bookIDs = bookIDs;
@@ -22,7 +29,9 @@ public class PurchaseBook implements Command
 
   }
 
-
+  /**
+   * executes the buy command through the library class
+   */
   @Override
   public void execute(){ library.purchaseBooks(quantity, bookIDs);}
 }

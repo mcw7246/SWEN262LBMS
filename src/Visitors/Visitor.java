@@ -1,13 +1,18 @@
 package Visitors;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import Books.Book;
 import Books.CheckOut;
 
 /**
+ * Class to represent a Visitor
+ *
  * @author Mikayla Wishart - mcw7246
+ * @author Yug Patel - ydp4388
  */
 public class Visitor
 {
@@ -111,20 +116,22 @@ public class Visitor
     return inVisit;
   }
 
-    /**
-     * Gets a list of currently checked out books.
-     *
-     * @return An ArrayList of currently checked out books.
-     */
-    public ArrayList<Book> getCheckedOutBooks()
-    {
-        ArrayList<Book> books = new ArrayList<>();
 
-        for (CheckOut checkout: this.checkOuts)
-        {
-            books.addAll(checkout.getBooks());
+    public CheckOut getCheckOut(Book book) {
+        for (CheckOut checkOut: checkOuts){
+            if(book == checkOut.getBook()){
+                return checkOut;
+            }
         }
-        return books;
+        return null;
+    }
+
+    public List<Book> getCheckedOutBooks() {
+      List<Book> books = new ArrayList<>();
+      for(CheckOut checkOut: checkOuts){
+          books.add(checkOut.getBook());
+      }
+      return books;
   }
 
   /**
@@ -137,68 +144,32 @@ public class Visitor
             + this.phoneNum + "\nID: " + this.id + "\nIs In Library: " + this.inVisit;
   }
 
+
+  public void setCheckOuts(List<CheckOut> checkOuts){
+      this.checkOuts.addAll(checkOuts);
+  }
+
   /**
    * Visitor returning books
    * @return a string that contains visitor's information
    */
-  public double returnBooks(ArrayList<Book> books, Calendar dateReturned)
-    {
-        double totalFines = 0.0;
-
-        for (Book book: books)
-        {
-            // get all checked out books for this visitor
-            ArrayList<Book> checkedOut = this.getCheckedOutBooks();
-
-            // Confirm visitor has checked out book
-            if (!checkedOut.contains(book))
-            {
-                continue;
+  public UnpaidFine returnBooks(Book book, Date currentDate) {
+        double Fines = 0.0;
+        for(CheckOut checkOut: checkOuts){
+            if(checkOut.getBook() == book){
+                Fines = calculateFine(checkOut, currentDate);
+                checkOuts.remove(checkOut);
+                break;
             }
-
-            CheckOut checkout = findCheckOut(book);
-            boolean booksLeft = checkout.returnBook(dateReturned, book);
-            if(booksLeft)
-            {
-              // Remove the checkout
-              this.checkOuts.remove(checkout);
-            }
-
-            // Calculate any fines applied to this book.
-            int fineAmount = calculateFine(checkout);
-
-            // Create fine object if necessary
-            if (fineAmount > 0)
-            {
-                this.unpaidFines.add(new UnpaidFine(fineAmount, dateReturned));
-                this.balance += fineAmount;
-
-                // Add to total fines applied
-                totalFines += fineAmount;
-            }
-
-            // Put the copy back in the library
-            book.returnCopies(1);
         }
-
-        return totalFines;
-    }
-
-    /**
-     * Finds checkout associated with specific book
-     * 
-     * @param book - book that is being checked out
-     * @return check out object that contains the book
-     */
-    private CheckOut findCheckOut(Book book){
-
-      for(CheckOut checkOut: this.checkOuts)
-      {
-        if(checkOut.getBooks().contains(book))
-          return checkOut;
-      }
-      return null;
-    }
+        if(Fines > 0){
+            UnpaidFine unpaidFine = new UnpaidFine(Fines, currentDate);
+            this.unpaidFines.add(unpaidFine);
+            balance += Fines;
+            return unpaidFine;
+        }
+        return null;
+  }
 
 
     /**
@@ -208,17 +179,18 @@ public class Visitor
      * @param checkout - A Checkout object used to calculate fines.
      * @return An integer representing the amount charged to the visitor.
      */
-    private int calculateFine(CheckOut checkout)
+    private int calculateFine(CheckOut checkout, Date currentDate)
     {
         int fineAmount = 0;
-        int returnDate = checkout.getCheckInDate().get(Calendar.DAY_OF_YEAR);
-        int dueDate = checkout.getCheckOutDate().get(Calendar.DAY_OF_YEAR);
 
-        int days = returnDate - dueDate;
+        Date checkoutDate = checkout.getDueDate();
+
+        long diffInMillies =  currentDate.getTime() - checkoutDate.getTime();
+        long days = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
         if (days >= 1)
         {
-            fineAmount = Integer.min(10 + (2 * (days / 7)), 30);
+            fineAmount = Integer.min((int) (10 + (2 * (days / 7))), 30);
         }
 
         return fineAmount;
@@ -229,10 +201,12 @@ public class Visitor
      *
      * @param amount - The amount to pay toward fines.
      */
-    public void payFine(double amount, Calendar datePaid)
+    public PaidFine payFine(double amount, Integer datePaid)
     {
         this.balance -= amount;
-        this.paidFines.add(new PaidFine(amount, datePaid));
+        PaidFine paidFine = new PaidFine(amount, datePaid);
+        this.paidFines.add(paidFine);
+        return paidFine;
     }
 
       /**
@@ -243,5 +217,9 @@ public class Visitor
     public int getBalance()
     {
         return this.balance;
+    }
+
+    public boolean isMaxCheckOut(Integer num){
+        return num + checkOuts.size() >= 5;
     }
 }

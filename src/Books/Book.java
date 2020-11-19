@@ -1,12 +1,18 @@
 package Books;
 
+import javafx.beans.property.SimpleBooleanProperty;
+
 /**
  * Creates object of a single book in the library
  *
  * @author Mikayla Wishart - mcw7246
+ * @author Yug Patel - ydp4388
  */
 public class Book implements Product
 {
+  private SimpleBooleanProperty checked = new SimpleBooleanProperty(false);
+
+  private Integer idNum;
   private String isbn;
   private String title;
   private String author;
@@ -16,6 +22,16 @@ public class Book implements Product
   private int numCopies;
   private int numCopiesAvailable;
 
+  public Book( Integer idNum, String isbn, String title, String authors, String publisher, String publishDate){
+
+    this.idNum = idNum;
+    this.isbn = isbn;
+    this.title = title;
+    this.author = authors;
+    this.publisher = publisher;
+    this.publishDate = publishDate;
+
+  }
   /**
    * Constructor for creating a Book object
    *
@@ -36,6 +52,10 @@ public class Book implements Product
     numCopies = 0;
     numCopiesAvailable = 0;
   }
+  public SimpleBooleanProperty checkedProperty(){return this.checked;}
+  public java.lang.Boolean getChecked(){return this.checkedProperty().get();}
+
+  public Integer getIdNum(){return idNum;}
 
   /**
    *
@@ -96,11 +116,6 @@ public class Book implements Product
   public void setNumCopies(int value){
     numCopies = value;
   }
+  public void setIdNum(int num){idNum = num; }
 
-    /**
-   *  Adds to the number of copies of available when a visitor returns books
-   */
-  public void returnCopies(int amount){
-      numCopiesAvailable += amount;
-  }
 }

@@ -2,37 +2,33 @@ package GUI;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
-
+/**
+ * the gui specific for the begin visit command
+ * @author Yug Patel - ydp4388
+ * @author Mikayla Wishart - mcw7246
+ */
 public class BeginVisitGui
 {
-  GridPane gridPane;
-  String visitorID;
-  public BeginVisitGui(GridPane gridPane){
-    this.gridPane = gridPane;
-  }
+  static String visitorID;
 
-  public GridPane beginVisitGridPane(){
-    GridPane updatedGridPane = gridPane;
+  /**
+   * the main gui that will be put in the middle of the application for the begin visit
+   * @return gridpane specifically for begin visit
+   */
+  public static GridPane beginVisit(){
+    GridPane updatedGridPane = new GridPane();
 
     updatedGridPane.getChildren().clear();
 
-    Button backToHome = new Button("Back to home");
-    backToHome.setOnAction(new EventHandler<ActionEvent>()
-    {
-      @Override
-      public void handle(ActionEvent actionEvent)
-      {
-        MainGui.mainPage(gridPane);
-      }
-    });
     Label userID = new Label("Enter your Visitor ID: ");
     TextArea id = new TextArea("");
+    id.setPrefSize(200,20);
 
     Button submit = new Button("Begin Visit!");
     submit.setOnAction(new EventHandler<ActionEvent>()
@@ -41,22 +37,44 @@ public class BeginVisitGui
       public void handle(ActionEvent actionEvent)
       {
         visitorID = id.getText();
-        beginVisitAction();
+        updatedGridPane.add(beginVisitAction(), 1, 4);
       }
     });
 
-    updatedGridPane.add(backToHome, 0, 0);
-    updatedGridPane.add(userID, 0, 1);
-    updatedGridPane.add(id, 0, 2);
-    updatedGridPane.add(submit, 0, 3);
+    updatedGridPane.add(userID, 1, 1);
+    updatedGridPane.add(id, 1, 2);
+    updatedGridPane.add(submit, 1, 3);
 
     updatedGridPane.setVgap(10);
+    updatedGridPane.setHgap(10);
 
     return updatedGridPane;
   }
 
-  public void beginVisitAction(){
-
+  /**
+   * TextArea for the results of the begin visit
+   * @return text area for the results
+   */
+  public static TextArea beginVisitAction(){
+    String result = "";
+    String cmd = "arrive," + visitorID + ";";
+    MainGui.commandParser.parseCommand(cmd);
+    for(String str: MainGui.commandParser.getMessage()){
+      if(result != ""){
+        result += "\n";
+      }
+      result += str;
+    }
+    MainGui.commandParser.getMessage().clear();
+    String[] lines = result.split("\r\n|\r|\n");
+    TextArea ans = new TextArea(result);
+    ans.setEditable(false);
+    ans.setStyle("-fx-font-size: 1.2em;");
+    ans.setMaxWidth(400);
+    ans.setPrefSize(300, 40 * lines.length);
+    GridPane.setColumnSpan(ans, 2);
+    GridPane.setRowSpan(ans, 2);
+    return ans;
   }
 
 }

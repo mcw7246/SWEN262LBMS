@@ -13,6 +13,8 @@ public class main
   /**
    * Main method for the application. Takes in input from user
    * @param args
+   *
+   * @author Mikayla Wishart - mcw7246
    */
   public static void main(String[] args) throws FileNotFoundException {
 
@@ -23,6 +25,7 @@ public class main
     Client client = new Client();
     CommandParser commandParser = client.getCommandParser();
 
+    //commandParser.parseCommand("register,first name,last name,address, phone-number;");
     String input = in.nextLine();
     while(!input.equals("exit")){
       if(input != ""){

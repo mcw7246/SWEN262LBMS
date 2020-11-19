@@ -4,19 +4,25 @@ import Books.Book;
 import Books.CheckOut;
 
 import java.io.FileNotFoundException;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import java.lang.reflect.GenericArrayType;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import Command.*;
 
 import Books.BookStore;
 import Client.Client;
+import Visitors.PaidFine;
+import Visitors.UnpaidFine;
+import Visitors.Visit;
 import Visitors.Visitor;
 
+import javax.swing.*;
+
 /**
+ * creates the library class
  * @author Yug Patel - ydp4388
+ * @author Mikayla Wishart - mcw7246
  * @author Ryan Tytka - rdt7867
  */
 public class Library
@@ -25,9 +31,13 @@ public class Library
     LibraryState open;
     LibraryState closed;
 
-    LibraryState libraryState;
+    protected LibraryState libraryState;
 
-    List<CheckOut> checkOuts;
+    protected List<CheckOut> checkOuts;
+
+    protected List<UnpaidFine> allUnpaidFines;
+    protected List<PaidFine> allPaidFines;
+    protected Double libraryBalance;
 
     private HashMap<Integer, Book> searchResult;
     private int visitorID;
@@ -35,16 +45,22 @@ public class Library
     private BookStore bookStore;
     private Client client;
 
+    public static Map<String, List<CheckOut>> checkOutsByUserID;
     //Visitors in the library database: Id -> Visitor.
     private HashMap<Integer, Visitor> visitors;
     //Books purchased by the library: Book -> Quantity.
-    private HashMap<Book, Integer> books;
+    protected HashMap<Book, Integer> books;
     //List of current visitors: Id -> Visit start time.
     private HashMap<Integer, Integer> currentVisitors;
     //Number of purchased books with date: Day_Of_Year -> Number of Books.
     private HashMap<Integer, Integer> numPurchased;
 
 
+    /**
+     * constructor
+     * @param client client
+     * @throws FileNotFoundException if the bookstore is unable to be initialized
+     */
     public Library(Client client) throws FileNotFoundException
     {
         this.visitors = new HashMap<>();
@@ -57,6 +73,11 @@ public class Library
         closed = new Closed(this);
         libraryState = open;
         this.numPurchased = new HashMap<>();
+        this.checkOuts = new ArrayList<>();
+        this.libraryBalance = 0.0;
+        this.allPaidFines = new ArrayList<>();
+        this.allUnpaidFines = new ArrayList<>();
+        checkOutsByUserID = new HashMap<>();
     }
 
     /**
@@ -155,47 +176,36 @@ public class Library
     }
 
 
+    /**
+     *
+     * @return map of the books purchased
+     */
     public HashMap<Integer, Integer> getNumPurchased()
     {
         return numPurchased;
 
-
     }
+
+
     /**
-     * Method used by employees to borrow books.
-     * @param qty quantity of books
-     * @param ID book id for search results
+     * sets the client message
+     * @param visitorID visitor id of who you are looking for
      */
-    public void borrowBooks (Integer qty, List < Integer > ID)
+    public void findBorrowedBooks (Integer visitorID)
     {
-        for (Integer num : client.getSearchResult().keySet())
-        {
-            for (Integer id : ID)
-            {
-                if (id == num)
-                {
-                    books.put(client.getSearchResult().get(num), qty);
-                }
+        Visitor visitor = visitors.get(visitorID);
+        client.setSearchResult(visitor.getCheckedOutBooks());
+        String message = "";
+        message += "borrowed," + client.getSearchResult().size();
+        for (Integer id : client.getSearchResult().keySet()) {
+            Book bookSearch = client.getSearchResult().get(id);
+            CheckOut checkOut = visitor.getCheckOut(bookSearch);
+            if(checkOut != null) {
+                message += "\n";
+                message += id + " - " + bookSearch.getIsbn() + "," + bookSearch.getTitle() + "," + checkOut.getCheckOutDate() + ";";
             }
         }
-    }
-
-
-    public void checkOutBooks (List<Book> books, Calendar checkInDate, Calendar
-            checkOutDate, int visitorID){
-        if (this.invalidID(visitorID)){
-            client.setMessage(visitorID + "is invalid.");
-        }
-        else{
-            CheckOut CO = new CheckOut(books, checkInDate, checkOutDate, visitorID);
-            checkOuts.add(CO);
-            for(CheckOut c: checkOuts){
-                Calendar borrowDate = c.getCheckOutDate();
-                String date = c.getVisitorID()+ borrowDate.get(Calendar.YEAR) + "/" + borrowDate.get(Calendar.MONTH) + "/" +
-                        borrowDate.get(Calendar.DAY_OF_MONTH);
-                client.setMessage(c.getBooks() + date);
-            }
-        }
+        client.setMessage(message);
     }
 
     /**
@@ -308,12 +318,24 @@ public class Library
          libraryState.endVisit(visitorID);
      }
 
+    /**
+     * searches title
+     * @param title title of book
+     * @param books books to search through
+     * @return list of results
+     */
     public List<Book> searchTitles(String title, List<Book> books){
         List<Book> results = books;
         results.removeIf(book -> (!book.getTitle().contains(title)));
         return results;
     }
 
+    /**
+     * searches authors
+     * @param authors authors
+     * @param books books to search through
+     * @return list of results
+     */
     public List<Book> searchAuthors(List<String> authors, List<Book> books){
         List<Book> results = books;
         for(String author : authors){
@@ -322,12 +344,24 @@ public class Library
         return results;
     }
 
+    /**
+     * searches isbn
+     * @param isbn isbn
+     * @param books books to search through
+     * @return results
+     */
     public List<Book> searchISBN(String isbn, List<Book> books){
         List<Book> results = books;
         results.removeIf(book -> (!book.getIsbn().equals(isbn)));
         return results;
     }
 
+    /**
+     * searches publisher
+     * @param publisher publisher
+     * @param books books to search through
+     * @return results
+     */
     public List<Book> searchPublisher(String publisher, List<Book> books){
         List<Book> results = books;
         results.removeIf(book -> (!book.getPublisher().contains(publisher)));
@@ -335,13 +369,21 @@ public class Library
     }
 
 
+    /**
+     * searches through the books
+     * @param title title of the book
+     * @param authors authors of the book
+     * @param isbn isbn of the book
+     * @param publisher publisher o the book
+     * @param sortOrd sort order
+     */
     public void bookSearch(String title, List<String> authors, String isbn, String publisher, String sortOrd)
     {
         String message = "";
         String titleSub = title.substring(1, title.length() - 1);
 
 
-        List<Book> bookFits = (ArrayList)books.values();
+        List<Book> bookFits = new ArrayList<>(books.keySet());
         boolean allAuthors = true;
         boolean allTitles = true;
         boolean allISBN = true;
@@ -362,19 +404,19 @@ public class Library
 
         if(!allTitles)
         {
-            searchTitles(titleSub, bookFits);
+            bookFits = searchTitles(titleSub, bookFits);
         }
 
         if(!allAuthors){
-            searchAuthors(authors, bookFits);
+            bookFits = searchAuthors(authors, bookFits);
         }
 
         if(!allISBN){
-            searchISBN(isbn, bookFits);
+            bookFits = searchISBN(isbn, bookFits);
         }
 
         if(!allPublisher){
-            searchPublisher(publisher, bookFits);
+            bookFits = searchPublisher(publisher, bookFits);
         }
         client.setSearchResult(bookFits);
         message = "info," + bookFits.size();
@@ -387,31 +429,22 @@ public class Library
         client.setMessage(message);
     }
 
+    /**
+     * check out the books
+     * @param books books to check out
+     * @param visitorID visitor id of the user checking out the books
+     */
+    public void checkOutBooks (List<Integer> books, int visitorID){
+        libraryState.borrowBook(books, visitorID);
+    }
+
      /**
       * When a visitor returns borrowed book(s)
       * @param visitorID - the visitoryID of the visitor returning books
       */
-     public void returnBooks ( int visitorID)
+     public void returnBooks (int visitorID, List<Integer> bookId)
      {
-         ArrayList<Book> books = new ArrayList<>();
-         for (Book book : this.searchResult.values())
-         {
-             books.add(book);
-         }
-
-         Visitor visitor = this.visitors.get(visitorID);
-
-         double fines = visitor.returnBooks(books, this.client.getDateObj());
-
-         if (fines > 0)
-         {
-             //update client with amount due
-             this.client.setMessage("Late fees accrued: $" + fines);
-         }
-         else {
-             //update client with success message
-             this.client.setMessage("Successfully returned books!");
-         }
+        libraryState.returnBooks(visitorID,bookId);
      }
 
      /**
@@ -422,22 +455,39 @@ public class Library
       */
      public void payFine ( int visitorID, double amount)
      {
-         Visitor visitor = this.visitors.get(visitorID);
-
-         // Check for invalid visitor ID
-         if (visitor == null)
-         {
-             return;
+         if(this.invalidID(visitorID)) {
+             client.setMessage("pay,invalid-visitor-id;");
          }
+         else {
+             Visitor visitor = this.visitors.get(visitorID);
 
-         // Check for invalid amount
-         if (amount < 0 || amount > visitor.getBalance())
-         {
-             return;
+             // Check for invalid amount
+             if (amount < 0 || amount > visitor.getBalance()) {
+                 client.setMessage("pay,invalid-amount," + amount + "," + visitor.getBalance() + ";");
+             }
+             else {
+                 PaidFine paidFine = visitor.payFine(amount, this.client.getDateObj().get(Calendar.DAY_OF_YEAR));
+                 this.allPaidFines.add(paidFine);
+                 libraryBalance -= amount;
+                 this.client.setMessage("pay,success," + visitor.getBalance() + ";");
+             }
          }
-
-         visitor.payFine(amount, this.client.getDateObj());
-         this.client.setMessage("Remaining balance: " + visitor.getBalance());
      }
+
+    /**
+     *
+     * @return all fines list
+     */
+    public List<PaidFine> getAllPaidFines() {
+        return allPaidFines;
+    }
+
+    /**
+     *
+     * @return total library balance
+     */
+    public Double getLibraryBalance(){
+         return libraryBalance;
+    }
 }
 

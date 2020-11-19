@@ -1,15 +1,11 @@
 package GUI;
 
-import Command.Command;
-import Command.*;
 import State.Library;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 
@@ -17,6 +13,7 @@ import javafx.scene.layout.GridPane;
  * GUI for the NewVisitor command
  *
  * @author Yug Patel - ydp4388
+ * @author Mikayla Wishart - mcw7246
  */
 public class NewVisitorGui
 {
@@ -25,7 +22,12 @@ public class NewVisitorGui
   static String pNumber;
   static String address;
   protected Library library;
-  public static GridPane newVisitor(Library library){
+
+  /**
+   *
+   * @return the gridpane for the register command
+   */
+  public static GridPane newVisitor(){
     GridPane updated = new GridPane();
 
     updated.getChildren().clear();
@@ -80,6 +82,10 @@ public class NewVisitorGui
     return updated;
   }
 
+  /**
+   *
+   * @return the return for the register new visitor class
+   */
   public static TextArea handleNewVisitor(){
     String result = "";
     if(!fName.equals("") && !lName.equals("") && !address.equals("") && !pNumber.equals("")){

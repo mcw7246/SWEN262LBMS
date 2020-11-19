@@ -16,6 +16,10 @@ public class EndVisitGui
 {
   static String visitorID;
 
+  /**
+   *
+   * @return the gridpane specifically for the end visit command
+   */
   public static GridPane endVisit()
   {
     GridPane updated = new GridPane();
@@ -47,6 +51,10 @@ public class EndVisitGui
     return updated;
   }
 
+  /**
+   *
+   * @return the end visit response
+   */
   public static TextArea endVisitAction(){
     String result = "";
     String cmd = "depart," + visitorID + ";";

@@ -2,19 +2,13 @@ package GUI;
 
 import Books.BookStore;
 import Client.Client;
-import Command.AdvanceTime;
 import Command.CommandParser;
-import Command.NewVisitor;
-import Command.StoreSearch;
 import State.Library;
-import com.sun.javafx.fxml.builder.JavaFXSceneBuilder;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -44,6 +38,11 @@ public class MainGui extends Application
   static Client client;
   static BookStore bookStore;
   final static List<String> commandTypes = Arrays.asList("Advance Time", "Begin Visit", "Book Search", "Borrowed Books", "Date Time", "End Visit", "New Visitor", "Pay Fines", "Report", "Store Search");
+
+
+  /**
+   * @param primaryStage the main stage that
+   */
   @Override
   public void start(Stage primaryStage)
   {
@@ -86,8 +85,9 @@ public class MainGui extends Application
   }
 
 
-
-
+  /**
+   * the main pane for the home screen
+   */
   public static void getMainPane(){
     FlowPane flowPane = new FlowPane();
     title.setText("Welcome to the Library Book Management System");
@@ -144,7 +144,6 @@ public class MainGui extends Application
     flowPane.setPadding(new Insets(20));
 
     borderPane.setCenter(flowPane);
-    //return flowPane;
   }
 
   /**
@@ -245,6 +244,7 @@ public class MainGui extends Application
     }
     return box;
   }
+
 
   public static void main(String[] args)
   {

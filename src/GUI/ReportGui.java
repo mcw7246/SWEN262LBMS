@@ -12,11 +12,15 @@ import javafx.scene.layout.GridPane;
  * GUI for the Report command
  *
  * @author Yug Patel - ydp4388
+ * @author Mikayla Wishart - mcw7246
  */
 public class ReportGui
 {
   static String days;
 
+  /**
+   * @return the specific GridPane for the report command
+   */
   public static GridPane report(){
     GridPane updated = new GridPane();
 
@@ -50,6 +54,9 @@ public class ReportGui
     return updated;
   }
 
+  /**
+   * @return displays the textarea for the results of the report command
+   */
   public static TextArea Report(){
     String result = "";
     String cmd = "report," + days + ";";

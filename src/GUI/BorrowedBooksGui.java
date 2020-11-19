@@ -17,8 +17,7 @@ import java.util.List;
 
 /**
  * GUI for BorrowBook command
- *
- *
+ * @author Mikayla Wishart - mcw7246
  */
 public class BorrowedBooksGui
 {
@@ -26,6 +25,11 @@ public class BorrowedBooksGui
   public static String userID;
   public static GridPane updated;
   public static ObservableList<CheckOut> checkOuts;
+
+  /**
+   *
+   * @return the GridPane that is specific to borrowedBooks
+   */
   public static GridPane borrowedBooks(){
     updated = new GridPane();
 
@@ -56,6 +60,10 @@ public class BorrowedBooksGui
 
     return updated;
   }
+
+  /**
+   * handles the look of the results of findBorrowedBooks
+   */
   public static void handleFindBorrowedBooks(){
     updated.getChildren().clear();
     String cmd = "borrowed,"+ userID + ";";
@@ -119,6 +127,10 @@ public class BorrowedBooksGui
     updated.getChildren().add(table);
   }
 
+  /**
+   * implements returning books as a GUI
+   * @param checkOut the object that is being returned
+   */
   public static void handleReturn(CheckOut checkOut){
     String cmd = "return," + userID + "," + checkOut.getIdNum() + ";";
     MainGui.commandParser.parseCommand(cmd);

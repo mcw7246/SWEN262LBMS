@@ -12,12 +12,17 @@ import javafx.scene.layout.GridPane;
  * GUI for the PayFine command
  *
  * @author Yug Patel - ydp4388
+ * @author Mikayla Wishart - mcw7246
  */
 public class PayFinesGui
 {
   static String dollars;
   static String id;
 
+  /**
+   *
+   * @return gridpane for the payfines specifically
+   */
   public static GridPane payFines(){
     GridPane updated = new GridPane();
 
@@ -55,6 +60,9 @@ public class PayFinesGui
     return updated;
   }
 
+  /**
+   * @return the results of the pay fine command
+   */
   public static TextArea PayFine(){
     String result = "";
     String cmd = "pay," + id + "," + dollars + ";";

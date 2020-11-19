@@ -1,14 +1,10 @@
 package GUI;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 
 /**
- * GUI for the DateTime Command
- *
+ * Gui class specified for DateTime
  * @author Yug Patel - ydp4388
  */
 public class DateTimeGui

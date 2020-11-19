@@ -25,7 +25,7 @@ import java.util.*;
 /**
  * GUI for the StoreSearch and incorporates the GUI for PurchaseBook
  *
- * @author Mikayla Wishart
+ * @author Mikayla Wishart - mcw7246
  * @author Yug Patel - ydp4388
  */
 public class StoreSearchGui
@@ -39,6 +39,9 @@ public class StoreSearchGui
   static String sortOrd;
   static GridPane updated = new GridPane();
 
+  /**
+   * @return returns the gridpane for the StoreSearch command
+   */
   public static GridPane storeSearch(){
     updated.getChildren().clear();
 
@@ -112,6 +115,9 @@ public class StoreSearchGui
     return updated;
   }
 
+  /**
+   * @return the gridpane of the results of the search
+   */
   public static GridPane searchResults(){
     //creates the command and puts it through the command parser
     String cmd = "search,\"" + name + "\",{" + authors + "}," + isbn + "," + publisher + "," + sortOrd + ";";
@@ -291,6 +297,9 @@ public class StoreSearchGui
     }
   }
 
+  /**
+   * @param booksToPurchase the books that are marked to purchase
+   */
   public static void booksPurchase(Map<Book, Integer> booksToPurchase){
     for(Book book : booksToPurchase.keySet()){
       String command = "buy," + booksToPurchase.get(book) + "," + Integer.toString(book.getIdNum()) + ";";

@@ -23,6 +23,7 @@ import javax.swing.*;
  * creates the library class
  * @author Yug Patel - ydp4388
  * @author Mikayla Wishart - mcw7246
+ * @author Ryan Tytka - rdt7867
  */
 public class Library
 {

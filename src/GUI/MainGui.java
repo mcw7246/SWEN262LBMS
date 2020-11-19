@@ -183,7 +183,7 @@ public class MainGui extends Application
       case "NewVisitorGui":
         title.setText("New Visitor");
         borderPane.setTop(title);
-        return NewVisitorGui.newVisitor(library);
+        return NewVisitorGui.newVisitor();
       case "PayFinesGui":
         title.setText("Pay Fines");
         borderPane.setTop(title);

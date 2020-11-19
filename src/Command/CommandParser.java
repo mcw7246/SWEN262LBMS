@@ -12,6 +12,7 @@ import java.util.*;
  *
  * @author Mikayla Wishart - mcw7246
  * @author Yug Patel - ydp4388
+ * @author Bryan Wang - jw3513
  */
 public class CommandParser
 {

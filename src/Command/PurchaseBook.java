@@ -6,6 +6,7 @@ import State.Library;
 /**
  * implements the command interface for the buy command
  * @author Mikayla Wishart - mcw7246
+ * @author Bryan Wang - jw3513
  */
 public class PurchaseBook implements Command
 {

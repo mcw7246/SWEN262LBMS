@@ -1,6 +1,7 @@
 package GUI;
 
 import Books.CheckOut;
+import com.sun.tools.javac.Main;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -141,6 +142,8 @@ public class BorrowedBooksGui
     else{
       System.out.println(MainGui.commandParser.getMessage());
     }
+    Label results = new Label(MainGui.commandParser.getMessage().get(size - 1));
 
+    updated.add(results, 1, 1);
   }
 }
